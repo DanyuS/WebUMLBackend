@@ -1,0 +1,42 @@
+设计	2-3天
+调试	2-3天
+普通功能	2-3天
+导入导出	2-3天
+聊天功能	3-5天
+多人协作	20-30天
+集成	5-7天
+共计	36-54天 //理想状态
+
+
+https://hal.inria.fr/file/index/docid/555588/filename/techreport.pdf  //CRDT
+
+https://liyu1981.github.io/what-is-CRDT/
+
+https://www.zhihu.com/question/50800736/answer/122788565  //开题报告大概写什么
+
+Stanford MOSS  //查重工具，看着挺好玩的
+
+http://fex.baidu.com/blog/2014/04/realtime-collaboration/  //协同编辑
+
+https://github.com/Aaaaash/blog/issues/10  //协同
+
+https://blog.csdn.net/pheecian10/article/details/81461390  //协同
+
+https://baidu.github.io/amis/docs/getting-started  //速成前端
+
+http://operational-transformation.github.io  //OT算法
+
+https://blog.csdn.net/pheecian10/article/details/78496854  //OT算法图解
+
+https://blog.csdn.net/typa01_kk/article/details/76696618  //springboot
+
+https://juejin.im/post/5c622fb5e51d457f9f2c2381  //Springboot && vue
+
+https://blog.csdn.net/shuaicihai/article/details/59484175  //报仇工具
+
+https://blog.csdn.net/a745233700/article/details/79321245  //报仇工具
+
+https://www.zhihu.com/question/274573543  //多人编辑
+
+https://www.jianshu.com/p/872a52a948f0  //在线编辑
+
