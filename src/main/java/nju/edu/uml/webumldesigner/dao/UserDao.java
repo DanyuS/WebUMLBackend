@@ -1,9 +1,8 @@
 package nju.edu.uml.webumldesigner.dao;
 
-import nju.edu.uml.webumldesigner.repository.User;
+import nju.edu.uml.webumldesigner.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-//@Mapper
-public interface UserDao {
-    public User isValidLogin(String userEmail, String userPassword);
-//    public User isValidLogin(@Param("userName")String userName, @Param("userPassword")String userPassword);
+public interface UserDao extends JpaRepository<User, Integer> {
+    User findUserByUserEmailAndUserPassword(String userEmail, String userPassword);
 }

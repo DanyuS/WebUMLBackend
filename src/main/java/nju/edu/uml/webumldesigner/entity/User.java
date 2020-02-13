@@ -1,14 +1,18 @@
-package nju.edu.uml.webumldesigner.repository;
+package nju.edu.uml.webumldesigner.entity;
 
-import java.util.List;
+import javax.persistence.*;
 
+@Entity
 public class User {
+    @Id
+    //策略为递增
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int uid;
     private String userId;
     private String userName;
     private String userPassword;
     private String userEmail;
-    private List<Integer> fidList;
+    private String fidList;
     private String editable;
 
     public int getUid() {
@@ -51,11 +55,11 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public List<Integer> getFidList() {
+    public String getFidList() {
         return fidList;
     }
 
-    public void setFidList(List<Integer> fidList) {
+    public void setFidList(String fidList) {
         this.fidList = fidList;
     }
 

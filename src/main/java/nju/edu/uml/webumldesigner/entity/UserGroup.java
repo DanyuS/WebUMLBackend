@@ -1,8 +1,15 @@
-package nju.edu.uml.webumldesigner.repository;
+package nju.edu.uml.webumldesigner.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.List;
 
+@Entity
 public class UserGroup {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int gid;
     private String groupId;
     private String groupName;
