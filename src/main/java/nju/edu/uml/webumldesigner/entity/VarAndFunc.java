@@ -9,19 +9,19 @@ import javax.persistence.Id;
 public class VarAndFunc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int vid;
+    private Integer vid;
     private String modifier;
     private String dataType;
     private String name;
     private String params;
     private String propId;
-    private int flag;//0为参数，1为方法
+    private Integer flag;//0为参数，1为方法
 
-    public int getVid() {
+    public Integer getVid() {
         return vid;
     }
 
-    public void setVid(int vid) {
+    public void setVid(Integer vid) {
         this.vid = vid;
     }
 
@@ -65,11 +65,11 @@ public class VarAndFunc {
         this.propId = propId;
     }
 
-    public int getFlag() {
+    public Integer getFlag() {
         return flag;
     }
 
-    public void setFlag(int flag) {
+    public void setFlag(Integer flag) {
         this.flag = flag;
     }
 }

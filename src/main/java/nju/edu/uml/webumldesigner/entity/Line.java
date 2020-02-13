@@ -9,18 +9,18 @@ import javax.persistence.Id;
 public class Line {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int lid;
+    private Integer lid;
     private String lineId;
     private String relationType;
     private String fromId;
     private String toId;
     private String styles;
 
-    public int getLid() {
+    public Integer getLid() {
         return lid;
     }
 
-    public void setLid(int lid) {
+    public void setLid(Integer lid) {
         this.lid = lid;
     }
 

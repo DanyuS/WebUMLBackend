@@ -9,17 +9,17 @@ import javax.persistence.Id;
 public class NodePic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int nid;
+    private Integer nid;
     private String nodeId;
     private String nodeType;
     private String nodeStyle;
     private String pidList;
 
-    public int getNid() {
+    public Integer getNid() {
         return nid;
     }
 
-    public void setNid(int nid) {
+    public void setNid(Integer nid) {
         this.nid = nid;
     }
 

@@ -9,12 +9,12 @@ import javax.persistence.Id;
 public class Properties {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pid;
+    private Integer pid;
     private String propertiesId;
     private String className;
     private String classType;
     private String name;
-    private String character;
+    private String characters;
     private String userCase;
     private String boarder;
     private String container;
@@ -32,10 +32,10 @@ public class Properties {
     private String detailedHistory;
     private String fork;
     private String interfaces;
-    private String constraint;
+    private String constraints;
     private String lifeline;
     private String activation;
-    private String delete;
+    private String deletes;
     private String component;
     private String node;
     private String isInstance;
@@ -46,16 +46,16 @@ public class Properties {
     private String comment;
     private String text;
     private String compositionType;
-    private String condition;
+    private String conditions;
 
     //variable&function 建表 加个标记位
 
 
-    public int getPid() {
+    public Integer getPid() {
         return pid;
     }
 
-    public void setPid(int pid) {
+    public void setPid(Integer pid) {
         this.pid = pid;
     }
 
@@ -91,12 +91,12 @@ public class Properties {
         this.name = name;
     }
 
-    public String getCharacter() {
-        return character;
+    public String getCharacters() {
+        return characters;
     }
 
-    public void setCharacter(String character) {
-        this.character = character;
+    public void setCharacters(String characters) {
+        this.characters = characters;
     }
 
     public String getUserCase() {
@@ -235,12 +235,12 @@ public class Properties {
         this.interfaces = interfaces;
     }
 
-    public String getConstraint() {
-        return constraint;
+    public String getConstraints() {
+        return constraints;
     }
 
-    public void setConstraint(String constraint) {
-        this.constraint = constraint;
+    public void setConstraints(String constraints) {
+        this.constraints = constraints;
     }
 
     public String getLifeline() {
@@ -259,12 +259,12 @@ public class Properties {
         this.activation = activation;
     }
 
-    public String getDelete() {
-        return delete;
+    public String getDeletes() {
+        return deletes;
     }
 
-    public void setDelete(String delete) {
-        this.delete = delete;
+    public void setDeletes(String deletes) {
+        this.deletes = deletes;
     }
 
     public String getComponent() {
@@ -347,11 +347,11 @@ public class Properties {
         this.compositionType = compositionType;
     }
 
-    public String getCondition() {
-        return condition;
+    public String getConditions() {
+        return conditions;
     }
 
-    public void setCondition(String condition) {
-        this.condition = condition;
+    public void setConditions(String conditions) {
+        this.conditions = conditions;
     }
 }

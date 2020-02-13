@@ -1,13 +1,15 @@
 package nju.edu.uml.webumldesigner.dao;
 
+import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.entity.Line;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LineDao {
-    public boolean addLine();
+public interface LineDao extends JpaRepository<Line, Integer> {
+//    public boolean addLine();
 
-    public Line getLineByLid(int lid);
-
-    public boolean delLineByLid(int lid);
-
-    public Line upDateLine();
+    public Line findLineByLid(Integer lid);
+//
+//    public boolean delLineByLid(int lid);
+//
+//    public Line upDateLine();
 }

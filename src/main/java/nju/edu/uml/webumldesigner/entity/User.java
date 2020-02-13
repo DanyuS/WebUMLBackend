@@ -7,7 +7,7 @@ public class User {
     @Id
     //策略为递增
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int uid;
+    private Integer uid;
     private String userId;
     private String userName;
     private String userPassword;
@@ -15,11 +15,11 @@ public class User {
     private String fidList;
     private String editable;
 
-    public int getUid() {
+    public Integer getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(Integer uid) {
         this.uid = uid;
     }
 

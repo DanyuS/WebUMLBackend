@@ -10,17 +10,17 @@ import java.util.List;
 public class UserGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int gid;
+    private Integer gid;
     private String groupId;
     private String groupName;
     private String uidList;
     private String fidList;
 
-    public int getGid() {
+    public Integer getGid() {
         return gid;
     }
 
-    public void setGid(int gid) {
+    public void setGid(Integer gid) {
         this.gid = gid;
     }
 

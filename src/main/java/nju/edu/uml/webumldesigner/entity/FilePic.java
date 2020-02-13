@@ -9,17 +9,18 @@ import javax.persistence.Id;
 public class FilePic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int fid;
+    private Integer fid;
     private String fileId;
     private String fileName;
     private String fileType;
     private String nidList;
+    private String lidList;
 
-    public int getFid() {
+    public Integer getFid() {
         return fid;
     }
 
-    public void setFid(int fid) {
+    public void setFid(Integer fid) {
         this.fid = fid;
     }
 
@@ -53,5 +54,13 @@ public class FilePic {
 
     public void setNidList(String nidList) {
         this.nidList = nidList;
+    }
+
+    public String getLidList() {
+        return lidList;
+    }
+
+    public void setLidList(String lidList) {
+        this.lidList = lidList;
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PropertiesDao extends JpaRepository<Properties, Integer> {
 //    public boolean addProperties();
 
-    public Properties findPropertiesByPid(int pid);
+    public Properties findPropertiesByPid(Integer pid);
 //
 //    public boolean delPropertiesByPid(int pid);
 //
