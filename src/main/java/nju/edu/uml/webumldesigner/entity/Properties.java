@@ -1,9 +1,6 @@
 package nju.edu.uml.webumldesigner.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Properties {
@@ -49,6 +46,10 @@ public class Properties {
     private String conditions;
 
     //variable&function 建表 加个标记位
+    @OneToOne
+    private VarAndFunc variables;
+    @OneToOne
+    private VarAndFunc functions;
 
 
     public Integer getPid() {
@@ -353,5 +354,21 @@ public class Properties {
 
     public void setConditions(String conditions) {
         this.conditions = conditions;
+    }
+
+    public VarAndFunc getVariables() {
+        return variables;
+    }
+
+    public void setVariables(VarAndFunc variables) {
+        this.variables = variables;
+    }
+
+    public VarAndFunc getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(VarAndFunc functions) {
+        this.functions = functions;
     }
 }

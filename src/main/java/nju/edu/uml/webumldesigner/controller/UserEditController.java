@@ -18,6 +18,11 @@ public class UserEditController {
         return result;
     }
 
+    @GetMapping("/updateFile")
+    public boolean updateFile(Integer fid, String fileName, String fileType){
+        return editService.updateFile(fid, fileName, fileType);
+    }
+
     @GetMapping("/delFile")
     public boolean delFile(Integer uid, Integer fid) {
         boolean result = editService.delFile(uid, fid);
@@ -25,22 +30,32 @@ public class UserEditController {
     }
 
     @GetMapping("/addNode")
-    public boolean addNode(Integer fid, String nodeStyle, String nodeType){
+    public boolean addNode(Integer fid, String nodeStyle, String nodeType) {
         return editService.addNode(fid, nodeStyle, nodeType);
     }
 
+    @GetMapping("/updateNode")
+    public boolean updateNode(Integer nid, String nodeStyle, String nodeType){
+        return editService.updateNode(nid, nodeStyle, nodeType);
+    }
+
     @GetMapping("/delNode")
-    public boolean delNode(Integer fid, Integer nid){
+    public boolean delNode(Integer fid, Integer nid) {
         return editService.delNode(fid, nid);
     }
 
     @GetMapping("/addLine")
-    public boolean addLine(Integer fid, String relationType, String fromId, String toId, String styles){
+    public boolean addLine(Integer fid, String relationType, String fromId, String toId, String styles) {
         return editService.addLine(fid, relationType, fromId, toId, styles);
     }
 
+    @GetMapping("/updateLine")
+    public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles){
+        return editService.updateLine(lid, relationType, fromId, toId, styles);
+    }
+
     @GetMapping("/delLine")
-    public boolean delLine(Integer fid, Integer lid){
+    public boolean delLine(Integer fid, Integer lid) {
         return editService.delLine(fid, lid);
     }
 
@@ -49,8 +64,28 @@ public class UserEditController {
         return editService.addProperties(nid);
     }
 
+    @GetMapping("/updateProperties")
+    public boolean updateProperties(Integer pid){
+        return editService.updateProperties(pid);
+    }
+
     @GetMapping("/delProperties")
-    public boolean delProperties(Integer nid, Integer pid){
+    public boolean delProperties(Integer nid, Integer pid) {
         return editService.delProperties(nid, pid);
+    }
+
+    @GetMapping("/addVarAndFunc")
+    public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
+        return editService.addVarAndFunc(pid, modifier, dataType, name, params, propId, flag);
+    }
+
+    @GetMapping("/delVarAndFUnc")
+    public boolean delVarAndFUnc(Integer pid, Integer vid) {
+        return editService.delVarAndFUnc(pid, vid);
+    }
+
+    @GetMapping("/upDateVarAndFunc")
+    public boolean upDateVarAndFunc(Integer pid, Integer vid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
+        return editService.upDateVarAndFunc(pid, vid, modifier, dataType, name, params, propId, flag);
     }
 }

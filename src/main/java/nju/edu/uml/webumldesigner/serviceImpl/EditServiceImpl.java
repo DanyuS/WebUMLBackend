@@ -27,6 +27,9 @@ public class EditServiceImpl implements EditService {
     @Autowired
     private PropertiesDao propertiesDao;
 
+    @Autowired
+    private VarAndFuncDao varAndFuncDao;
+
     @Override
     public Properties getPropertiesByPid(Integer pid) {
         return null;
@@ -50,6 +53,15 @@ public class EditServiceImpl implements EditService {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean updateFile(Integer fid, String fileName, String fileType) {
+        FilePic filePic = fileDao.findFilePicByFid(fid);
+        filePic.setFileName(fileName);
+        filePic.setFileType(fileType);
+        fileDao.save(filePic);
+        return true;
     }
 
     @Override
@@ -82,6 +94,15 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
+    public boolean updateNode(Integer nid, String nodeStyle, String nodeType) {
+        NodePic nodePic = nodeDao.findNodePicByNid(nid);
+        nodePic.setNodeStyle(nodeStyle);
+        nodePic.setNodeType(nodeType);
+        nodeDao.save(nodePic);
+        return true;
+    }
+
+    @Override
     public boolean delNode(Integer fid, Integer nid) {
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
         nodeDao.delete(nodePic);
@@ -110,6 +131,17 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
+    public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles) {
+        Line line = lineDao.findLineByLid(lid);
+        line.setRelationType(relationType);
+        line.setFromId(fromId);
+        line.setToId(toId);
+        line.setStyles(styles);
+        lineDao.save(line);
+        return true;
+    }
+
+    @Override
     public boolean delLine(Integer fid, Integer lid) {
         Line line = lineDao.findLineByLid(lid);
         lineDao.delete(line);
@@ -119,6 +151,7 @@ public class EditServiceImpl implements EditService {
 
     @Override
     public boolean addProperties(Integer nid) {
+        //TODO
         //存入数据库
         Properties properties = new Properties();
 //        properties.setPropertiesId(propertiesId);
@@ -136,6 +169,12 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
+    public boolean updateProperties(Integer pid) {
+        //TODO
+        return true;
+    }
+
+    @Override
     public boolean delProperties(Integer nid, Integer pid) {
         Properties properties = propertiesDao.findPropertiesByPid(pid);
         propertiesDao.delete(properties);
@@ -143,9 +182,74 @@ public class EditServiceImpl implements EditService {
         return true;
     }
 
+    @Override
+    public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
+        VarAndFunc varAndFunc = new VarAndFunc();
+        varAndFunc.setModifier(modifier);
+        varAndFunc.setDataType(dataType);
+        varAndFunc.setName(name);
+        varAndFunc.setParams(params);
+        varAndFunc.setPropId(propId);
+        varAndFunc.setFlag(flag);
+        VarAndFunc result = varAndFuncDao.save(varAndFunc);
+        if (result.getVid() > 0) {
+            Properties properties = propertiesDao.findPropertiesByPid(pid);
+            if (flag == 0) {
+                properties.setVariables(varAndFunc);
+            } else {
+                properties.setFunctions(varAndFunc);
+            }
+            propertiesDao.save(properties);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean delVarAndFUnc(Integer pid, Integer vid) {
+        Properties properties = propertiesDao.findPropertiesByPid(pid);
+        VarAndFunc varAndFunc = varAndFuncDao.findVarAndFuncByVid(vid);
+        if(varAndFunc.getFlag() == 0){
+            properties.setVariables(null);
+        }else if(varAndFunc.getFlag() == 1){
+            properties.setFunctions(null);
+        }
+        propertiesDao.save(properties);
+        varAndFuncDao.delete(varAndFunc);
+        return true;
+    }
+
+    @Override
+    public boolean upDateVarAndFunc(Integer pid, Integer vid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
+        VarAndFunc varAndFunc = varAndFuncDao.findVarAndFuncByVid(vid);
+        varAndFunc.setModifier(modifier);
+        varAndFunc.setDataType(dataType);
+        varAndFunc.setName(name);
+        varAndFunc.setParams(params);
+        varAndFunc.setPropId(propId);
+        varAndFunc.setFlag(flag);
+        varAndFuncDao.save(varAndFunc);
+        Properties properties = propertiesDao.findPropertiesByPid(pid);
+        if (flag == 0) {
+            properties.setVariables(varAndFunc);
+        } else {
+            properties.setFunctions(varAndFunc);
+        }
+        propertiesDao.save(properties);
+
+        return true;
+    }
+
+    @Override
+    public boolean importFile(Integer fid, Integer id) {
+        //TODO
+        return false;
+    }
+
     //将fid加入user的fidList中
     private void addFidToUser(Integer uid, Integer fid) {
-        User user = userDao.findByUid(uid);
+        User user = userDao.findUserByUid(uid);
         String fidList = user.getFidList();
         List<String> fList = new Gson().fromJson(fidList, List.class);
         fList.add(String.valueOf(fid));
@@ -155,7 +259,7 @@ public class EditServiceImpl implements EditService {
 
     //将fid從user的fidList中移除
     private void removeFidFromUser(Integer uid, Integer fid) {
-        User user = userDao.findByUid(uid);
+        User user = userDao.findUserByUid(uid);
         String fidList = user.getFidList();
         List<String> fList = new Gson().fromJson(fidList, List.class);
         for (int i = 0; i < fList.size(); i++) {

@@ -1,7 +1,12 @@
 package nju.edu.uml.webumldesigner.dao;
 
-public interface UserGroupDao {
-    public boolean inviteUser(String userEmail);
+import nju.edu.uml.webumldesigner.entity.UserGroup;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    public String getUserGroup(int gid);
+public interface UserGroupDao extends JpaRepository<UserGroup, Integer> {
+    UserGroup findUserGroupByGid(Integer gid);
+//    public boolean inviteUser(String userEmail);
+//
+//    public String getUserGroup(int gid);
+
 }
