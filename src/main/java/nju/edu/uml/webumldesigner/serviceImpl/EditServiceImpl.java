@@ -249,13 +249,49 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
-    public List<FilePic> getAllFilePicByUid(Integer uid) {
+    public List<FilePic> getAllFileByUid(Integer uid) {
         User user = userDao.findUserByUid(uid);
         List<Integer> fidList = transStringToList(user.getFidList());
         List<FilePic> result = new ArrayList<FilePic>();
-        for(int i=0;i<fidList.size();i++){
+        for (int i = 0; i < fidList.size(); i++) {
             FilePic filePic = fileDao.findFilePicByFid(fidList.get(i));
             result.add(filePic);
+        }
+        return result;
+    }
+
+    @Override
+    public List<NodePic> getAllNodeByFid(Integer fid) {
+        FilePic filePic = fileDao.findFilePicByFid(fid);
+        List<Integer> nidList = transStringToList(filePic.getNidList());
+        List<NodePic> result = new ArrayList<NodePic>();
+        for (int i = 0; i < nidList.size(); i++) {
+            NodePic nodePic = nodeDao.findNodePicByNid(nidList.get(i));
+            result.add(nodePic);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Line> getAllLineByFid(Integer fid) {
+        FilePic filePic = fileDao.findFilePicByFid(fid);
+        List<Integer> lidList = transStringToList(filePic.getLidList());
+        List<Line> result = new ArrayList<Line>();
+        for (int i = 0; i < lidList.size(); i++) {
+            Line line = lineDao.findLineByLid(lidList.get(i));
+            result.add(line);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Properties> getAllPropertiesByNid(Integer nid) {
+        NodePic nodePic = nodeDao.findNodePicByNid(nid);
+        List<Integer> pidList = transStringToList(nodePic.getPidList());
+        List<Properties> result = new ArrayList<Properties>();
+        for (int i = 0; i < pidList.size(); i++) {
+            Properties properties = propertiesDao.findPropertiesByPid(pidList.get(i));
+            result.add(properties);
         }
         return result;
     }

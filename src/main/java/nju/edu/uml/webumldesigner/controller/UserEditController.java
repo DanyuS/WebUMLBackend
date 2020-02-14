@@ -1,6 +1,9 @@
 package nju.edu.uml.webumldesigner.controller;
 
 import nju.edu.uml.webumldesigner.entity.FilePic;
+import nju.edu.uml.webumldesigner.entity.Line;
+import nju.edu.uml.webumldesigner.entity.NodePic;
+import nju.edu.uml.webumldesigner.entity.Properties;
 import nju.edu.uml.webumldesigner.service.EditService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +25,7 @@ public class UserEditController {
     }
 
     @GetMapping("/updateFile")
-    public boolean updateFile(Integer fid, String fileName, String fileType){
+    public boolean updateFile(Integer fid, String fileName, String fileType) {
         return editService.updateFile(fid, fileName, fileType);
     }
 
@@ -38,7 +41,7 @@ public class UserEditController {
     }
 
     @GetMapping("/updateNode")
-    public boolean updateNode(Integer nid, String nodeStyle, String nodeType){
+    public boolean updateNode(Integer nid, String nodeStyle, String nodeType) {
         return editService.updateNode(nid, nodeStyle, nodeType);
     }
 
@@ -53,7 +56,7 @@ public class UserEditController {
     }
 
     @GetMapping("/updateLine")
-    public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles){
+    public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles) {
         return editService.updateLine(lid, relationType, fromId, toId, styles);
     }
 
@@ -68,7 +71,7 @@ public class UserEditController {
     }
 
     @GetMapping("/updateProperties")
-    public boolean updateProperties(Integer pid){
+    public boolean updateProperties(Integer pid) {
         return editService.updateProperties(pid);
     }
 
@@ -93,7 +96,22 @@ public class UserEditController {
     }
 
     @GetMapping("/getAllFilePicByUid")
-    public List<FilePic> getAllFilePicByUid(Integer uid){
-        return editService.getAllFilePicByUid(uid);
+    public List<FilePic> getAllFilePicByUid(Integer uid) {
+        return editService.getAllFileByUid(uid);
+    }
+
+    @GetMapping("/getAllNodeByFid")
+    public List<NodePic> getAllNodeByFid(Integer fid){
+        return editService.getAllNodeByFid(fid);
+    }
+
+    @GetMapping("/getAllLineByFid")
+    public List<Line> getAllLineByFid(Integer fid){
+        return editService.getAllLineByFid(fid);
+    }
+
+    @GetMapping("/getAllPropertiesByNid")
+    public List<Properties> getAllPropertiesByNid(Integer nid){
+        return editService.getAllPropertiesByNid(nid);
     }
 }

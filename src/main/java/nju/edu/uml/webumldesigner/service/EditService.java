@@ -1,6 +1,8 @@
 package nju.edu.uml.webumldesigner.service;
 
 import nju.edu.uml.webumldesigner.entity.FilePic;
+import nju.edu.uml.webumldesigner.entity.Line;
+import nju.edu.uml.webumldesigner.entity.NodePic;
 import nju.edu.uml.webumldesigner.entity.Properties;
 
 import java.util.List;
@@ -40,5 +42,11 @@ public interface EditService {
 
     public boolean importFile(Integer fid, Integer id);//这里的id可以说uid或者gid？
 
-    public List<FilePic> getAllFilePicByUid(Integer uid);
+    public List<FilePic> getAllFileByUid(Integer uid);
+
+    public List<NodePic> getAllNodeByFid(Integer fid);
+
+    public List<Line> getAllLineByFid(Integer fid);
+
+    public List<Properties> getAllPropertiesByNid(Integer nid);
 }
