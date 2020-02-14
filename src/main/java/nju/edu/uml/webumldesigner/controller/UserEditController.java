@@ -1,8 +1,11 @@
 package nju.edu.uml.webumldesigner.controller;
 
+import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.service.EditService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class UserEditController {
@@ -87,5 +90,10 @@ public class UserEditController {
     @GetMapping("/upDateVarAndFunc")
     public boolean upDateVarAndFunc(Integer pid, Integer vid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
         return editService.upDateVarAndFunc(pid, vid, modifier, dataType, name, params, propId, flag);
+    }
+
+    @GetMapping("/getAllFilePicByUid")
+    public List<FilePic> getAllFilePicByUid(Integer uid){
+        return editService.getAllFilePicByUid(uid);
     }
 }

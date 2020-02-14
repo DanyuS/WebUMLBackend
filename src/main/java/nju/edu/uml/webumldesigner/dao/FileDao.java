@@ -9,6 +9,7 @@ public interface FileDao extends JpaRepository<FilePic, Integer> {
 //    public String findFidListByGid(int gid);
 //
     FilePic findFilePicByFid(Integer fid);
+
 //
 //    public String findNidListByFid(int fid);
 }

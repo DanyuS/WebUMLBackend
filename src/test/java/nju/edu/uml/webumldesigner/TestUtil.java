@@ -16,7 +16,7 @@ public class TestUtil {
 
     @Test
     public void testUpdate() {
-        User user = userDao.findByUid(1);
+        User user = userDao.findUserByUid(1);
         String fidList = user.getFidList();
         List<Integer> fList = new Gson().fromJson(fidList, List.class);
         fList.add(1);

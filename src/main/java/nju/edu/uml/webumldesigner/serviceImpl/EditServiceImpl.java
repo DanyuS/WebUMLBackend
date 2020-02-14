@@ -7,6 +7,7 @@ import nju.edu.uml.webumldesigner.service.EditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -210,9 +211,9 @@ public class EditServiceImpl implements EditService {
     public boolean delVarAndFUnc(Integer pid, Integer vid) {
         Properties properties = propertiesDao.findPropertiesByPid(pid);
         VarAndFunc varAndFunc = varAndFuncDao.findVarAndFuncByVid(vid);
-        if(varAndFunc.getFlag() == 0){
+        if (varAndFunc.getFlag() == 0) {
             properties.setVariables(null);
-        }else if(varAndFunc.getFlag() == 1){
+        } else if (varAndFunc.getFlag() == 1) {
             properties.setFunctions(null);
         }
         propertiesDao.save(properties);
@@ -245,6 +246,18 @@ public class EditServiceImpl implements EditService {
     public boolean importFile(Integer fid, Integer id) {
         //TODO
         return false;
+    }
+
+    @Override
+    public List<FilePic> getAllFilePicByUid(Integer uid) {
+        User user = userDao.findUserByUid(uid);
+        List<Integer> fidList = transStringToList(user.getFidList());
+        List<FilePic> result = new ArrayList<FilePic>();
+        for(int i=0;i<fidList.size();i++){
+            FilePic filePic = fileDao.findFilePicByFid(fidList.get(i));
+            result.add(filePic);
+        }
+        return result;
     }
 
     //将fid加入user的fidList中
@@ -345,5 +358,14 @@ public class EditServiceImpl implements EditService {
         }
         nodePic.setPidList(new Gson().toJson(pList));
         nodeDao.save(nodePic);
+    }
+
+    private List<Integer> transStringToList(String listStr) {
+        List<String> list = new Gson().fromJson(listStr, List.class);
+        List<Integer> result = new ArrayList<Integer>();
+        for (int i = 0; i < list.size(); i++) {
+            result.add(Integer.parseInt(list.get(i)));
+        }
+        return result;
     }
 }
