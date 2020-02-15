@@ -148,16 +148,16 @@ public class EditServiceImpl implements EditService {
             for (int i = 0; i < key.size(); i++) {
                 switch (key.get(i)) {
                     case "width":
-                        nodeStyle.setWidth(Integer.parseInt(value.get(i)));
+                        nodeStyle.setStyleWidth(Integer.parseInt(value.get(i)));
                         break;
                     case "height":
-                        nodeStyle.setHeight(Integer.parseInt(value.get(i)));
+                        nodeStyle.setStyleHeight(Integer.parseInt(value.get(i)));
                         break;
                     case "left":
-                        nodeStyle.setLeft(Integer.parseInt(value.get(i)));
+                        nodeStyle.setStyleLeft(Integer.parseInt(value.get(i)));
                         break;
                     case "top":
-                        nodeStyle.setTop(Integer.parseInt(value.get(i)));
+                        nodeStyle.setStyleTop(Integer.parseInt(value.get(i)));
                         break;
                 }
             }
