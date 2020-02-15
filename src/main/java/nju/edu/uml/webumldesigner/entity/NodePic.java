@@ -1,9 +1,6 @@
 package nju.edu.uml.webumldesigner.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class NodePic {
@@ -12,8 +9,10 @@ public class NodePic {
     private Integer nid;
     private String nodeId;
     private String nodeType;
-    private String nodeStyle;
-    private String pidList;
+    @OneToOne
+    private NodeStyle nodeStyle;
+    @OneToOne
+    private Properties properties;
 
     public Integer getNid() {
         return nid;
@@ -39,19 +38,19 @@ public class NodePic {
         this.nodeType = nodeType;
     }
 
-    public String getNodeStyle() {
+    public NodeStyle getNodeStyle() {
         return nodeStyle;
     }
 
-    public void setNodeStyle(String nodeStyle) {
+    public void setNodeStyle(NodeStyle nodeStyle) {
         this.nodeStyle = nodeStyle;
     }
 
-    public String getPidList() {
-        return pidList;
+    public Properties getProperties() {
+        return properties;
     }
 
-    public void setPidList(String pidList) {
-        this.pidList = pidList;
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
 }

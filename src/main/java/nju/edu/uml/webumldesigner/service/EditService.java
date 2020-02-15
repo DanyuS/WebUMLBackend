@@ -1,9 +1,6 @@
 package nju.edu.uml.webumldesigner.service;
 
-import nju.edu.uml.webumldesigner.entity.FilePic;
-import nju.edu.uml.webumldesigner.entity.Line;
-import nju.edu.uml.webumldesigner.entity.NodePic;
-import nju.edu.uml.webumldesigner.entity.Properties;
+import nju.edu.uml.webumldesigner.entity.*;
 
 import java.util.List;
 
@@ -16,9 +13,9 @@ public interface EditService {
 
     public boolean delFile(Integer uid, Integer fid);
 
-    public boolean addNode(Integer fid, String nodeStyle, String nodeType);
+    public boolean addNode(Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties);
 
-    public boolean updateNode(Integer nid, String nodeStyle, String nodeType);
+    public boolean updateNode(Integer nid, String nodeKey, List<String> key, List<String> value);
 
     public boolean delNode(Integer fid, Integer nid);
 
@@ -28,11 +25,11 @@ public interface EditService {
 
     public boolean delLine(Integer fid, Integer lid);
 
-    public boolean addProperties(Integer nid);
-
-    public boolean updateProperties(Integer pid);
-
-    public boolean delProperties(Integer nid, Integer pid);
+//    public boolean addProperties(Integer nid);
+//
+//    public boolean updateProperties(Integer pid);
+//
+//    public boolean delProperties(Integer nid, Integer pid);
 
     public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag);
 
@@ -48,5 +45,5 @@ public interface EditService {
 
     public List<Line> getAllLineByFid(Integer fid);
 
-    public List<Properties> getAllPropertiesByNid(Integer nid);
+//    public List<Properties> getAllPropertiesByNid(Integer nid);
 }

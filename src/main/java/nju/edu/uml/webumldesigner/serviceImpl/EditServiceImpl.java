@@ -76,11 +76,11 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
-    public boolean addNode(Integer fid, String nodeStyle, String nodeType) {
+    public boolean addNode(Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
         NodePic nodePic = new NodePic();
         nodePic.setNodeStyle(nodeStyle);
         nodePic.setNodeType(nodeType);
-        nodePic.setPidList("[]");
+        nodePic.setProperties(properties);
         //日后要改成用户id加啥啥还是别的怎么用法
         String num = String.valueOf(nodeDao.count() + 1);
         nodePic.setNodeId("n" + num);
@@ -95,10 +95,74 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
-    public boolean updateNode(Integer nid, String nodeStyle, String nodeType) {
+    public boolean updateNode(Integer nid, String nodeKey, List<String> key, List<String> value) {
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
-        nodePic.setNodeStyle(nodeStyle);
-        nodePic.setNodeType(nodeType);
+        if (nodeKey.equals("properties")) {
+            Properties properties = nodePic.getProperties();
+            for (int i = 0; i < key.size(); i++) {
+                switch (key.get(i)) {
+                    case "className":
+                        properties.setClassName(value.get(i));
+                        break;
+                    case "classType":
+                        properties.setClassType(value.get(i));
+                        break;
+                    case "name":
+                        properties.setName(value.get(i));
+                        break;
+                    case "isInstance":
+                        if (value.get(i).equals("true")) {
+                            properties.setInstance(true);
+                        } else {
+                            properties.setInstance(false);
+                        }
+                        break;
+                    case "isWeak":
+                        if (value.get(i).equals("true")) {
+                            properties.setWeak(true);
+                        } else {
+                            properties.setWeak(false);
+                        }
+                        break;
+                    case "compositionType":
+                        properties.setCompositionType(value.get(i));
+                        break;
+                    case "conditions":
+                        properties.setConditions(value.get(i));
+                        break;
+                    case "variables": {
+                        VarAndFunc varAndFunc = new Gson().fromJson(value.get(i), VarAndFunc.class);
+                        properties.setVariables(varAndFunc);
+                        break;
+                    }
+                    case "functions": {
+                        VarAndFunc varAndFunc = new Gson().fromJson(value.get(i), VarAndFunc.class);
+                        properties.setFunctions(varAndFunc);
+                        break;
+                    }
+                }
+            }
+            nodePic.setProperties(properties);
+        } else {
+            NodeStyle nodeStyle = nodePic.getNodeStyle();
+            for (int i = 0; i < key.size(); i++) {
+                switch (key.get(i)) {
+                    case "width":
+                        nodeStyle.setWidth(Integer.parseInt(value.get(i)));
+                        break;
+                    case "height":
+                        nodeStyle.setHeight(Integer.parseInt(value.get(i)));
+                        break;
+                    case "left":
+                        nodeStyle.setLeft(Integer.parseInt(value.get(i)));
+                        break;
+                    case "top":
+                        nodeStyle.setTop(Integer.parseInt(value.get(i)));
+                        break;
+                }
+            }
+            nodePic.setNodeStyle(nodeStyle);
+        }
         nodeDao.save(nodePic);
         return true;
     }
@@ -150,38 +214,38 @@ public class EditServiceImpl implements EditService {
         return true;
     }
 
-    @Override
-    public boolean addProperties(Integer nid) {
-        //TODO
-        //存入数据库
-        Properties properties = new Properties();
-//        properties.setPropertiesId(propertiesId);
-
-        String num = String.valueOf(propertiesDao.count() + 1);
-        properties.setPropertiesId("p" + num);
-        Properties result = propertiesDao.save(properties);
-
-        if (result.getPid() > 0) {
-            Integer pid = Integer.parseInt(num);
-            addPidToNode(nid, pid);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean updateProperties(Integer pid) {
-        //TODO
-        return true;
-    }
-
-    @Override
-    public boolean delProperties(Integer nid, Integer pid) {
-        Properties properties = propertiesDao.findPropertiesByPid(pid);
-        propertiesDao.delete(properties);
-        removePidFromNode(nid, pid);
-        return true;
-    }
+//    @Override
+//    public boolean addProperties(Integer nid) {
+//
+//        //存入数据库
+//        Properties properties = new Properties();
+////        properties.setPropertiesId(propertiesId);
+//
+//        String num = String.valueOf(propertiesDao.count() + 1);
+//        properties.setPropertiesId("p" + num);
+//        Properties result = propertiesDao.save(properties);
+//
+//        if (result.getPid() > 0) {
+////            Integer pid = Integer.parseInt(num);
+////            addPidToNode(nid, pid);
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean updateProperties(Integer pid) {
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean delProperties(Integer nid, Integer pid) {
+//        Properties properties = propertiesDao.findPropertiesByPid(pid);
+//        propertiesDao.delete(properties);
+////        removePidFromNode(nid, pid);
+//        return true;
+//    }
 
     @Override
     public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
@@ -284,17 +348,17 @@ public class EditServiceImpl implements EditService {
         return result;
     }
 
-    @Override
-    public List<Properties> getAllPropertiesByNid(Integer nid) {
-        NodePic nodePic = nodeDao.findNodePicByNid(nid);
-        List<Integer> pidList = transStringToList(nodePic.getPidList());
-        List<Properties> result = new ArrayList<Properties>();
-        for (int i = 0; i < pidList.size(); i++) {
-            Properties properties = propertiesDao.findPropertiesByPid(pidList.get(i));
-            result.add(properties);
-        }
-        return result;
-    }
+//    @Override
+//    public List<Properties> getAllPropertiesByNid(Integer nid) {
+//        NodePic nodePic = nodeDao.findNodePicByNid(nid);
+//        List<Integer> pidList = transStringToList(nodePic.getPidList());
+//        List<Properties> result = new ArrayList<Properties>();
+//        for (int i = 0; i < pidList.size(); i++) {
+//            Properties properties = propertiesDao.findPropertiesByPid(pidList.get(i));
+//            result.add(properties);
+//        }
+//        return result;
+//    }
 
     //将fid加入user的fidList中
     private void addFidToUser(Integer uid, Integer fid) {
@@ -371,30 +435,30 @@ public class EditServiceImpl implements EditService {
         fileDao.save(filePic);
     }
 
-    //将pid加入node的pidList中
-    private void addPidToNode(Integer nid, Integer pid) {
-        NodePic nodePic = nodeDao.findNodePicByNid(nid);
-        String pidList = nodePic.getPidList();
-        List<String> pList = new Gson().fromJson(pidList, List.class);
-        pList.add(String.valueOf(pid));
-        nodePic.setPidList(new Gson().toJson(pList));
-        nodeDao.save(nodePic);
-    }
+//    //将pid加入node的pidList中
+//    private void addPidToNode(Integer nid, Integer pid) {
+//        NodePic nodePic = nodeDao.findNodePicByNid(nid);
+//        String pidList = nodePic.getPidList();
+//        List<String> pList = new Gson().fromJson(pidList, List.class);
+//        pList.add(String.valueOf(pid));
+//        nodePic.setPidList(new Gson().toJson(pList));
+//        nodeDao.save(nodePic);
+//    }
 
-    //将pid從node的pidList中移除
-    private void removePidFromNode(Integer nid, Integer pid) {
-        NodePic nodePic = nodeDao.findNodePicByNid(nid);
-        String pidList = nodePic.getPidList();
-        List<String> pList = new Gson().fromJson(pidList, List.class);
-        for (int i = 0; i < pList.size(); i++) {
-            if (pList.get(i).equals(String.valueOf(pid))) {
-                pList.remove(i);
-                break;
-            }
-        }
-        nodePic.setPidList(new Gson().toJson(pList));
-        nodeDao.save(nodePic);
-    }
+//    //将pid從node的pidList中移除
+//    private void removePidFromNode(Integer nid, Integer pid) {
+//        NodePic nodePic = nodeDao.findNodePicByNid(nid);
+//        String pidList = nodePic.getPidList();
+//        List<String> pList = new Gson().fromJson(pidList, List.class);
+//        for (int i = 0; i < pList.size(); i++) {
+//            if (pList.get(i).equals(String.valueOf(pid))) {
+//                pList.remove(i);
+//                break;
+//            }
+//        }
+//        nodePic.setPidList(new Gson().toJson(pList));
+//        nodeDao.save(nodePic);
+//    }
 
     private List<Integer> transStringToList(String listStr) {
         List<String> list = new Gson().fromJson(listStr, List.class);

@@ -1,9 +1,6 @@
 package nju.edu.uml.webumldesigner.controller;
 
-import nju.edu.uml.webumldesigner.entity.FilePic;
-import nju.edu.uml.webumldesigner.entity.Line;
-import nju.edu.uml.webumldesigner.entity.NodePic;
-import nju.edu.uml.webumldesigner.entity.Properties;
+import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,13 +33,13 @@ public class UserEditController {
     }
 
     @GetMapping("/addNode")
-    public boolean addNode(Integer fid, String nodeStyle, String nodeType) {
-        return editService.addNode(fid, nodeStyle, nodeType);
+    public boolean addNode(Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
+        return editService.addNode(fid, nodeType, nodeStyle, properties);
     }
 
     @GetMapping("/updateNode")
-    public boolean updateNode(Integer nid, String nodeStyle, String nodeType) {
-        return editService.updateNode(nid, nodeStyle, nodeType);
+    public boolean updateNode(Integer nid, String nodeKey, List<String> key, List<String> value) {
+        return editService.updateNode(nid, nodeKey, key, value);
     }
 
     @GetMapping("/delNode")
@@ -65,20 +62,20 @@ public class UserEditController {
         return editService.delLine(fid, lid);
     }
 
-    @GetMapping("/addProperties")
-    public boolean addProperties(Integer nid) {
-        return editService.addProperties(nid);
-    }
-
-    @GetMapping("/updateProperties")
-    public boolean updateProperties(Integer pid) {
-        return editService.updateProperties(pid);
-    }
-
-    @GetMapping("/delProperties")
-    public boolean delProperties(Integer nid, Integer pid) {
-        return editService.delProperties(nid, pid);
-    }
+//    @GetMapping("/addProperties")
+//    public boolean addProperties(Integer nid) {
+//        return editService.addProperties(nid);
+//    }
+//
+//    @GetMapping("/updateProperties")
+//    public boolean updateProperties(Integer pid) {
+//        return editService.updateProperties(pid);
+//    }
+//
+//    @GetMapping("/delProperties")
+//    public boolean delProperties(Integer nid, Integer pid) {
+//        return editService.delProperties(nid, pid);
+//    }
 
     @GetMapping("/addVarAndFunc")
     public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
@@ -101,17 +98,17 @@ public class UserEditController {
     }
 
     @GetMapping("/getAllNodeByFid")
-    public List<NodePic> getAllNodeByFid(Integer fid){
+    public List<NodePic> getAllNodeByFid(Integer fid) {
         return editService.getAllNodeByFid(fid);
     }
 
     @GetMapping("/getAllLineByFid")
-    public List<Line> getAllLineByFid(Integer fid){
+    public List<Line> getAllLineByFid(Integer fid) {
         return editService.getAllLineByFid(fid);
     }
 
-    @GetMapping("/getAllPropertiesByNid")
-    public List<Properties> getAllPropertiesByNid(Integer nid){
-        return editService.getAllPropertiesByNid(nid);
-    }
+//    @GetMapping("/getAllPropertiesByNid")
+//    public List<Properties> getAllPropertiesByNid(Integer nid) {
+//        return editService.getAllPropertiesByNid(nid);
+//    }
 }
