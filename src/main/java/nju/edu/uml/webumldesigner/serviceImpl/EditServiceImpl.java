@@ -37,23 +37,23 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
-    public boolean createFile(Integer uid, String fileName, String fileType) {
+    public Integer createFile(Integer uid, String fileName, String fileType) {
         FilePic filePic = new FilePic();
         filePic.setFileName(fileName);
         filePic.setFileType(fileType);
         String num = String.valueOf(fileDao.count() + 1);
         filePic.setFileId("f" + num);
         filePic.setNidList("[]");
-        filePic.setNidList("[]");
+//        filePic.setNidList("[]");
         FilePic result = fileDao.save(filePic);
         if (result.getFid() > 0) {
             //加入user的fidList中
             Integer fid = Integer.parseInt(num);
             addFidToUser(uid, fid);
-            return true;
+            return result.getFid();
         }
 
-        return false;
+        return -1;
     }
 
     @Override
@@ -76,11 +76,13 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
-    public boolean addNode(Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
+    public Integer addNode(Integer uid, Integer gid, Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
         NodePic nodePic = new NodePic();
         nodePic.setNodeStyle(nodeStyle);
         nodePic.setNodeType(nodeType);
         nodePic.setProperties(properties);
+        nodePic.setUid(uid);
+        nodePic.setGid(gid);
         //日后要改成用户id加啥啥还是别的怎么用法
         String num = String.valueOf(nodeDao.count() + 1);
         nodePic.setNodeId("n" + num);
@@ -89,9 +91,9 @@ public class EditServiceImpl implements EditService {
         if (result.getNid() > 0) {
             Integer nid = Integer.parseInt(num);
             addNidToFile(fid, nid);
-            return true;
+            return result.getNid();
         }
-        return false;
+        return -1;
     }
 
     @Override
@@ -176,12 +178,14 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
-    public boolean addLine(Integer fid, String relationType, String fromId, String toId, String styles) {
+    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles) {
         Line line = new Line();
         line.setRelationType(relationType);
         line.setFromId(fromId);
         line.setToId(toId);
         line.setStyles(styles);
+        line.setUid(uid);
+        line.setGid(gid);
 
         String num = String.valueOf(lineDao.count() + 1);
         line.setLineId("l" + num);
@@ -190,9 +194,9 @@ public class EditServiceImpl implements EditService {
         if (result.getLid() > 0) {
             Integer lid = result.getLid();
             addLidToFile(fid, lid);
-            return true;
+            return result.getLid();
         }
-        return false;
+        return -1;
     }
 
     @Override

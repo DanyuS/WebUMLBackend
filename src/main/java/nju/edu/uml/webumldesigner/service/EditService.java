@@ -7,19 +7,19 @@ import java.util.List;
 public interface EditService {
     public Properties getPropertiesByPid(Integer pid);
 
-    public boolean createFile(Integer uid, String fileName, String fileType);
+    public Integer createFile(Integer uid, String fileName, String fileType);
 
     public boolean updateFile(Integer fid, String fileName, String fileType);
 
     public boolean delFile(Integer uid, Integer fid);
 
-    public boolean addNode(Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties);
+    public Integer addNode(Integer uid, Integer gid, Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties);
 
     public boolean updateNode(Integer nid, String nodeKey, List<String> key, List<String> value);
 
     public boolean delNode(Integer fid, Integer nid);
 
-    public boolean addLine(Integer fid, String relationType, String fromId, String toId, String styles);
+    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles);
 
     public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles);
 

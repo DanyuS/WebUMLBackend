@@ -14,6 +14,9 @@ public class NodePic {
     @OneToOne
     private Properties properties;
 
+    private Integer uid;//node创建者
+    private Integer gid;//创建者所属组，如果没有就为-1
+
     public Integer getNid() {
         return nid;
     }
@@ -52,5 +55,21 @@ public class NodePic {
 
     public void setProperties(Properties properties) {
         this.properties = properties;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
+    public Integer getGid() {
+        return gid;
+    }
+
+    public void setGid(Integer gid) {
+        this.gid = gid;
     }
 }

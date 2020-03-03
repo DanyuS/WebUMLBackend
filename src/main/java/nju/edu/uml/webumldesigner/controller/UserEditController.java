@@ -16,9 +16,9 @@ public class UserEditController {
     }
 
     @GetMapping("/createFile")
-    public boolean createFile(Integer uid, String fileName, String fileType) {
-        boolean result = editService.createFile(uid, fileName, fileType);
-        return result;
+    public Integer createFile(Integer uid, String fileName, String fileType) {
+        Integer fid = editService.createFile(uid, fileName, fileType);
+        return fid;
     }
 
     @GetMapping("/updateFile")
@@ -33,8 +33,8 @@ public class UserEditController {
     }
 
     @GetMapping("/addNode")
-    public boolean addNode(Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
-        return editService.addNode(fid, nodeType, nodeStyle, properties);
+    public Integer addNode(Integer uid, Integer gid, Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
+        return editService.addNode(uid, gid, fid, nodeType, nodeStyle, properties);
     }
 
     @GetMapping("/updateNode")
@@ -48,8 +48,8 @@ public class UserEditController {
     }
 
     @GetMapping("/addLine")
-    public boolean addLine(Integer fid, String relationType, String fromId, String toId, String styles) {
-        return editService.addLine(fid, relationType, fromId, toId, styles);
+    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles) {
+        return editService.addLine(uid, gid, fid, relationType, fromId, toId, styles);
     }
 
     @GetMapping("/updateLine")

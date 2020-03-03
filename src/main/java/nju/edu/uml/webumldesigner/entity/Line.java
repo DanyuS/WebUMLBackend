@@ -16,6 +16,9 @@ public class Line {
     private String toId;
     private String styles;
 
+    private Integer uid;//node创建者
+    private Integer gid;//创建者所属组，如果没有就为-1
+
     public Integer getLid() {
         return lid;
     }
@@ -62,5 +65,21 @@ public class Line {
 
     public void setStyles(String styles) {
         this.styles = styles;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
+    public Integer getGid() {
+        return gid;
+    }
+
+    public void setGid(Integer gid) {
+        this.gid = gid;
     }
 }
