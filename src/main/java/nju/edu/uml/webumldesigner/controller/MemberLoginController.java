@@ -16,11 +16,11 @@ public class MemberLoginController {
     }
 
     @GetMapping("/login")
-    public String isValidLogin(String userEmail, String userPassword) {
+    public Integer isValidLogin(String userEmail, String userPassword) {
         User user = loginService.isValidLogin(userEmail, userPassword);
         if(user != null){
-            return user.getUserName();
+            return user.getUid();
         }
-        return "Failed to login";
+        return -1;
     }
 }
