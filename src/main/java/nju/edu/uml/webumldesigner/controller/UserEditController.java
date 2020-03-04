@@ -1,8 +1,13 @@
 package nju.edu.uml.webumldesigner.controller;
 
+import nju.edu.uml.webumldesigner.controller.params.NewNodeParam;
+import nju.edu.uml.webumldesigner.controller.params.Prop;
+import nju.edu.uml.webumldesigner.controller.params.Style;
 import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,10 +37,32 @@ public class UserEditController {
         return result;
     }
 
-    @GetMapping("/addNode")
+    /*@GetMapping("/addNode")
     public Integer addNode(Integer uid, Integer gid, Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
         return editService.addNode(uid, gid, fid, nodeType, nodeStyle, properties);
+    }*/
+
+    @PostMapping("/addNode")
+    public Integer addNode(@RequestBody NewNodeParam newNodeParam) {
+        Style styles = newNodeParam.getStyles();
+        NodeStyle nodeStyle = new NodeStyle();
+        nodeStyle.setStyleHeight(styles.getHeight());
+        nodeStyle.setStyleLeft(styles.getLeft());
+        nodeStyle.setStyleTop(styles.getTop());
+        nodeStyle.setStyleWidth(styles.getWidth());
+        Prop props = newNodeParam.getProps();
+        Properties properties = new Properties();
+        properties.setInstance(props.isInstance());
+        properties.setWeak(properties.isWeak());
+        properties.setClassName(properties.getClassName());
+        properties.setClassType(properties.getClassType());
+        properties.setCompositionType(properties.getCompositionType());
+        properties.setConditions(properties.getConditions());
+        properties.setName(properties.getName());
+        return editService.addNode(newNodeParam.getUid(), newNodeParam.getGid(), newNodeParam.getFid(), newNodeParam.getNodeType(), nodeStyle, properties);
     }
+
+
 
     @GetMapping("/updateNode")
     public boolean updateNode(Integer nid, String nodeKey, List<String> key, List<String> value) {
