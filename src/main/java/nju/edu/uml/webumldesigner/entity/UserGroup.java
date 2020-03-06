@@ -13,8 +13,12 @@ public class UserGroup {
     private Integer gid;
     private String groupId;
     private String groupName;
-    private String uidList;
+    private String invitedUidList;
+    private String invitedUserNameList;
+    private String invitingUidList;
+    private String invitingUserNameList;
     private String fidList;
+    private Integer captainId;
 
     public Integer getGid() {
         return gid;
@@ -40,12 +44,36 @@ public class UserGroup {
         this.groupName = groupName;
     }
 
-    public String getUidList() {
-        return uidList;
+    public String getInvitedUidList() {
+        return invitedUidList;
     }
 
-    public void setUidList(String uidList) {
-        this.uidList = uidList;
+    public void setInvitedUidList(String invitedUidList) {
+        this.invitedUidList = invitedUidList;
+    }
+
+    public String getInvitedUserNameList() {
+        return invitedUserNameList;
+    }
+
+    public void setInvitedUserNameList(String invitedUserNameList) {
+        this.invitedUserNameList = invitedUserNameList;
+    }
+
+    public String getInvitingUidList() {
+        return invitingUidList;
+    }
+
+    public void setInvitingUidList(String invitingUidList) {
+        this.invitingUidList = invitingUidList;
+    }
+
+    public String getInvitingUserNameList() {
+        return invitingUserNameList;
+    }
+
+    public void setInvitingUserNameList(String invitingUserNameList) {
+        this.invitingUserNameList = invitingUserNameList;
     }
 
     public String getFidList() {
@@ -54,5 +82,13 @@ public class UserGroup {
 
     public void setFidList(String fidList) {
         this.fidList = fidList;
+    }
+
+    public Integer getCaptainId() {
+        return captainId;
+    }
+
+    public void setCaptainId(Integer captainId) {
+        this.captainId = captainId;
     }
 }

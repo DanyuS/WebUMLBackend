@@ -1,11 +1,11 @@
 package nju.edu.uml.webumldesigner.controller;
 
+import com.google.gson.Gson;
 import nju.edu.uml.webumldesigner.controller.params.NewNodeParam;
 import nju.edu.uml.webumldesigner.controller.params.Prop;
 import nju.edu.uml.webumldesigner.controller.params.Style;
 import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,18 +20,18 @@ public class UserEditController {
         this.editService = editService;
     }
 
-    @GetMapping("/createFile")
+    @PostMapping("/createFile")
     public Integer createFile(Integer uid, String fileName, String fileType) {
         Integer fid = editService.createFile(uid, fileName, fileType);
         return fid;
     }
 
-    @GetMapping("/updateFile")
+    @PostMapping("/updateFile")
     public boolean updateFile(Integer fid, String fileName, String fileType) {
         return editService.updateFile(fid, fileName, fileType);
     }
 
-    @GetMapping("/delFile")
+    @PostMapping("/delFile")
     public boolean delFile(Integer uid, Integer fid) {
         boolean result = editService.delFile(uid, fid);
         return result;
@@ -63,28 +63,27 @@ public class UserEditController {
     }
 
 
-
-    @GetMapping("/updateNode")
+    @PostMapping("/updateNode")
     public boolean updateNode(Integer nid, String nodeKey, List<String> key, List<String> value) {
         return editService.updateNode(nid, nodeKey, key, value);
     }
 
-    @GetMapping("/delNode")
+    @PostMapping("/delNode")
     public boolean delNode(Integer fid, Integer nid) {
         return editService.delNode(fid, nid);
     }
 
-    @GetMapping("/addLine")
+    @PostMapping("/addLine")
     public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles) {
         return editService.addLine(uid, gid, fid, relationType, fromId, toId, styles);
     }
 
-    @GetMapping("/updateLine")
+    @PostMapping("/updateLine")
     public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles) {
         return editService.updateLine(lid, relationType, fromId, toId, styles);
     }
 
-    @GetMapping("/delLine")
+    @PostMapping("/delLine")
     public boolean delLine(Integer fid, Integer lid) {
         return editService.delLine(fid, lid);
     }
@@ -104,34 +103,38 @@ public class UserEditController {
 //        return editService.delProperties(nid, pid);
 //    }
 
-    @GetMapping("/addVarAndFunc")
+    @PostMapping("/addVarAndFunc")
     public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
         return editService.addVarAndFunc(pid, modifier, dataType, name, params, propId, flag);
     }
 
-    @GetMapping("/delVarAndFUnc")
+    @PostMapping("/delVarAndFUnc")
     public boolean delVarAndFUnc(Integer pid, Integer vid) {
         return editService.delVarAndFUnc(pid, vid);
     }
 
-    @GetMapping("/upDateVarAndFunc")
+    @PostMapping("/upDateVarAndFunc")
     public boolean upDateVarAndFunc(Integer pid, Integer vid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
         return editService.upDateVarAndFunc(pid, vid, modifier, dataType, name, params, propId, flag);
     }
 
-    @GetMapping("/getAllFilePicByUid")
-    public List<FilePic> getAllFilePicByUid(Integer uid) {
-        return editService.getAllFileByUid(uid);
+    @PostMapping("/getAllFilePicByUid")
+    public String getAllFilePicByUid(Integer uid) {
+        List<FilePic> filePicList = editService.getAllFileByUid(uid);
+        String result = new Gson().toJson(filePicList);
+        return result;
     }
 
-    @GetMapping("/getAllNodeByFid")
-    public List<NodePic> getAllNodeByFid(Integer fid) {
-        return editService.getAllNodeByFid(fid);
+    @PostMapping("/getAllNodeByFid")
+    public String getAllNodeByFid(Integer fid) {
+        List<NodePic> nodePicList = editService.getAllNodeByFid(fid);
+        return new Gson().toJson(nodePicList);
     }
 
-    @GetMapping("/getAllLineByFid")
-    public List<Line> getAllLineByFid(Integer fid) {
-        return editService.getAllLineByFid(fid);
+    @PostMapping("/getAllLineByFid")
+    public String getAllLineByFid(Integer fid) {
+        List<Line> lineList = editService.getAllLineByFid(fid);
+        return new Gson().toJson(lineList);
     }
 
 //    @GetMapping("/getAllPropertiesByNid")

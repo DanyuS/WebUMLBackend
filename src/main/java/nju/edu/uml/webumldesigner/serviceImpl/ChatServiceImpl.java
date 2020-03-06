@@ -5,4 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ChatServiceImpl implements ChatService {
+//    @Override
+//    public Integer createChatRoom(Integer gid) {
+//        return null;
+//    }
 }

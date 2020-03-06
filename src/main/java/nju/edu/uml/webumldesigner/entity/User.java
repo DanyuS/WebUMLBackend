@@ -14,6 +14,8 @@ public class User {
     private String userEmail;
     private String fidList;
     private String editable;
+    private String gidList;
+    private String invitingGidList;
 
     public Integer getUid() {
         return uid;
@@ -69,5 +71,21 @@ public class User {
 
     public void setEditable(String editable) {
         this.editable = editable;
+    }
+
+    public String getGidList() {
+        return gidList;
+    }
+
+    public void setGidList(String gidList) {
+        this.gidList = gidList;
+    }
+
+    public String getInvitingGidList() {
+        return invitingGidList;
+    }
+
+    public void setInvitingGidList(String invitingGidList) {
+        this.invitingGidList = invitingGidList;
     }
 }

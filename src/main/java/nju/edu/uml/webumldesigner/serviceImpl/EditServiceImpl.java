@@ -31,6 +31,9 @@ public class EditServiceImpl implements EditService {
     @Autowired
     private VarAndFuncDao varAndFuncDao;
 
+    @Autowired
+    private NodeStyleDao nodeStyleDao;
+
     @Override
     public Properties getPropertiesByPid(Integer pid) {
         return null;
@@ -86,6 +89,9 @@ public class EditServiceImpl implements EditService {
         //日后要改成用户id加啥啥还是别的怎么用法
         String num = String.valueOf(nodeDao.count() + 1);
         nodePic.setNodeId("n" + num);
+
+        nodeStyleDao.save(nodeStyle);
+        propertiesDao.save(properties);
 
         NodePic result = nodeDao.save(nodePic);
         if (result.getNid() > 0) {
@@ -145,6 +151,7 @@ public class EditServiceImpl implements EditService {
                 }
             }
             nodePic.setProperties(properties);
+            propertiesDao.save(properties);
         } else {
             NodeStyle nodeStyle = nodePic.getNodeStyle();
             for (int i = 0; i < key.size(); i++) {
@@ -164,6 +171,7 @@ public class EditServiceImpl implements EditService {
                 }
             }
             nodePic.setNodeStyle(nodeStyle);
+            nodeStyleDao.save(nodeStyle);
         }
         nodeDao.save(nodePic);
         return true;
@@ -172,6 +180,10 @@ public class EditServiceImpl implements EditService {
     @Override
     public boolean delNode(Integer fid, Integer nid) {
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
+        NodeStyle nodeStyle = nodePic.getNodeStyle();
+        nodeStyleDao.delete(nodeStyle);
+        Properties properties = nodePic.getProperties();
+        propertiesDao.delete(properties);
         nodeDao.delete(nodePic);
         removeNidFromFile(fid, nid);
         return true;
@@ -472,4 +484,5 @@ public class EditServiceImpl implements EditService {
         }
         return result;
     }
+
 }
