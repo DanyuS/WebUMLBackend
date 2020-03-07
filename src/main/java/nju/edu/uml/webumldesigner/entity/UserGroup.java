@@ -19,6 +19,7 @@ public class UserGroup {
     private String invitingUserNameList;
     private String fidList;
     private Integer captainId;
+    private String captainEmail;
 
     public Integer getGid() {
         return gid;
@@ -90,5 +91,13 @@ public class UserGroup {
 
     public void setCaptainId(Integer captainId) {
         this.captainId = captainId;
+    }
+
+    public String getCaptainEmail() {
+        return captainEmail;
+    }
+
+    public void setCaptainEmail(String captainEmail) {
+        this.captainEmail = captainEmail;
     }
 }

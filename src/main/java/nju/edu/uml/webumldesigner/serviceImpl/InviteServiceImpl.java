@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import nju.edu.uml.webumldesigner.dao.FileDao;
 import nju.edu.uml.webumldesigner.dao.UserDao;
 import nju.edu.uml.webumldesigner.dao.UserGroupDao;
-import nju.edu.uml.webumldesigner.entity.ChatRoom;
 import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.entity.UserGroup;
@@ -43,6 +42,7 @@ public class InviteServiceImpl implements InviteService {
         userGroup.setInvitingUserNameList("[]");
         userGroup.setFidList("[]");
         userGroup.setCaptainId(uid);
+        userGroup.setCaptainEmail(user.getUserEmail());
 
         UserGroup result = userGroupDao.save(userGroup);
 
@@ -55,26 +55,27 @@ public class InviteServiceImpl implements InviteService {
     }
 
     @Override
-    public boolean inviteUser(Integer gid, String userEmail) {
-        //受邀用户信息添加邀请小组，接受邀请后删除
-        User user = userDao.findUserByUserEmail(userEmail);
-        List<Integer> invitingGidList = new Gson().fromJson(user.getInvitingGidList(), List.class);
-        invitingGidList.add(gid);
-        user.setInvitingGidList(new Gson().toJson(invitingGidList));
-        userDao.save(user);
+    public boolean inviteUser(Integer gid, List<String> userEmailList) {
+        for (String userEmail : userEmailList) {
+            //受邀用户信息添加邀请小组，接受邀请后删除
+            User user = userDao.findUserByUserEmail(userEmail);
+            List<Integer> invitingGidList = transStringToList(user.getInvitingGidList());
+            invitingGidList.add(gid);
+            user.setInvitingGidList(new Gson().toJson(invitingGidList));
+            userDao.save(user);
 
-        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        //受邀用户id加入邀请中小组
-        List<Integer> invitingUidList = new Gson().fromJson(userGroup.getInvitingUidList(), List.class);
-        invitingUidList.add(user.getUid());
-        userGroup.setInvitingUidList(new Gson().toJson(invitingUidList));
-        //受邀用户name加入邀请中小组
-        List<String> invitingUserNameList = new Gson().fromJson(userGroup.getInvitingUserNameList(), List.class);
-        invitingUserNameList.add(user.getUserName());
-        userGroup.setInvitingUserNameList(new Gson().toJson(invitingUserNameList));
+            UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+            //受邀用户id加入邀请中小组
+            List<Integer> invitingUidList = transStringToList(userGroup.getInvitingUidList());
+            invitingUidList.add(user.getUid());
+            userGroup.setInvitingUidList(new Gson().toJson(invitingUidList));
+            //受邀用户name加入邀请中小组
+            List<String> invitingUserNameList = new Gson().fromJson(userGroup.getInvitingUserNameList(), List.class);
+            invitingUserNameList.add(user.getUserName());
+            userGroup.setInvitingUserNameList(new Gson().toJson(invitingUserNameList));
 
-        userGroupDao.save(userGroup);
-
+            userGroupDao.save(userGroup);
+        }
         //发送邮件?
         //确认？
         //加入小组
@@ -85,7 +86,7 @@ public class InviteServiceImpl implements InviteService {
     public List<UserGroup> getAllGroupByUid(Integer uid) {
         //获取用户所在的全部团队
         User user = userDao.findUserByUid(uid);
-        List<Integer> gidList = new Gson().fromJson(user.getGidList(), List.class);
+        List<Integer> gidList = transStringToList(user.getGidList());
         List<UserGroup> userGroupList = new ArrayList<UserGroup>();
         for (Integer integer : gidList) {
             UserGroup userGroup = userGroupDao.findUserGroupByGid(integer);
@@ -98,9 +99,9 @@ public class InviteServiceImpl implements InviteService {
     public List<FilePic> getAllFileByGid(Integer gid) {
         //获取全部团队文件
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        List<Integer> fidList = new Gson().fromJson(userGroup.getFidList(), List.class);
+        List<Integer> fidList = transStringToList(userGroup.getFidList());
         List<FilePic> filePicList = new ArrayList<FilePic>();
-        for(Integer i : fidList){
+        for (Integer i : fidList) {
             FilePic filePic = fileDao.findFilePicByFid(i);
             filePicList.add(filePic);
         }
@@ -111,7 +112,7 @@ public class InviteServiceImpl implements InviteService {
     public List<UserGroup> getAllInvitingGroupByUid(Integer uid) {
         //查看邀请，获取所有尚未处理的（即处于邀请中的）小组
         User user = userDao.findUserByUid(uid);
-        List<Integer> gidList = new Gson().fromJson(user.getInvitingGidList(), List.class);
+        List<Integer> gidList = transStringToList(user.getInvitingGidList());
         List<UserGroup> userGroupList = new ArrayList<UserGroup>();
         for (Integer integer : gidList) {
             UserGroup userGroup = userGroupDao.findUserGroupByGid(integer);
@@ -119,4 +120,93 @@ public class InviteServiceImpl implements InviteService {
         }
         return userGroupList;
     }
+
+    @Override
+    public boolean acceptInvite(Integer uid, Integer gid) {
+        //首先用户的邀请小组删除该条小组记录
+        User user = userDao.findUserByUid(uid);
+        List<Integer> invitingGidList = transStringToList(user.getInvitingGidList());
+        for (int i = 0; i < invitingGidList.size(); i++) {
+            if (invitingGidList.get(i).equals(gid)) {
+                invitingGidList.remove(i);
+                break;
+            }
+        }
+        userDao.save(user);
+        //其次将小组记录中待邀请成功移入邀请成功
+        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        List<Integer> invitedUidList = transStringToList(userGroup.getInvitedUidList());
+        for (int i = 0;i<invitedUidList.size();i++){
+            if(invitedUidList.get(i).equals(uid)){
+                invitedUidList.remove(i);
+                break;
+            }
+        }
+        List<String> invitedUserNameList = transStringToList(userGroup.getInvitedUserNameList());
+        for (int i = 0;i<invitedUserNameList.size();i++){
+            if(invitedUserNameList.get(i).equals(user.getUserName())){
+                invitedUserNameList.remove(i);
+                break;
+            }
+        }
+        List<Integer> invitingUidList = transStringToList(userGroup.getInvitingUidList());
+        invitingUidList.add(uid);
+        List<String> invitingUserNameList = transStringToList(userGroup.getInvitingUserNameList());
+        invitingUserNameList.add(user.getUserName());
+
+        userGroup.setInvitedUidList(new Gson().toJson(invitedUidList));
+        userGroup.setInvitedUserNameList(new Gson().toJson(invitedUserNameList));
+        userGroup.setInvitingUidList(new Gson().toJson(invitingUidList));
+        userGroup.setInvitingUserNameList(new Gson().toJson(invitingUserNameList));
+
+        userGroupDao.save(userGroup);
+
+        return true;
+    }
+
+    @Override
+    public boolean rejectInvite(Integer uid, Integer gid) {
+        //首先用户的邀请小组删除该条小组记录
+        User user = userDao.findUserByUid(uid);
+        List<Integer> invitingGidList = transStringToList(user.getInvitingGidList());
+        for (int i = 0; i < invitingGidList.size(); i++) {
+            if (invitingGidList.get(i).equals(gid)) {
+                invitingGidList.remove(i);
+                break;
+            }
+        }
+        userDao.save(user);
+        //其次将小组记录中移出待邀请
+        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        List<Integer> invitedUidList = transStringToList(userGroup.getInvitedUidList());
+        for (int i = 0;i<invitedUidList.size();i++){
+            if(invitedUidList.get(i).equals(uid)){
+                invitedUidList.remove(i);
+                break;
+            }
+        }
+        List<String> invitedUserNameList = transStringToList(userGroup.getInvitedUserNameList());
+        for (int i = 0;i<invitedUserNameList.size();i++){
+            if(invitedUserNameList.get(i).equals(user.getUserName())){
+                invitedUserNameList.remove(i);
+                break;
+            }
+        }
+
+        userGroup.setInvitedUidList(new Gson().toJson(invitedUidList));
+        userGroup.setInvitedUserNameList(new Gson().toJson(invitedUserNameList));
+
+        userGroupDao.save(userGroup);
+
+        return true;
+    }
+
+    private List transStringToList(String str) {
+        return new Gson().fromJson(str, List.class);
+    }
+
+//    private List<String> transStringToStringList(String str) {
+//        return new Gson().fromJson(str, List.class);
+//    }
+
 }
