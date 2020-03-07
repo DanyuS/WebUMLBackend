@@ -2,6 +2,7 @@ package nju.edu.uml.webumldesigner.controller;
 
 import com.google.gson.Gson;
 import nju.edu.uml.webumldesigner.entity.FilePic;
+import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.entity.UserGroup;
 import nju.edu.uml.webumldesigner.service.InviteService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,11 @@ public class GroupManageController {
     @PostMapping("/inviteUser")
     public boolean inviteUser(Integer gid, List<String> userEmailList) {
         return inviteService.inviteUser(gid, userEmailList);
+    }
+
+    @PostMapping("/getAllUser")
+    public String getAllUser(Integer uid, Integer gid){
+        return new Gson().toJson(inviteService.getAllUser(uid, gid));
     }
 
     @PostMapping("/getAllGroupByUid")

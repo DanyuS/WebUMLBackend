@@ -83,6 +83,30 @@ public class InviteServiceImpl implements InviteService {
     }
 
     @Override
+    public List<User> getAllUser(Integer uid, Integer gid) {
+        List<User> userList = userDao.findAllByUidExists();
+
+        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        List<Integer> uidList = transStringToList(userGroup.getInvitedUidList());
+        List<Integer> invitingUidList = transStringToList(userGroup.getInvitingUidList());
+        for (Integer integer : invitingUidList) {
+            uidList.add(integer);
+        }
+
+        //移出已经在小组里的和正在邀请中的user
+        for (int i = 0; i < userList.size(); i++) {
+            User user = userList.get(i);
+            for (Integer integer : uidList) {
+                if (integer.equals(user.getUid())) {
+                    userList.remove(i);
+                }
+            }
+        }
+
+        return userList;
+    }
+
+    @Override
     public List<UserGroup> getAllGroupByUid(Integer uid) {
         //获取用户所在的全部团队
         User user = userDao.findUserByUid(uid);
@@ -136,22 +160,22 @@ public class InviteServiceImpl implements InviteService {
         //其次将小组记录中待邀请成功移入邀请成功
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
         List<Integer> invitedUidList = transStringToList(userGroup.getInvitedUidList());
-        for (int i = 0;i<invitedUidList.size();i++){
-            if(invitedUidList.get(i).equals(uid)){
+        for (int i = 0; i < invitedUidList.size(); i++) {
+            if (invitedUidList.get(i).equals(uid)) {
                 invitedUidList.remove(i);
                 break;
             }
         }
-        List<String> invitedUserNameList = transStringToList(userGroup.getInvitedUserNameList());
-        for (int i = 0;i<invitedUserNameList.size();i++){
-            if(invitedUserNameList.get(i).equals(user.getUserName())){
+        List<String> invitedUserNameList = transStringToStringList(userGroup.getInvitedUserNameList());
+        for (int i = 0; i < invitedUserNameList.size(); i++) {
+            if (invitedUserNameList.get(i).equals(user.getUserName())) {
                 invitedUserNameList.remove(i);
                 break;
             }
         }
         List<Integer> invitingUidList = transStringToList(userGroup.getInvitingUidList());
         invitingUidList.add(uid);
-        List<String> invitingUserNameList = transStringToList(userGroup.getInvitingUserNameList());
+        List<String> invitingUserNameList = transStringToStringList(userGroup.getInvitingUserNameList());
         invitingUserNameList.add(user.getUserName());
 
         userGroup.setInvitedUidList(new Gson().toJson(invitedUidList));
@@ -179,15 +203,15 @@ public class InviteServiceImpl implements InviteService {
         //其次将小组记录中移出待邀请
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
         List<Integer> invitedUidList = transStringToList(userGroup.getInvitedUidList());
-        for (int i = 0;i<invitedUidList.size();i++){
-            if(invitedUidList.get(i).equals(uid)){
+        for (int i = 0; i < invitedUidList.size(); i++) {
+            if (invitedUidList.get(i).equals(uid)) {
                 invitedUidList.remove(i);
                 break;
             }
         }
-        List<String> invitedUserNameList = transStringToList(userGroup.getInvitedUserNameList());
-        for (int i = 0;i<invitedUserNameList.size();i++){
-            if(invitedUserNameList.get(i).equals(user.getUserName())){
+        List<String> invitedUserNameList = transStringToStringList(userGroup.getInvitedUserNameList());
+        for (int i = 0; i < invitedUserNameList.size(); i++) {
+            if (invitedUserNameList.get(i).equals(user.getUserName())) {
                 invitedUserNameList.remove(i);
                 break;
             }
@@ -201,12 +225,12 @@ public class InviteServiceImpl implements InviteService {
         return true;
     }
 
-    private List transStringToList(String str) {
+    private List<Integer> transStringToList(String str) {
         return new Gson().fromJson(str, List.class);
     }
 
-//    private List<String> transStringToStringList(String str) {
-//        return new Gson().fromJson(str, List.class);
-//    }
+    private List<String> transStringToStringList(String str) {
+        return new Gson().fromJson(str, List.class);
+    }
 
 }
