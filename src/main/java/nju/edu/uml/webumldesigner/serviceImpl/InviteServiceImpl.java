@@ -84,7 +84,7 @@ public class InviteServiceImpl implements InviteService {
 
     @Override
     public List<User> getAllUser(Integer uid, Integer gid) {
-        List<User> userList = userDao.findAllByUidExists();
+        List<User> userList = userDao.findAllByEditableEquals("T");
 
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
         List<Integer> uidList = transStringToList(userGroup.getInvitedUidList());

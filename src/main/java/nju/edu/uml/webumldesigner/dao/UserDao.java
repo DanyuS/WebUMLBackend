@@ -12,5 +12,5 @@ public interface UserDao extends JpaRepository<User, Integer> {
 
     User findUserByUserEmail(String UserEmail);
 
-    List<User> findAllByUidExists();
+    List<User> findAllByEditableEquals(String editable);
 }

@@ -30,28 +30,26 @@ public class GroupManageController {
     }
 
     @PostMapping("/getAllUser")
-    public String getAllUser(Integer uid, Integer gid){
-        return new Gson().toJson(inviteService.getAllUser(uid, gid));
+    public List<User> getAllUser(Integer uid, Integer gid){
+        return inviteService.getAllUser(uid, gid);
     }
 
     @PostMapping("/getAllGroupByUid")
-    public String getAllGroupByUid(Integer uid) {
+    public List<UserGroup> getAllGroupByUid(Integer uid) {
         List<UserGroup> userGroupList = inviteService.getAllGroupByUid(uid);
-        String result = new Gson().toJson(userGroupList);
-        return result;
+        return userGroupList;
     }
 
     @PostMapping("/getAllFileByGid")
-    public String getAllFileByGid(Integer gid) {
+    public List<FilePic> getAllFileByGid(Integer gid) {
         List<FilePic> filePicList = inviteService.getAllFileByGid(gid);
-        String result = new Gson().toJson(filePicList);
-        return result;
+        return filePicList;
     }
 
     @PostMapping("/getAllInvitingGroupByUid")
-    public String getAllInvitingGroupByUid(Integer uid) {
+    public List<UserGroup> getAllInvitingGroupByUid(Integer uid) {
         List<UserGroup> userGroupList = inviteService.getAllInvitingGroupByUid(uid);
-        return new Gson().toJson(userGroupList);
+        return userGroupList;
     }
 
     @PostMapping("/acceptInvite")
