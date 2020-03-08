@@ -46,7 +46,6 @@ public class EditServiceImpl implements EditService {
         filePic.setFileType(fileType);
         String num = String.valueOf(fileDao.count() + 1);
         filePic.setFileId("f" + num);
-        filePic.setNidList("[]");
 //        filePic.setNidList("[]");
         FilePic result = fileDao.save(filePic);
         if (result.getFid() > 0) {
@@ -343,7 +342,7 @@ public class EditServiceImpl implements EditService {
     @Override
     public List<NodePic> getAllNodeByFid(Integer fid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
-        List<Integer> nidList = transStringToList(filePic.getNidList());
+        List<Integer> nidList = filePic.getNidList();
         List<NodePic> result = new ArrayList<NodePic>();
         for (int i = 0; i < nidList.size(); i++) {
             NodePic nodePic = nodeDao.findNodePicByNid(nidList.get(i));
@@ -355,7 +354,7 @@ public class EditServiceImpl implements EditService {
     @Override
     public List<Line> getAllLineByFid(Integer fid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
-        List<Integer> lidList = transStringToList(filePic.getLidList());
+        List<Integer> lidList = filePic.getLidList();
         List<Line> result = new ArrayList<Line>();
         for (int i = 0; i < lidList.size(); i++) {
             Line line = lineDao.findLineByLid(lidList.get(i));
@@ -404,50 +403,46 @@ public class EditServiceImpl implements EditService {
     //将nid加入file的nidList中
     private void addNidToFile(Integer fid, Integer nid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
-        String nidList = filePic.getNidList();
-        List<String> nList = new Gson().fromJson(nidList, List.class);
-        nList.add(String.valueOf(nid));
-        filePic.setNidList(new Gson().toJson(nList));
+        List<Integer> nidList = filePic.getNidList();
+        nidList.add(nid);
+        filePic.setNidList(nidList);
         fileDao.save(filePic);
     }
 
     //将nid從file的nidList中移除
     private void removeNidFromFile(Integer fid, Integer nid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
-        String nidList = filePic.getNidList();
-        List<String> nList = new Gson().fromJson(nidList, List.class);
-        for (int i = 0; i < nList.size(); i++) {
-            if (nList.get(i).equals(String.valueOf(nid))) {
-                nList.remove(i);
+        List<Integer> nidList = filePic.getNidList();
+        for (int i = 0; i < nidList.size(); i++) {
+            if (nidList.get(i).equals(nid)) {
+                nidList.remove(i);
                 break;
             }
         }
-        filePic.setNidList(new Gson().toJson(nList));
+        filePic.setNidList(nidList);
         fileDao.save(filePic);
     }
 
     //将Lid加入file的nidList中
     private void addLidToFile(Integer fid, Integer lid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
-        String lidList = filePic.getLidList();
-        List<String> lList = new Gson().fromJson(lidList, List.class);
-        lList.add(String.valueOf(lid));
-        filePic.setLidList(new Gson().toJson(lList));
+        List<Integer> lidList = filePic.getLidList();
+        lidList.add(lid);
+        filePic.setLidList(lidList);
         fileDao.save(filePic);
     }
 
     //将lid從file的lidList中移除
     private void removeLidFromFile(Integer fid, Integer lid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
-        String lidList = filePic.getLidList();
-        List<String> lList = new Gson().fromJson(lidList, List.class);
-        for (int i = 0; i < lList.size(); i++) {
-            if (lList.get(i).equals(String.valueOf(lid))) {
-                lList.remove(i);
+        List<Integer> lidList = filePic.getLidList();
+        for (int i = 0; i < lidList.size(); i++) {
+            if (lidList.get(i).equals(lid)) {
+                lidList.remove(i);
                 break;
             }
         }
-        filePic.setLidList(new Gson().toJson(lList));
+        filePic.setLidList(lidList);
         fileDao.save(filePic);
     }
 

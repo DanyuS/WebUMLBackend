@@ -1,9 +1,7 @@
 package nju.edu.uml.webumldesigner.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class FilePic {
@@ -13,8 +11,10 @@ public class FilePic {
     private String fileId;
     private String fileName;
     private String fileType;
-    private String nidList;
-    private String lidList;
+    @ElementCollection
+    private List<Integer> nidList;
+    @ElementCollection
+    private List<Integer> lidList;
 
     public Integer getFid() {
         return fid;
@@ -48,19 +48,19 @@ public class FilePic {
         this.fileType = fileType;
     }
 
-    public String getNidList() {
+    public List<Integer> getNidList() {
         return nidList;
     }
 
-    public void setNidList(String nidList) {
+    public void setNidList(List<Integer> nidList) {
         this.nidList = nidList;
     }
 
-    public String getLidList() {
+    public List<Integer> getLidList() {
         return lidList;
     }
 
-    public void setLidList(String lidList) {
+    public void setLidList(List<Integer> lidList) {
         this.lidList = lidList;
     }
 }
