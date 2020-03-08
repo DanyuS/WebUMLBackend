@@ -46,6 +46,11 @@ public class InviteServiceImpl implements InviteService {
 
         UserGroup result = userGroupDao.save(userGroup);
 
+        //user的gidList存入gid
+        List<Integer> gidList = transStringToList(user.getGidList());
+        gidList.add(result.getGid());
+        user.setGidList(new Gson().toJson(gidList));
+        userDao.save(user);
         //与此同时还要创建聊天室??
         //目前对于聊天室的理解就是群名即为组名，故没必要另建组？首先去chatroom遍历gid，然后依序获取。。像那种群成员加入离开还需要不？
 //        ChatRoom chatRoom = new ChatRoom();
