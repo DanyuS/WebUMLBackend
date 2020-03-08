@@ -120,22 +120,19 @@ public class UserEditController {
     }
 
     @GetMapping("/getAllFilePicByUid")
-    public String getAllFilePicByUid(Integer uid) {
+    public List<FilePic> getAllFilePicByUid(Integer uid) {
         List<FilePic> filePicList = editService.getAllFileByUid(uid);
-        String result = new Gson().toJson(filePicList);
-        return result;
+        return filePicList;
     }
 
     @GetMapping("/getAllNodeByFid")
-    public String getAllNodeByFid(Integer fid) {
-        List<NodePic> nodePicList = editService.getAllNodeByFid(fid);
-        return new Gson().toJson(nodePicList);
+    public List<NodePic> getAllNodeByFid(Integer fid) {
+        return editService.getAllNodeByFid(fid);
     }
 
     @GetMapping("/getAllLineByFid")
-    public String getAllLineByFid(Integer fid) {
-        List<Line> lineList = editService.getAllLineByFid(fid);
-        return new Gson().toJson(lineList);
+    public List<Line> getAllLineByFid(Integer fid) {
+        return editService.getAllLineByFid(fid);
     }
 
 //    @GetMapping("/getAllPropertiesByNid")
