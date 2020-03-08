@@ -1,6 +1,5 @@
 package nju.edu.uml.webumldesigner.serviceImpl;
 
-import com.google.gson.Gson;
 import nju.edu.uml.webumldesigner.dao.FileDao;
 import nju.edu.uml.webumldesigner.dao.UserDao;
 import nju.edu.uml.webumldesigner.dao.UserGroupDao;
@@ -52,9 +51,6 @@ public class InviteServiceImpl implements InviteService {
         List<Integer> gidList = user.getGidList();
         gidList.add(result.getGid());
         user.setGidList(gidList);
-//        List<Integer> gidList = transStringToList(user.getGidList());
-//        gidList.add(result.getGid());
-//        user.setGidList(new Gson().toJson(gidList));
         userDao.save(user);
         //与此同时还要创建聊天室??
         //目前对于聊天室的理解就是群名即为组名，故没必要另建组？首先去chatroom遍历gid，然后依序获取。。像那种群成员加入离开还需要不？
@@ -121,7 +117,6 @@ public class InviteServiceImpl implements InviteService {
         //获取用户所在的全部团队
         User user = userDao.findUserByUid(uid);
         List<Integer> gidList = user.getGidList();
-//        List<Integer> gidList = transStringToList(user.getGidList());
         List<UserGroup> userGroupList = new ArrayList<UserGroup>();
         for (Integer integer : gidList) {
             UserGroup userGroup = userGroupDao.findUserGroupByGid(integer);
@@ -235,13 +230,4 @@ public class InviteServiceImpl implements InviteService {
 
         return true;
     }
-
-    private List<Integer> transStringToList(String str) {
-        return new Gson().fromJson(str, List.class);
-    }
-
-    private List<String> transStringToStringList(String str) {
-        return new Gson().fromJson(str, List.class);
-    }
-
 }
