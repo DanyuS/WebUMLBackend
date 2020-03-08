@@ -1,9 +1,6 @@
 package nju.edu.uml.webumldesigner.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,11 +10,16 @@ public class UserGroup {
     private Integer gid;
     private String groupId;
     private String groupName;
-    private String invitedUidList;
-    private String invitedUserNameList;
-    private String invitingUidList;
-    private String invitingUserNameList;
-    private String fidList;
+    @ElementCollection
+    private List<Integer> invitedUidList;
+    @ElementCollection
+    private List<String> invitedUserNameList;
+    @ElementCollection
+    private List<Integer> invitingUidList;
+    @ElementCollection
+    private List<String> invitingUserNameList;
+    @ElementCollection
+    private List<Integer> fidList;
     private Integer captainId;
     private String captainEmail;
 
@@ -45,43 +47,43 @@ public class UserGroup {
         this.groupName = groupName;
     }
 
-    public String getInvitedUidList() {
+    public List<Integer> getInvitedUidList() {
         return invitedUidList;
     }
 
-    public void setInvitedUidList(String invitedUidList) {
+    public void setInvitedUidList(List<Integer> invitedUidList) {
         this.invitedUidList = invitedUidList;
     }
 
-    public String getInvitedUserNameList() {
+    public List<String> getInvitedUserNameList() {
         return invitedUserNameList;
     }
 
-    public void setInvitedUserNameList(String invitedUserNameList) {
+    public void setInvitedUserNameList(List<String> invitedUserNameList) {
         this.invitedUserNameList = invitedUserNameList;
     }
 
-    public String getInvitingUidList() {
+    public List<Integer> getInvitingUidList() {
         return invitingUidList;
     }
 
-    public void setInvitingUidList(String invitingUidList) {
+    public void setInvitingUidList(List<Integer> invitingUidList) {
         this.invitingUidList = invitingUidList;
     }
 
-    public String getInvitingUserNameList() {
+    public List<String> getInvitingUserNameList() {
         return invitingUserNameList;
     }
 
-    public void setInvitingUserNameList(String invitingUserNameList) {
+    public void setInvitingUserNameList(List<String> invitingUserNameList) {
         this.invitingUserNameList = invitingUserNameList;
     }
 
-    public String getFidList() {
+    public List<Integer> getFidList() {
         return fidList;
     }
 
-    public void setFidList(String fidList) {
+    public void setFidList(List<Integer> fidList) {
         this.fidList = fidList;
     }
 

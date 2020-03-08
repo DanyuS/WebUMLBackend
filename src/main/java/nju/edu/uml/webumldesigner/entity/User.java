@@ -1,6 +1,8 @@
 package nju.edu.uml.webumldesigner.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -14,8 +16,11 @@ public class User {
     private String userEmail;
     private String fidList;
     private String editable;
-    private String gidList;
-    private String invitingGidList;
+    @ElementCollection
+    private List<Integer> gidList;
+
+    @ElementCollection
+    private List<Integer> invitingGidList;
 
     public Integer getUid() {
         return uid;
@@ -73,19 +78,19 @@ public class User {
         this.editable = editable;
     }
 
-    public String getGidList() {
+    public List<Integer> getGidList() {
         return gidList;
     }
 
-    public void setGidList(String gidList) {
+    public void setGidList(List<Integer> gidList) {
         this.gidList = gidList;
     }
 
-    public String getInvitingGidList() {
+    public List<Integer> getInvitingGidList() {
         return invitingGidList;
     }
 
-    public void setInvitingGidList(String invitingGidList) {
+    public void setInvitingGidList(List<Integer> invitingGidList) {
         this.invitingGidList = invitingGidList;
     }
 }

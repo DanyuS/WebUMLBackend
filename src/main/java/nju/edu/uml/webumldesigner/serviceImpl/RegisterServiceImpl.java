@@ -20,8 +20,8 @@ public class RegisterServiceImpl implements RegisterService {
         user.setUserPassword(userPassword);
         user.setEditable("T");
         user.setFidList("[]");
-        user.setGidList("[]");
-        user.setInvitingGidList("[]");
+//        user.setGidList("[]");
+//        user.setInvitingGidList("[]");
 
         String num = String.valueOf(userDao.count() + 1);
         user.setUserId("u"+num);
