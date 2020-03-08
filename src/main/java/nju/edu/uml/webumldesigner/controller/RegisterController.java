@@ -13,7 +13,7 @@ public class RegisterController {
         this.registerService = registerService;
     }
 
-    @PostMapping("/register")
+    @GetMapping("/register")
     public boolean register(String userName, String userEmail, String userPassword){
         boolean result = registerService.userRegister(userName, userEmail, userPassword);
 //        boolean result = registerService.userRegister("userName1", "userEmail1", "userPassword1");
