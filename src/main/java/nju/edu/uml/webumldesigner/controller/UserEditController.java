@@ -2,6 +2,7 @@ package nju.edu.uml.webumldesigner.controller;
 
 import com.google.gson.Gson;
 import nju.edu.uml.webumldesigner.controller.params.NewNodeParam;
+import nju.edu.uml.webumldesigner.controller.params.NodeParams;
 import nju.edu.uml.webumldesigner.controller.params.Prop;
 import nju.edu.uml.webumldesigner.controller.params.Style;
 import nju.edu.uml.webumldesigner.entity.*;
@@ -64,9 +65,10 @@ public class UserEditController {
     }
 
 
-    @GetMapping("/updateNode")
-    public boolean updateNode(Integer nid, String nodeKey, List<String> key, List<String> value) {
-        return editService.updateNode(nid, nodeKey, key, value);
+    @PostMapping("/updateNode")
+    public boolean updateNode(@RequestBody NodeParams nodeParams) {
+        //TODO
+        return editService.updateNode(nodeParams.getNid(), nodeParams.getNodeKey(), nodeParams.getKey(), nodeParams.getValue());
     }
 
     @GetMapping("/delNode")
