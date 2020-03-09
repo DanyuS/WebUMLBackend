@@ -32,12 +32,15 @@ public class InviteServiceImpl implements InviteService {
         ///ok?
         //初始化创建者加入invited列表中
         User user = userDao.findUserByUid(uid);
-        List<Integer> uidList = new ArrayList<Integer>();
-        uidList.add(uid);
-        userGroup.setInvitedUidList(uidList);
-        List<String> invitedUserNameList = new ArrayList<String>();
-        invitedUserNameList.add(user.getUserName());
-        userGroup.setInvitedUserNameList(invitedUserNameList);
+        List<User> userList = new ArrayList<User>();
+        userList.add(user);
+        userGroup.setInvitedUserList(userList);
+//        List<Integer> uidList = new ArrayList<Integer>();
+//        uidList.add(uid);
+//        userGroup.setInvitedUidList(uidList);
+//        List<String> invitedUserNameList = new ArrayList<String>();
+//        invitedUserNameList.add(user.getUserName());
+//        userGroup.setInvitedUserNameList(invitedUserNameList);
         //这个后期要传入！！！要修改UserGroup对象适应前后端
 //        userGroup.setInvitingUidList("[]");
 //        userGroup.setInvitingUserNameList("[]");
@@ -71,15 +74,10 @@ public class InviteServiceImpl implements InviteService {
             userDao.save(user);
 
             UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-            //受邀用户id加入邀请中小组
-            List<Integer> invitingUidList = userGroup.getInvitingUidList();
-            invitingUidList.add(user.getUid());
-            userGroup.setInvitingUidList(invitingUidList);
-            //受邀用户name加入邀请中小组
-            List<String> invitingUserNameList = userGroup.getInvitingUserNameList();
-            invitingUserNameList.add(user.getUserName());
-            userGroup.setInvitingUserNameList(invitingUserNameList);
-
+            //受邀用户加入邀请中小组
+            List<User> invitingUserList = userGroup.getInvitingUserList();
+            invitingUserList.add(user);
+            userGroup.setInvitingUserList(invitingUserList);
             userGroupDao.save(userGroup);
         }
         //发送邮件?
@@ -93,17 +91,15 @@ public class InviteServiceImpl implements InviteService {
         List<User> userList = userDao.findAllByEditableEquals("T");
 
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        List<Integer> uidList = userGroup.getInvitedUidList();
-        List<Integer> invitingUidList = userGroup.getInvitingUidList();
-        for (Integer integer : invitingUidList) {
-            uidList.add(integer);
-        }
+        List<User> invitedUserList = userGroup.getInvitedUserList();
+        List<User> invitingUserList = userGroup.getInvitingUserList();
+        invitedUserList.addAll(invitingUserList);
 
         //移出已经在小组里的和正在邀请中的user
         for (int i = 0; i < userList.size(); i++) {
             User user = userList.get(i);
-            for (Integer integer : uidList) {
-                if (integer.equals(user.getUid())) {
+            for (User u : invitedUserList) {
+                if (u.getUid().equals(user.getUid())) {
                     userList.remove(i);
                 }
             }
@@ -165,29 +161,19 @@ public class InviteServiceImpl implements InviteService {
         userDao.save(user);
         //其次将小组记录中待邀请成功移入邀请成功
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        List<Integer> invitedUidList = userGroup.getInvitedUidList();
-        for (int i = 0; i < invitedUidList.size(); i++) {
-            if (invitedUidList.get(i).equals(uid)) {
-                invitedUidList.remove(i);
+        List<User> invitedUserList = userGroup.getInvitedUserList();
+        for (int i = 0; i < invitedUserList.size(); i++) {
+            if (invitedUserList.get(i).getUid().equals(uid)) {
+                invitedUserList.remove(i);
                 break;
             }
         }
-        List<String> invitedUserNameList = userGroup.getInvitedUserNameList();
-        for (int i = 0; i < invitedUserNameList.size(); i++) {
-            if (invitedUserNameList.get(i).equals(user.getUserName())) {
-                invitedUserNameList.remove(i);
-                break;
-            }
-        }
-        List<Integer> invitingUidList = userGroup.getInvitingUidList();
-        invitingUidList.add(uid);
-        List<String> invitingUserNameList = userGroup.getInvitingUserNameList();
-        invitingUserNameList.add(user.getUserName());
 
-        userGroup.setInvitedUidList(invitedUidList);
-        userGroup.setInvitedUserNameList(invitedUserNameList);
-        userGroup.setInvitingUidList(invitingUidList);
-        userGroup.setInvitingUserNameList(invitingUserNameList);
+        List<User> invitingUserList = userGroup.getInvitingUserList();
+        invitingUserList.add(user);
+
+        userGroup.setInvitingUserList(invitedUserList);
+        userGroup.setInvitingUserList(invitingUserList);
 
         userGroupDao.save(userGroup);
 
@@ -208,23 +194,15 @@ public class InviteServiceImpl implements InviteService {
         userDao.save(user);
         //其次将小组记录中移出待邀请
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        List<Integer> invitedUidList = userGroup.getInvitedUidList();
-        for (int i = 0; i < invitedUidList.size(); i++) {
-            if (invitedUidList.get(i).equals(uid)) {
-                invitedUidList.remove(i);
-                break;
-            }
-        }
-        List<String> invitedUserNameList = userGroup.getInvitedUserNameList();
-        for (int i = 0; i < invitedUserNameList.size(); i++) {
-            if (invitedUserNameList.get(i).equals(user.getUserName())) {
-                invitedUserNameList.remove(i);
+        List<User> invitedUserList = userGroup.getInvitedUserList();
+        for (int i = 0; i < invitedUserList.size(); i++) {
+            if (invitedUserList.get(i).getUid().equals(uid)) {
+                invitedUserList.remove(i);
                 break;
             }
         }
 
-        userGroup.setInvitedUidList(invitedUidList);
-        userGroup.setInvitedUserNameList(invitedUserNameList);
+        userGroup.setInvitedUserList(invitedUserList);
 
         userGroupDao.save(userGroup);
 
