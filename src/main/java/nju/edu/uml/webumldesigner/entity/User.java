@@ -16,6 +16,7 @@ public class User {
     private String userEmail;
     private String fidList;
     private String editable;
+    private String code;
     @ElementCollection
     private List<Integer> gidList;
 
@@ -92,5 +93,13 @@ public class User {
 
     public void setInvitingGidList(List<Integer> invitingGidList) {
         this.invitingGidList = invitingGidList;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

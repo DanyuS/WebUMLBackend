@@ -13,18 +13,23 @@ public class RegisterServiceImpl implements RegisterService {
     private UserDao userDao;
 
     @Override
-    public boolean userRegister(String userName, String userEmail, String userPassword) {
-        User user = new User();
+    public boolean userRegister(String userName, String userEmail, String userPassword, String code) {
+        User user = userDao.findUserByUserEmail(userEmail);
+        //验证码错误
+        if(code==null || !code.equals(user.getCode())){
+            return false;
+        }
+        //已注册
+        if(user.getUserPassword()!=null){
+            return true;
+        }
+        //初始化用户
         user.setUserName(userName);
-        user.setUserEmail(userEmail);
         user.setUserPassword(userPassword);
         user.setEditable("T");
         user.setFidList("[]");
 //        user.setGidList("[]");
 //        user.setInvitingGidList("[]");
-
-        String num = String.valueOf(userDao.count() + 1);
-        user.setUserId("u"+num);
         User result = userDao.save(user);
         if (result.getUid() > 0) {
             return true;
