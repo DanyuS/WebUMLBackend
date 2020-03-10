@@ -16,12 +16,24 @@ public class ChatRoom {
     private LocalDate chatTime;
     private String chatContent;
 
+    public Integer getCid() {
+        return cid;
+    }
+
     public void setCid(Integer cid) {
         this.cid = cid;
     }
 
+    public Integer getGid() {
+        return gid;
+    }
+
     public void setGid(Integer gid) {
         this.gid = gid;
+    }
+
+    public Integer getUid() {
+        return uid;
     }
 
     public void setUid(Integer uid) {

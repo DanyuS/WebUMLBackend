@@ -1,14 +1,9 @@
-package nju.edu.uml.webumldesigner.entity;
+package nju.edu.uml.webumldesigner.controller.params;
 
-import javax.persistence.*;
+
 import java.util.List;
-import java.util.Map;
 
-@Entity
-public class Line {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer lid;
+public class LineParams {
     private Integer lineId;
     private String relationType;
     private Integer fromId;
@@ -16,27 +11,14 @@ public class Line {
     private String text;
     private String markerStart;
     private String markerEnd;
-    @OneToMany
-    private List<LinePosition> lineList;
-    @OneToOne
-    private LinePosition startPosition;
-    @OneToOne
-    private LinePosition endPosition;
-    @OneToOne
-    private LineStyle lineStyle;
-    @OneToOne
-    private LineSvgStyle lineSvgStyle;
+    private List<LinePositionParams> lineList;
+    private LinePositionParams startPosition;
+    private LinePositionParams endPosition;
+    private LineStyleParams lineStyle;
+    private LineSvgStyleParams lineSvgStyle;
 
     private Integer uid;//line创建者
     private Integer gid;//创建者所属组，如果没有就为-1
-
-    public Integer getLid() {
-        return lid;
-    }
-
-    public void setLid(Integer lid) {
-        this.lid = lid;
-    }
 
     public Integer getLineId() {
         return lineId;
@@ -94,43 +76,43 @@ public class Line {
         this.markerEnd = markerEnd;
     }
 
-    public List<LinePosition> getLineList() {
+    public List<LinePositionParams> getLineList() {
         return lineList;
     }
 
-    public void setLineList(List<LinePosition> lineList) {
+    public void setLineList(List<LinePositionParams> lineList) {
         this.lineList = lineList;
     }
 
-    public LinePosition getStartPosition() {
+    public LinePositionParams getStartPosition() {
         return startPosition;
     }
 
-    public void setStartPosition(LinePosition startPosition) {
+    public void setStartPosition(LinePositionParams startPosition) {
         this.startPosition = startPosition;
     }
 
-    public LinePosition getEndPosition() {
+    public LinePositionParams getEndPosition() {
         return endPosition;
     }
 
-    public void setEndPosition(LinePosition endPosition) {
+    public void setEndPosition(LinePositionParams endPosition) {
         this.endPosition = endPosition;
     }
 
-    public LineStyle getLineStyle() {
+    public LineStyleParams getLineStyle() {
         return lineStyle;
     }
 
-    public void setLineStyle(LineStyle lineStyle) {
+    public void setLineStyle(LineStyleParams lineStyle) {
         this.lineStyle = lineStyle;
     }
 
-    public LineSvgStyle getLineSvgStyle() {
+    public LineSvgStyleParams getLineSvgStyle() {
         return lineSvgStyle;
     }
 
-    public void setLineSvgStyle(LineSvgStyle lineSvgStyle) {
+    public void setLineSvgStyle(LineSvgStyleParams lineSvgStyle) {
         this.lineSvgStyle = lineSvgStyle;
     }
 

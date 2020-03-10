@@ -1,6 +1,7 @@
 package nju.edu.uml.webumldesigner.serviceImpl;
 
 import com.google.gson.Gson;
+import nju.edu.uml.webumldesigner.controller.params.LineParams;
 import nju.edu.uml.webumldesigner.dao.*;
 import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
@@ -26,6 +27,15 @@ public class EditServiceImpl implements EditService {
     private LineDao lineDao;
 
     @Autowired
+    private LinePositionDao linePositionDao;
+
+    @Autowired
+    private LineStyleDao lineStyleDao;
+
+    @Autowired
+    private LineSvgStyleDao lineSvgStyleDao;
+
+    @Autowired
     private PropertiesDao propertiesDao;
 
     @Autowired
@@ -33,6 +43,7 @@ public class EditServiceImpl implements EditService {
 
     @Autowired
     private NodeStyleDao nodeStyleDao;
+
 
     @Override
     public Properties getPropertiesByPid(Integer pid) {
@@ -79,6 +90,9 @@ public class EditServiceImpl implements EditService {
 
     @Override
     public Integer addNode(Integer uid, Integer gid, Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
+        nodeStyleDao.save(nodeStyle);
+        propertiesDao.save(properties);
+
         NodePic nodePic = new NodePic();
         nodePic.setNodeStyle(nodeStyle);
         nodePic.setNodeType(nodeType);
@@ -89,8 +103,8 @@ public class EditServiceImpl implements EditService {
         String num = String.valueOf(nodeDao.count() + 1);
         nodePic.setNodeId("n" + num);
 
-        nodeStyleDao.save(nodeStyle);
-        propertiesDao.save(properties);
+//        nodeStyleDao.save(nodeStyle);
+//        propertiesDao.save(properties);
 
         NodePic result = nodeDao.save(nodePic);
         if (result.getNid() > 0) {
@@ -188,35 +202,101 @@ public class EditServiceImpl implements EditService {
         return true;
     }
 
+//    @Override
+//    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles) {
+//        Line line = new Line();
+//        line.setRelationType(relationType);
+//        line.setFromId(fromId);
+//        line.setToId(toId);
+//        line.setStyles(styles);
+//        line.setUid(uid);
+//        line.setGid(gid);
+//
+//        String num = String.valueOf(lineDao.count() + 1);
+//        line.setLineId("l" + num);
+//
+//        Line result = lineDao.save(line);
+//        if (result.getLid() > 0) {
+//            Integer lid = result.getLid();
+//            addLidToFile(fid, lid);
+//            return result.getLid();
+//        }
+//        return -1;
+//    }
+
     @Override
-    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles) {
-        Line line = new Line();
-        line.setRelationType(relationType);
-        line.setFromId(fromId);
-        line.setToId(toId);
-        line.setStyles(styles);
-        line.setUid(uid);
-        line.setGid(gid);
+    public boolean addLine(LineParams lineParams) {
+        //TODO 各个daosave的位置问题，包括上面的addNode
+        List<LinePosition> linePositionList = new ArrayList<LinePosition>();
+        for (int i = 0; i < lineParams.getLineList().size(); i++) {
+            LinePosition linePosition = new LinePosition();
+            linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
+            linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
+            linePosition.setLpDirection(lineParams.getLineList().get(i).getDirection());
 
-        String num = String.valueOf(lineDao.count() + 1);
-        line.setLineId("l" + num);
+            linePositionDao.save(linePosition);
 
-        Line result = lineDao.save(line);
-        if (result.getLid() > 0) {
-            Integer lid = result.getLid();
-            addLidToFile(fid, lid);
-            return result.getLid();
+            linePositionList.add(linePosition);
         }
-        return -1;
+
+        LinePosition startPosition = new LinePosition();
+        startPosition.setLpLeft(lineParams.getStartPosition().getLeft());
+        startPosition.setLpTop(lineParams.getStartPosition().getTop());
+        startPosition.setLpDirection(lineParams.getStartPosition().getDirection());
+
+        linePositionDao.save(startPosition);
+
+        LinePosition endPosition = new LinePosition();
+        endPosition.setLpLeft(lineParams.getEndPosition().getLeft());
+        endPosition.setLpTop(lineParams.getEndPosition().getTop());
+        endPosition.setLpDirection(lineParams.getEndPosition().getDirection());
+
+        linePositionDao.save(endPosition);
+
+        LineStyle lineStyle = new LineStyle();
+        lineStyle.setStroke(lineParams.getLineStyle().getStroke());
+        lineStyle.setStrokeDasharray(lineParams.getLineStyle().getStrokeDasharray());
+        lineStyle.setStrokeWidth(lineParams.getLineStyle().getStrokeWidth());
+
+        lineStyleDao.save(lineStyle);
+
+        LineSvgStyle lineSvgStyle = new LineSvgStyle();
+        lineSvgStyle.setSvgPosition(lineParams.getLineSvgStyle().getPosition());
+        lineSvgStyle.setSvgWidth(lineParams.getLineSvgStyle().getWidth());
+        lineSvgStyle.setSvgHeight(lineParams.getLineSvgStyle().getHeight());
+        lineSvgStyle.setSvgLeft(lineParams.getLineSvgStyle().getLeft());
+        lineSvgStyle.setSvgTop(lineParams.getLineSvgStyle().getTop());
+
+        lineSvgStyleDao.save(lineSvgStyle);
+
+        Line line = new Line();
+        line.setLid(lineParams.getLineId());
+        line.setRelationType(lineParams.getRelationType());
+        line.setFromId(lineParams.getFromId());
+        line.setToId(lineParams.getToId());
+        line.setText(lineParams.getText());
+        line.setMarkerStart(lineParams.getMarkerStart());
+        line.setMarkerEnd(line.getMarkerEnd());
+        line.setLineList(linePositionList);
+        line.setStartPosition(startPosition);
+        line.setEndPosition(endPosition);
+        line.setLineStyle(lineStyle);
+        line.setLineSvgStyle(lineSvgStyle);
+        line.setUid(lineParams.getUid());
+        line.setGid(lineParams.getGid());
+
+        lineDao.save(line);
+
+        return true;
     }
 
     @Override
-    public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles) {
+    public boolean updateLine(Integer lid, String relationType, Integer fromId, Integer toId) {
+        //TODO shirting需要确定修改时的格式
         Line line = lineDao.findLineByLid(lid);
         line.setRelationType(relationType);
         line.setFromId(fromId);
         line.setToId(toId);
-        line.setStyles(styles);
         lineDao.save(line);
         return true;
     }

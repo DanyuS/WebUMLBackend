@@ -1,5 +1,6 @@
 package nju.edu.uml.webumldesigner.service;
 
+import nju.edu.uml.webumldesigner.controller.params.LineParams;
 import nju.edu.uml.webumldesigner.entity.*;
 
 import java.util.List;
@@ -19,9 +20,11 @@ public interface EditService {
 
     public boolean delNode(Integer fid, Integer nid);
 
-    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles);
+//    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles);
 
-    public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles);
+    public boolean addLine(LineParams lineParams);
+
+    public boolean updateLine(Integer lid, String relationType, Integer fromId, Integer toId);
 
     public boolean delLine(Integer fid, Integer lid);
 

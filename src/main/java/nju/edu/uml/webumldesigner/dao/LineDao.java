@@ -1,6 +1,5 @@
 package nju.edu.uml.webumldesigner.dao;
 
-import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.entity.Line;
 import org.springframework.data.jpa.repository.JpaRepository;
 

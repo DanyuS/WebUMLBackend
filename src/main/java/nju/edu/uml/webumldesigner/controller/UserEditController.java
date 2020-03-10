@@ -1,10 +1,7 @@
 package nju.edu.uml.webumldesigner.controller;
 
 import com.google.gson.Gson;
-import nju.edu.uml.webumldesigner.controller.params.NewNodeParam;
-import nju.edu.uml.webumldesigner.controller.params.NodeParams;
-import nju.edu.uml.webumldesigner.controller.params.Prop;
-import nju.edu.uml.webumldesigner.controller.params.Style;
+import nju.edu.uml.webumldesigner.controller.params.*;
 import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -77,13 +75,15 @@ public class UserEditController {
     }
 
     @GetMapping("/addLine")
-    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles) {
-        return editService.addLine(uid, gid, fid, relationType, fromId, toId, styles);
+    public boolean addLine(@RequestBody LineParams lineParams) {
+        return editService.addLine(lineParams);
+//        return editService.addLine(lineParams.getLineId(), lineParams.getRelationType(), lineParams.getFromId(), lineParams.getToId(), lineParams.getText(), lineParams.getMarkerStart(), line.getMarkerEnd(),linePositionList , startPosition, endPosition, lineStyle, lineSvgStyle, lineParams.getUid(), lineParams.getGid());
     }
 
     @GetMapping("/updateLine")
-    public boolean updateLine(Integer lid, String relationType, String fromId, String toId, String styles) {
-        return editService.updateLine(lid, relationType, fromId, toId, styles);
+    public boolean updateLine(Integer lid, String relationType, Integer fromId, Integer toId) {
+        //TODO shirting确定格式
+        return editService.updateLine(lid, relationType, fromId, toId);
     }
 
     @GetMapping("/delLine")
