@@ -74,7 +74,7 @@ public class UserEditController {
         return editService.delNode(fid, nid);
     }
 
-    @GetMapping("/addLine")
+    @PostMapping("/addLine")
     public boolean addLine(@RequestBody LineParams lineParams) {
         return editService.addLine(lineParams);
 //        return editService.addLine(lineParams.getLineId(), lineParams.getRelationType(), lineParams.getFromId(), lineParams.getToId(), lineParams.getText(), lineParams.getMarkerStart(), line.getMarkerEnd(),linePositionList , startPosition, endPosition, lineStyle, lineSvgStyle, lineParams.getUid(), lineParams.getGid());
