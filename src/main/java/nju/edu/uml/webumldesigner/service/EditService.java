@@ -24,7 +24,7 @@ public interface EditService {
 
     public boolean addLine(LineParams lineParams);
 
-    public boolean updateLine(Integer lid, String relationType, Integer fromId, Integer toId);
+    public boolean updateLine(Integer lid, LineParams lineParams);
 
     public boolean delLine(Integer fid, Integer lid);
 

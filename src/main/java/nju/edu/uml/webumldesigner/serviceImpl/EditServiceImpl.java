@@ -291,12 +291,69 @@ public class EditServiceImpl implements EditService {
     }
 
     @Override
-    public boolean updateLine(Integer lid, String relationType, Integer fromId, Integer toId) {
+    public boolean updateLine(Integer lid, LineParams lineParams) {
         //TODO shirting需要确定修改时的格式
         Line line = lineDao.findLineByLid(lid);
-        line.setRelationType(relationType);
-        line.setFromId(fromId);
-        line.setToId(toId);
+        List<LinePosition> linePositionList = line.getLineList();
+        for (int i = 0; i < lineParams.getLineList().size(); i++) {
+            //payAttention!!!!有可能会增加！！！！！后期极有可能要修改！！！还有顺序问题
+            LinePosition linePosition = linePositionList.get(i);
+            linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
+            linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
+            linePosition.setLpDirection(lineParams.getLineList().get(i).getDirection());
+
+            linePositionDao.save(linePosition);
+
+            linePositionList.add(linePosition);
+        }
+
+        ///////////////////////////= linePositionDao.find...(line.getStartPosition().getId())???????
+        LinePosition startPosition = line.getStartPosition();
+        startPosition.setLpLeft(lineParams.getStartPosition().getLeft());
+        startPosition.setLpTop(lineParams.getStartPosition().getTop());
+        startPosition.setLpDirection(lineParams.getStartPosition().getDirection());
+
+        linePositionDao.save(startPosition);
+
+        LinePosition endPosition = line.getEndPosition();
+        endPosition.setLpLeft(lineParams.getEndPosition().getLeft());
+        endPosition.setLpTop(lineParams.getEndPosition().getTop());
+        endPosition.setLpDirection(lineParams.getEndPosition().getDirection());
+
+        linePositionDao.save(endPosition);
+
+        LineStyle lineStyle = line.getLineStyle();
+        lineStyle.setStroke(lineParams.getLineStyle().getStroke());
+        lineStyle.setStrokeDasharray(lineParams.getLineStyle().getStrokeDasharray());
+        lineStyle.setStrokeWidth(lineParams.getLineStyle().getStrokeWidth());
+
+        lineStyleDao.save(lineStyle);
+
+//        LineSvgStyle lineSvgStyle = lineSvgStyleDao.findLineSvgStyleByLssid(line.getLineSvgStyle().getLssid());
+        LineSvgStyle lineSvgStyle = line.getLineSvgStyle();
+        lineSvgStyle.setSvgPosition(lineParams.getLineSvgStyle().getPosition());
+        lineSvgStyle.setSvgWidth(lineParams.getLineSvgStyle().getWidth());
+        lineSvgStyle.setSvgHeight(lineParams.getLineSvgStyle().getHeight());
+        lineSvgStyle.setSvgLeft(lineParams.getLineSvgStyle().getLeft());
+        lineSvgStyle.setSvgTop(lineParams.getLineSvgStyle().getTop());
+
+        lineSvgStyleDao.save(lineSvgStyle);
+
+        /////////
+        line.setLid(lineParams.getLineId());
+        line.setRelationType(lineParams.getRelationType());
+        line.setFromId(lineParams.getFromId());
+        line.setToId(lineParams.getToId());
+        line.setText(lineParams.getText());
+        line.setMarkerStart(lineParams.getMarkerStart());
+        line.setMarkerEnd(line.getMarkerEnd());
+        line.setLineList(linePositionList);
+        line.setStartPosition(startPosition);
+        line.setEndPosition(endPosition);
+        line.setLineStyle(lineStyle);
+        line.setLineSvgStyle(lineSvgStyle);
+        line.setUid(lineParams.getUid());
+        line.setGid(lineParams.getGid());
         lineDao.save(line);
         return true;
     }

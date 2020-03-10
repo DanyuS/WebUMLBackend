@@ -80,10 +80,10 @@ public class UserEditController {
 //        return editService.addLine(lineParams.getLineId(), lineParams.getRelationType(), lineParams.getFromId(), lineParams.getToId(), lineParams.getText(), lineParams.getMarkerStart(), line.getMarkerEnd(),linePositionList , startPosition, endPosition, lineStyle, lineSvgStyle, lineParams.getUid(), lineParams.getGid());
     }
 
-    @GetMapping("/updateLine")
-    public boolean updateLine(Integer lid, String relationType, Integer fromId, Integer toId) {
+    @PostMapping("/updateLine")
+    public boolean updateLine(Integer lid, @RequestBody LineParams lineParams) {
         //TODO shirting确定格式
-        return editService.updateLine(lid, relationType, fromId, toId);
+        return editService.updateLine(lid, lineParams);
     }
 
     @GetMapping("/delLine")
