@@ -1,5 +1,8 @@
 package nju.edu.uml.webumldesigner.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,11 +13,13 @@ public class UserGroup {
     private Integer gid;
     private String groupId;
     private String groupName;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<User> invitedUserList;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<User> invitingUserList;
-//    @ElementCollection
+    //    @ElementCollection
 //    private List<Integer> invitedUidList;
 //    @ElementCollection
 //    private List<String> invitedUserNameList;
