@@ -12,6 +12,7 @@ import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+@ServerEndpoint("/websocket/{info}")
 public class WebSocketUtil {
     //房间集合
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, WebSocketUtil>> chatRoomList = new ConcurrentHashMap<String, ConcurrentHashMap<String, WebSocketUtil>>();
@@ -66,7 +69,7 @@ public class WebSocketUtil {
             //用户退出房间
             User user = userDao.findUserByUid(chatRoom.getUid());
             chatRoomList.get(String.valueOf(chatRoom.getGid())).remove(user.getUserName());
-            if (chatRoomList.get(String.valueOf(chatRoom.getGid())).size() == 0) {
+            if (chatRoomList.get(String.valueOf(chatRoom.getGid())).size() != 0) {
                 String content = user.getUserName() + " 退出了房间";
                 chatRoom.setChatContent(content);
                 ConcurrentHashMap<String, WebSocketUtil> r = chatRoomList.get(String.valueOf(chatRoom.getGid()));
@@ -80,31 +83,29 @@ public class WebSocketUtil {
                 }
             }
         } else {
-//            //就是普通发送信息
-//            //向JSON对象中添加发送时间
-//            chatRoom.setChatTime(new Date());
-//            obj.put("date", df.format(new Date()));
-//            //获取客户端发送的数据中的内容---房间号 用于区别该消息是来自于哪个房间
-//            String roomid = obj.get("target").toString();
-//            //获取客户端发送的数据中的内容---用户
-//            String username = obj.get("nickname").toString();
-//            //从房间列表中定位到该房间
-//            ConcurrentHashMap<String, WebSocketService> r =roomList.get(roomid);
-//            List<String> uname = new ArrayList<String>();
-//            for(String u:r.keySet()){
-//                uname.add(u);
-//            }
+            //就是普通发送信息
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            chatRoom.setChatTime(df.format(date));
+            User user = userDao.findUserByUid(chatRoom.getUid());
+            String username = user.getUserName();
+            //从房间列表中定位到该房间
+            ConcurrentHashMap<String, WebSocketUtil> r =chatRoomList.get(String.valueOf(chatRoom.getGid()));
+            List<String> userName = new ArrayList<String>();
+            for(String u:r.keySet()){
+                userName.add(u);
+            }
 //            obj.put("uname", uname.toArray());
-//            if(r.get(username).rejoin == 0){			//证明不是退出重连
-//                for(String i:r.keySet()){  //遍历该房间
+            if(r.get(username).joinFlag == 0){			//证明不是退出重连
+                for(String i:r.keySet()){  //遍历该房间
 //                    obj.put("isSelf", username.equals(i));//设置消息是否为自己的
-//                    r.get(i).sendMessage(obj.toString());//调用方法 将消息推送
-//                }
-//            }else{
+                    r.get(i).sendMessage(new Gson().toJson(chatRoom));//调用方法 将消息推送
+                }
+            }else{
 //                obj.put("isSelf", true);
-//                r.get(username).sendMessage(obj.toString());
-//            }
-//            r.get(username).rejoin = 0;
+                r.get(username).sendMessage(new Gson().toJson(chatRoom));
+            }
+            r.get(username).joinFlag = 0;
         }
 
     }
