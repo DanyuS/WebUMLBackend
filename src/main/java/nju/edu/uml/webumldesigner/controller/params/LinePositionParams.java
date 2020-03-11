@@ -1,23 +1,23 @@
 package nju.edu.uml.webumldesigner.controller.params;
 
 public class LinePositionParams {
-    private Integer left;
-    private Integer top;
+    private String left;
+    private String top;
     private String direction;
 
-    public Integer getLeft() {
+    public String getLeft() {
         return left;
     }
 
-    public void setLeft(Integer left) {
+    public void setLeft(String left) {
         this.left = left;
     }
 
-    public Integer getTop() {
+    public String getTop() {
         return top;
     }
 
-    public void setTop(Integer top) {
+    public void setTop(String top) {
         this.top = top;
     }
 

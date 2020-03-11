@@ -10,8 +10,8 @@ public class LinePosition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer lpid;
-    private Integer lpLeft;
-    private Integer lpTop;
+    private String lpLeft;
+    private String lpTop;
     private String lpDirection;
 
     public Integer getLpid() {
@@ -22,19 +22,19 @@ public class LinePosition {
         this.lpid = lpid;
     }
 
-    public Integer getLpLeft() {
+    public String getLpLeft() {
         return lpLeft;
     }
 
-    public void setLpLeft(Integer lpLeft) {
+    public void setLpLeft(String lpLeft) {
         this.lpLeft = lpLeft;
     }
 
-    public Integer getLpTop() {
+    public String getLpTop() {
         return lpTop;
     }
 
-    public void setLpTop(Integer lpTop) {
+    public void setLpTop(String lpTop) {
         this.lpTop = lpTop;
     }
 

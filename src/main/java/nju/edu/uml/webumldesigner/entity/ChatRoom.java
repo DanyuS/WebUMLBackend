@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -13,7 +14,7 @@ public class ChatRoom {
     private Integer cid;
     private Integer gid;
     private Integer uid;
-    private LocalDate chatTime;
+    private Date chatTime;
     private String chatContent;
 
     public Integer getCid() {
@@ -40,11 +41,11 @@ public class ChatRoom {
         this.uid = uid;
     }
 
-    public LocalDate getChatTime() {
+    public Date getChatTime() {
         return chatTime;
     }
 
-    public void setChatTime(LocalDate chatTime) {
+    public void setChatTime(Date chatTime) {
         this.chatTime = chatTime;
     }
 

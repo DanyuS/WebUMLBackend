@@ -13,7 +13,10 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import java.io.IOException;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WebSocketUtil {
@@ -57,15 +60,51 @@ public class WebSocketUtil {
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) {
+    public void onMessage(Session session, String message) throws IOException {
         ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
-        if(chatRoom.getChatContent().equals("exit")){
+        if (chatRoom.getChatContent().equals("exit")) {
             //用户退出房间
             User user = userDao.findUserByUid(chatRoom.getUid());
             chatRoomList.get(String.valueOf(chatRoom.getGid())).remove(user.getUserName());
-            if(chatRoomList.get(String.valueOf(chatRoom.getGid())).size() == 0){
-
+            if (chatRoomList.get(String.valueOf(chatRoom.getGid())).size() == 0) {
+                String content = user.getUserName() + " 退出了房间";
+                chatRoom.setChatContent(content);
+                ConcurrentHashMap<String, WebSocketUtil> r = chatRoomList.get(String.valueOf(chatRoom.getGid()));
+                List<String> usernameList = new ArrayList<String>();
+                for (String userName : r.keySet()) {
+                    usernameList.add(userName);
+                }
+//                obj.put("usernameList", usernameList.toArray());
+                for (String i : r.keySet()) {  //遍历该房间
+                    r.get(i).sendMessage(new Gson().toJson(chatRoom));//调用方法 将消息推送
+                }
             }
+        } else {
+//            //就是普通发送信息
+//            //向JSON对象中添加发送时间
+//            chatRoom.setChatTime(new Date());
+//            obj.put("date", df.format(new Date()));
+//            //获取客户端发送的数据中的内容---房间号 用于区别该消息是来自于哪个房间
+//            String roomid = obj.get("target").toString();
+//            //获取客户端发送的数据中的内容---用户
+//            String username = obj.get("nickname").toString();
+//            //从房间列表中定位到该房间
+//            ConcurrentHashMap<String, WebSocketService> r =roomList.get(roomid);
+//            List<String> uname = new ArrayList<String>();
+//            for(String u:r.keySet()){
+//                uname.add(u);
+//            }
+//            obj.put("uname", uname.toArray());
+//            if(r.get(username).rejoin == 0){			//证明不是退出重连
+//                for(String i:r.keySet()){  //遍历该房间
+//                    obj.put("isSelf", username.equals(i));//设置消息是否为自己的
+//                    r.get(i).sendMessage(obj.toString());//调用方法 将消息推送
+//                }
+//            }else{
+//                obj.put("isSelf", true);
+//                r.get(username).sendMessage(obj.toString());
+//            }
+//            r.get(username).rejoin = 0;
         }
 
     }
