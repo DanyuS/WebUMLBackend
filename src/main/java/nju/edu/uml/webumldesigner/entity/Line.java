@@ -16,7 +16,7 @@ public class Line {
     private String text;
     private String markerStart;
     private String markerEnd;
-    @OneToMany
+    @ManyToMany
     private List<LinePosition> lineList;
     @OneToOne
     private LinePosition startPosition;
