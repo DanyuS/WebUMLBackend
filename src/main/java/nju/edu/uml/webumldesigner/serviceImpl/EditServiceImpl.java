@@ -107,12 +107,18 @@ public class EditServiceImpl implements EditService {
 //        propertiesDao.save(properties);
 
         NodePic result = nodeDao.save(nodePic);
-        if (result.getNid() > 0) {
-            Integer nid = Integer.parseInt(num);
-            addNidToFile(fid, nid);
-            return result.getNid();
-        }
-        return -1;
+        FilePic filePic = fileDao.findFilePicByFid(fid);
+        List<Integer> nidList = filePic.getNidList();
+        nidList.add(result.getNid());
+        filePic.setNidList(nidList);
+        fileDao.save(filePic);
+        return result.getNid();
+//        if (result.getNid() > 0) {
+//            Integer nid = Integer.parseInt(num);
+//            addNidToFile(fid, nid);
+//            return result.getNid();
+//        }
+//        return -1;
     }
 
     @Override
@@ -227,6 +233,9 @@ public class EditServiceImpl implements EditService {
     @Override
     public boolean addLine(LineParams lineParams) {
         //TODO 各个daosave的位置问题，包括上面的addNode
+        FilePic filePic = fileDao.findFilePicByFid(lineParams.getFid());
+
+
         List<LinePosition> linePositionList = new ArrayList<LinePosition>();
         for (int i = 0; i < lineParams.getLineList().size(); i++) {
             LinePosition linePosition = new LinePosition();
@@ -293,10 +302,14 @@ public class EditServiceImpl implements EditService {
 
         Line result = lineDao.save(line);
 
-        if (result.getLid() > 0) {
-            addLidToFile(lineParams.getFid(), result.getLid());
-
-        }
+        List<Integer> lidList = filePic.getLidList();
+        lidList.add(result.getLid());
+        filePic.setLidList(lidList);
+        fileDao.save(filePic);
+//        if (result.getLid() > 0) {
+//            addLidToFile(lineParams.getFid(), result.getLid());
+//
+//        }
 
         return true;
     }
