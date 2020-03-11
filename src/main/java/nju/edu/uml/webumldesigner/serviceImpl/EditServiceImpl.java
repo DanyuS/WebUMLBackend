@@ -273,7 +273,7 @@ public class EditServiceImpl implements EditService {
         line.setToId(lineParams.getToId());
         line.setText(lineParams.getText());
         line.setMarkerStart(lineParams.getMarkerStart());
-        line.setMarkerEnd(line.getMarkerEnd());
+        line.setMarkerEnd(lineParams.getMarkerEnd());
         line.setLineList(linePositionList);
         line.setStartPosition(startPosition);
         line.setEndPosition(endPosition);
@@ -340,7 +340,7 @@ public class EditServiceImpl implements EditService {
         line.setToId(lineParams.getToId());
         line.setText(lineParams.getText());
         line.setMarkerStart(lineParams.getMarkerStart());
-        line.setMarkerEnd(line.getMarkerEnd());
+        line.setMarkerEnd(lineParams.getMarkerEnd());
         line.setLineList(linePositionList);
         line.setStartPosition(startPosition);
         line.setEndPosition(endPosition);

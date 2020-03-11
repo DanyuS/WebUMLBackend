@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-@ServerEndpoint("/websocket/{info}")
+@ServerEndpoint("/websocket")
 public class WebSocketUtil {
     //房间集合
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, WebSocketUtil>> chatRoomList = new ConcurrentHashMap<String, ConcurrentHashMap<String, WebSocketUtil>>();
