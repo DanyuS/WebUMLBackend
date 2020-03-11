@@ -282,6 +282,15 @@ public class EditServiceImpl implements EditService {
         line.setUid(lineParams.getUid());
         line.setGid(lineParams.getGid());
 
+        for(int i =0;i<linePositionList.size();i++){
+            linePositionDao.save(linePositionList.get(i));
+        }
+        linePositionDao.save(startPosition);
+        linePositionDao.save(endPosition);
+        lineStyleDao.save(lineStyle);
+        lineSvgStyleDao.save(lineSvgStyle);
+
+
         lineDao.save(line);
 
         return true;
