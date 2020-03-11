@@ -22,7 +22,7 @@ public interface EditService {
 
 //    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles);
 
-    public boolean addLine(LineParams lineParams);
+    public Integer addLine(LineParams lineParams);
 
     public boolean updateLine(LineParams lineParams);
 

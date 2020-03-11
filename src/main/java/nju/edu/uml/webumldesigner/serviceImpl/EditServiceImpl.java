@@ -229,7 +229,7 @@ public class EditServiceImpl implements EditService {
 //    }
 
     @Override
-    public boolean addLine(LineParams lineParams) {
+    public Integer addLine(LineParams lineParams) {
         //TODO 各个daosave的位置问题，包括上面的addNode
         List<LinePosition> linePositionList = new ArrayList<LinePosition>();
         for (int i = 0; i < lineParams.getLineList().size(); i++) {
@@ -303,7 +303,7 @@ public class EditServiceImpl implements EditService {
 
         }
 
-        return true;
+        return result.getLid();
     }
 
     @Override
