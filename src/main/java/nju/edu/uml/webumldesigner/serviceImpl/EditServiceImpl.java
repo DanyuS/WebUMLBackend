@@ -232,7 +232,6 @@ public class EditServiceImpl implements EditService {
             LinePosition linePosition = new LinePosition();
             linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
             linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
-            linePosition.setLpDirection(lineParams.getLineList().get(i).getDirection());
 
             linePositionDao.save(linePosition);
 
@@ -242,14 +241,12 @@ public class EditServiceImpl implements EditService {
         LinePosition startPosition = new LinePosition();
         startPosition.setLpLeft(lineParams.getStartPosition().getLeft());
         startPosition.setLpTop(lineParams.getStartPosition().getTop());
-        startPosition.setLpDirection(lineParams.getStartPosition().getDirection());
 
         linePositionDao.save(startPosition);
 
         LinePosition endPosition = new LinePosition();
         endPosition.setLpLeft(lineParams.getEndPosition().getLeft());
         endPosition.setLpTop(lineParams.getEndPosition().getTop());
-        endPosition.setLpDirection(lineParams.getEndPosition().getDirection());
 
         linePositionDao.save(endPosition);
 
@@ -300,7 +297,6 @@ public class EditServiceImpl implements EditService {
             LinePosition linePosition = linePositionList.get(i);
             linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
             linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
-            linePosition.setLpDirection(lineParams.getLineList().get(i).getDirection());
 
             linePositionDao.save(linePosition);
 
@@ -311,14 +307,12 @@ public class EditServiceImpl implements EditService {
         LinePosition startPosition = line.getStartPosition();
         startPosition.setLpLeft(lineParams.getStartPosition().getLeft());
         startPosition.setLpTop(lineParams.getStartPosition().getTop());
-        startPosition.setLpDirection(lineParams.getStartPosition().getDirection());
 
         linePositionDao.save(startPosition);
 
         LinePosition endPosition = line.getEndPosition();
         endPosition.setLpLeft(lineParams.getEndPosition().getLeft());
         endPosition.setLpTop(lineParams.getEndPosition().getTop());
-        endPosition.setLpDirection(lineParams.getEndPosition().getDirection());
 
         linePositionDao.save(endPosition);
 

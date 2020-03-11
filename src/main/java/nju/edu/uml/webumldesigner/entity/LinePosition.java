@@ -12,7 +12,6 @@ public class LinePosition {
     private Integer lpid;
     private String lpLeft;
     private String lpTop;
-    private String lpDirection;
 
     public Integer getLpid() {
         return lpid;
@@ -36,13 +35,5 @@ public class LinePosition {
 
     public void setLpTop(String lpTop) {
         this.lpTop = lpTop;
-    }
-
-    public String getLpDirection() {
-        return lpDirection;
-    }
-
-    public void setLpDirection(String lpDirection) {
-        this.lpDirection = lpDirection;
     }
 }
