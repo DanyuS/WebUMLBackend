@@ -291,7 +291,12 @@ public class EditServiceImpl implements EditService {
         lineSvgStyleDao.save(lineSvgStyle);
 
 
-        lineDao.save(line);
+        Line result = lineDao.save(line);
+
+        if (result.getLid() > 0) {
+            addLidToFile(lineParams.getFid(), result.getLid());
+
+        }
 
         return true;
     }
