@@ -267,7 +267,7 @@ public class EditServiceImpl implements EditService {
         lineSvgStyleDao.save(lineSvgStyle);
 
         Line line = new Line();
-        line.setLid(lineParams.getLineId());
+        line.setLineId(lineParams.getLineId());
         line.setRelationType(lineParams.getRelationType());
         line.setFromId(lineParams.getFromId());
         line.setToId(lineParams.getToId());
@@ -334,7 +334,7 @@ public class EditServiceImpl implements EditService {
         lineSvgStyleDao.save(lineSvgStyle);
 
         /////////
-        line.setLid(lineParams.getLineId());
+        line.setLineId(lineParams.getLineId());
         line.setRelationType(lineParams.getRelationType());
         line.setFromId(lineParams.getFromId());
         line.setToId(lineParams.getToId());
