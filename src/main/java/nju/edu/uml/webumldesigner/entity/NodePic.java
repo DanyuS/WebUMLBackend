@@ -17,6 +17,8 @@ public class NodePic {
     private Integer uid;//node创建者
     private Integer gid;//创建者所属组，如果没有就为-1
 
+    private String isDeleted;
+
     public Integer getNid() {
         return nid;
     }
@@ -71,5 +73,13 @@ public class NodePic {
 
     public void setGid(Integer gid) {
         this.gid = gid;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

@@ -90,8 +90,8 @@ public class EditServiceImpl implements EditService {
 
     @Override
     public Integer addNode(Integer uid, Integer gid, Integer fid, String nodeType, NodeStyle nodeStyle, Properties properties) {
-        nodeStyleDao.save(nodeStyle);
-        propertiesDao.save(properties);
+//        nodeStyleDao.save(nodeStyle);
+//        propertiesDao.save(properties);
 
         NodePic nodePic = new NodePic();
         nodePic.setNodeStyle(nodeStyle);
@@ -103,8 +103,10 @@ public class EditServiceImpl implements EditService {
         String num = String.valueOf(nodeDao.count() + 1);
         nodePic.setNodeId("n" + num);
 
-//        nodeStyleDao.save(nodeStyle);
-//        propertiesDao.save(properties);
+        nodePic.setIsDeleted("F");
+
+        nodeStyleDao.save(nodeStyle);
+        propertiesDao.save(properties);
 
         NodePic result = nodeDao.save(nodePic);
         if (result.getNid() > 0) {
@@ -193,12 +195,14 @@ public class EditServiceImpl implements EditService {
     @Override
     public boolean delNode(Integer fid, Integer nid) {
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
-        NodeStyle nodeStyle = nodePic.getNodeStyle();
-        nodeStyleDao.delete(nodeStyle);
-        Properties properties = nodePic.getProperties();
-        propertiesDao.delete(properties);
-        nodeDao.delete(nodePic);
-        removeNidFromFile(fid, nid);
+        nodePic.setIsDeleted("T");
+        nodeDao.save(nodePic);
+//        NodeStyle nodeStyle = nodePic.getNodeStyle();
+//        nodeStyleDao.delete(nodeStyle);
+//        Properties properties = nodePic.getProperties();
+//        propertiesDao.delete(properties);
+//        nodeDao.delete(nodePic);
+//        removeNidFromFile(fid, nid);
         return true;
     }
 
@@ -281,8 +285,9 @@ public class EditServiceImpl implements EditService {
         line.setLineSvgStyle(lineSvgStyle);
         line.setUid(lineParams.getUid());
         line.setGid(lineParams.getGid());
+        line.setIsDeleted("F");
 
-        for(int i =0;i<linePositionList.size();i++){
+        for (int i = 0; i < linePositionList.size(); i++) {
             linePositionDao.save(linePositionList.get(i));
         }
         linePositionDao.save(startPosition);
@@ -360,8 +365,8 @@ public class EditServiceImpl implements EditService {
         line.setEndPosition(endPosition);
         line.setLineStyle(lineStyle);
         line.setLineSvgStyle(lineSvgStyle);
-        line.setUid(lineParams.getUid());
-        line.setGid(lineParams.getGid());
+//        line.setUid(lineParams.getUid());
+//        line.setGid(lineParams.getGid());
         lineDao.save(line);
         return true;
     }
@@ -369,8 +374,10 @@ public class EditServiceImpl implements EditService {
     @Override
     public boolean delLine(Integer fid, Integer lid) {
         Line line = lineDao.findLineByLid(lid);
-        lineDao.delete(line);
-        removeLidFromFile(fid, lid);
+        line.setIsDeleted("T");
+        lineDao.save(line);
+//        lineDao.delete(line);
+//        removeLidFromFile(fid, lid);
         return true;
     }
 
@@ -491,7 +498,10 @@ public class EditServiceImpl implements EditService {
         List<NodePic> result = new ArrayList<NodePic>();
         for (int i = 0; i < nidList.size(); i++) {
             NodePic nodePic = nodeDao.findNodePicByNid(nidList.get(i));
-            result.add(nodePic);
+            if (nodePic.getIsDeleted().equals("F")) {
+                result.add(nodePic);
+            }
+//            result.add(nodePic);
         }
         return result;
     }
@@ -503,7 +513,9 @@ public class EditServiceImpl implements EditService {
         List<Line> result = new ArrayList<Line>();
         for (int i = 0; i < lidList.size(); i++) {
             Line line = lineDao.findLineByLid(lidList.get(i));
-            result.add(line);
+            if (line.getIsDeleted().equals("F")) {
+                result.add(line);
+            }
         }
         return result;
     }

@@ -30,6 +30,8 @@ public class Line {
     private Integer uid;//line创建者
     private Integer gid;//创建者所属组，如果没有就为-1
 
+    private String isDeleted;
+
     public Integer getLid() {
         return lid;
     }
@@ -148,5 +150,13 @@ public class Line {
 
     public void setGid(Integer gid) {
         this.gid = gid;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
