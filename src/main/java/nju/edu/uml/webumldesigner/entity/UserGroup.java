@@ -13,10 +13,10 @@ public class UserGroup {
     private Integer gid;
     private String groupId;
     private String groupName;
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     private List<User> invitedUserList;
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     private List<User> invitingUserList;
     //    @ElementCollection
