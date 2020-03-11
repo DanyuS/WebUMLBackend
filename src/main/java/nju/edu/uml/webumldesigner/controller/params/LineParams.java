@@ -4,6 +4,7 @@ package nju.edu.uml.webumldesigner.controller.params;
 import java.util.List;
 
 public class LineParams {
+    private Integer lid;
     private Integer lineId;
     private String relationType;
     private Integer fromId;
@@ -20,6 +21,14 @@ public class LineParams {
     private Integer uid;//line创建者
     private Integer gid;//创建者所属组，如果没有就为-1
     private Integer fid;
+
+    public Integer getLid() {
+        return lid;
+    }
+
+    public void setLid(Integer lid) {
+        this.lid = lid;
+    }
 
     public Integer getLineId() {
         return lineId;
