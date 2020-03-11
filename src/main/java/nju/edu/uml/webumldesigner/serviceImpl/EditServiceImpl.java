@@ -233,7 +233,7 @@ public class EditServiceImpl implements EditService {
             linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
             linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
 
-            linePositionDao.save(linePosition);
+//            linePositionDao.save(linePosition);
 
             linePositionList.add(linePosition);
         }
@@ -242,20 +242,20 @@ public class EditServiceImpl implements EditService {
         startPosition.setLpLeft(lineParams.getStartPosition().getLeft());
         startPosition.setLpTop(lineParams.getStartPosition().getTop());
 
-        linePositionDao.save(startPosition);
+//        linePositionDao.save(startPosition);
 
         LinePosition endPosition = new LinePosition();
         endPosition.setLpLeft(lineParams.getEndPosition().getLeft());
         endPosition.setLpTop(lineParams.getEndPosition().getTop());
 
-        linePositionDao.save(endPosition);
+//        linePositionDao.save(endPosition);
 
         LineStyle lineStyle = new LineStyle();
         lineStyle.setStroke(lineParams.getLineStyle().getStroke());
         lineStyle.setStrokeDasharray(lineParams.getLineStyle().getStrokeDasharray());
         lineStyle.setStrokeWidth(lineParams.getLineStyle().getStrokeWidth());
 
-        lineStyleDao.save(lineStyle);
+//        lineStyleDao.save(lineStyle);
 
         LineSvgStyle lineSvgStyle = new LineSvgStyle();
         lineSvgStyle.setSvgPosition(lineParams.getLineSvgStyle().getPosition());
@@ -264,7 +264,7 @@ public class EditServiceImpl implements EditService {
         lineSvgStyle.setSvgLeft(lineParams.getLineSvgStyle().getLeft());
         lineSvgStyle.setSvgTop(lineParams.getLineSvgStyle().getTop());
 
-        lineSvgStyleDao.save(lineSvgStyle);
+//        lineSvgStyleDao.save(lineSvgStyle);
 
         Line line = new Line();
         line.setLineId(lineParams.getLineId());
