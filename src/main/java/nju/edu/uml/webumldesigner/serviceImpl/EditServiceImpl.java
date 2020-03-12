@@ -308,7 +308,6 @@ public class EditServiceImpl implements EditService {
 
     @Override
     public boolean updateLine(LineParams lineParams) {
-        //TODO shirting需要确定修改时的格式
         Integer lid = lineParams.getLid();
         Line line = lineDao.findLineByLid(lid);
         List<LinePosition> linePositionList = line.getLineList();

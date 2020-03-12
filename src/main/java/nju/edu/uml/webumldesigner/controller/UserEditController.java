@@ -82,7 +82,6 @@ public class UserEditController {
 
     @PostMapping("/updateLine")
     public boolean updateLine(@RequestBody LineParams lineParams) {
-        //TODO shirting确定格式
         return editService.updateLine(lineParams);
     }
 
