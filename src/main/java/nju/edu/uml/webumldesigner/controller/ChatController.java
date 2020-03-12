@@ -86,6 +86,8 @@ public class ChatController {
                     room.get(i).sendMessage(new Gson().toJson(chatRoom));
                 }
             }
+            //房间成员统统没了关闭连接
+            onClose(session);
         } else {
             //就是普通发送信息
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -115,7 +117,8 @@ public class ChatController {
 
     @OnClose
     public void onClose(Session session) {
-
+        System.out.println("--------------房间关闭");
+        chatRoomList.remove(this);
     }
 
     public int getConnectNum() {
