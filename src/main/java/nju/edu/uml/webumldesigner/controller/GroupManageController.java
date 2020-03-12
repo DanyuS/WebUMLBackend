@@ -5,6 +5,7 @@ import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.entity.UserGroup;
 import nju.edu.uml.webumldesigner.service.InviteService;
+import nju.edu.uml.webumldesigner.util.WebSocketUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,8 @@ import java.util.List;
 public class GroupManageController {
     private final InviteService inviteService;
 
+    private WebSocketUtil webSocketUtil;
+
     public GroupManageController(InviteService inviteService) {
         this.inviteService = inviteService;
     }
@@ -23,7 +26,10 @@ public class GroupManageController {
     @GetMapping("/createGroup")
     public Integer createGroup(String groupName, Integer uid) {
         //TODO 传参问题
-        return inviteService.createGroup(groupName, uid).getGid();
+        Integer gid = inviteService.createGroup(groupName, uid).getGid();
+        //创建房间
+        webSocketUtil.createRoom(gid);
+        return gid;
     }
 
     @PostMapping("/inviteUser")
