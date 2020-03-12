@@ -26,7 +26,7 @@ public class GroupManageController {
     @GetMapping("/createGroup")
     public Integer createGroup(String groupName, Integer uid) {
         //TODO 传参问题
-        Integer gid = inviteService.createGroup(groupName, uid).getGid();
+        Integer gid = inviteService.createGroup("groupName", 1).getGid();
         //创建房间
         chatController.createRoom(gid);
         return gid;
