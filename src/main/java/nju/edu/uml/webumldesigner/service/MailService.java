@@ -20,4 +20,5 @@ public interface MailService {
      * @param content
      */
     //void sendHtmlMail(String to, String subject, String content);
+    String sendFindPwdCode(String to, String subject, String content);
 }

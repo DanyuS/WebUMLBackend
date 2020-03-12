@@ -86,4 +86,36 @@ public class MailServiceImpl implements MailService {
         }
 
     }
+
+    @Override
+    public String sendFindPwdCode(String email, String subject, String code) {
+        User user = userDao.findUserByUserEmail(email);
+        if(user==null || user.getUserPassword()==null){
+            return "邮箱未注册";
+        }
+        user.setFindPwdCode(code);
+        user.setPwdCodeValid(true);
+        userDao.save(user);
+
+        //send code
+        try {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            //邮件发送人
+            simpleMailMessage.setFrom(from);
+            simpleMailMessage.setCc(from);
+            //邮件接收人
+            simpleMailMessage.setTo(email);
+            //邮件主题
+            simpleMailMessage.setSubject(subject);
+            //邮件内容
+            simpleMailMessage.setText("您的验证码是:\n"+code+"\n请填写正确验证码进行密码重置。\n感谢您的使用。");
+            mailSender.send(simpleMailMessage);
+            logger.info("邮件已经发送。");
+            return "邮件已发送";
+        } catch (Exception e) {
+            logger.error("邮件发送失败。", e.getMessage());
+            e.printStackTrace();
+            return "邮件发送失败";
+        }
+    }
 }

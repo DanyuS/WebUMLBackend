@@ -36,4 +36,25 @@ public class RegisterServiceImpl implements RegisterService {
         }
         return false;
     }
+
+    @Override
+    public String resetPwd(String userEmail, String userPassword, String code) {
+        User user = userDao.findUserByUserEmail(userEmail);
+        //验证码错误
+        if(user== null || user.getUserPassword()==null){
+            return "用户未注册";
+        }
+        else if(code==null || !code.equals(user.getFindPwdCode())){
+            return "验证码错误";
+        }
+        else if(!user.getPwdCodeValid()){
+            return "验证码过期";
+        }
+        else {
+            user.setPwdCodeValid(false);
+            user.setUserPassword(userPassword);
+            userDao.save(user);
+            return "密码已重置";
+        }
+    }
 }

@@ -17,6 +17,8 @@ public class User {
     private String fidList;
     private String editable;
     private String code;
+    private String findPwdCode;
+    private Boolean pwdCodeValid;
     @ElementCollection
     private List<Integer> gidList;
 
@@ -101,5 +103,21 @@ public class User {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getFindPwdCode() {
+        return findPwdCode;
+    }
+
+    public void setFindPwdCode(String findPwdCode) {
+        this.findPwdCode = findPwdCode;
+    }
+
+    public Boolean getPwdCodeValid() {
+        return pwdCodeValid;
+    }
+
+    public void setPwdCodeValid(Boolean pwdCodeValid) {
+        this.pwdCodeValid = pwdCodeValid;
     }
 }
