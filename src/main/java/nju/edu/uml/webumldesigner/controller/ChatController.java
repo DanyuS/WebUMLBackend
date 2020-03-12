@@ -49,7 +49,7 @@ public class ChatController {
     }
 
     @OnOpen
-    public void onOpen(Session session, @PathParam(value = "message")String message) {
+    public void onOpen(Session session, @PathParam(value = "message") String message) {
         //将用户加入聊天室
         this.session = session;
         ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
@@ -71,7 +71,7 @@ public class ChatController {
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) throws IOException {
+    public void onMessage(Session session, @PathParam(value = "message") String message) throws IOException {
         ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
         if (chatRoom.getChatContent().equals("exit")) {
             //用户退出房间
