@@ -1,6 +1,5 @@
 package nju.edu.uml.webumldesigner.controller;
 
-import com.google.gson.Gson;
 import nju.edu.uml.webumldesigner.controller.params.InvitationParams;
 import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.entity.User;
