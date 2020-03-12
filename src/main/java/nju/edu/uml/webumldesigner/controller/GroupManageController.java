@@ -17,7 +17,7 @@ import java.util.List;
 public class GroupManageController {
     private final InviteService inviteService;
 
-    private WebSocketUtil webSocketUtil;
+    private ChatController chatController;
 
     public GroupManageController(InviteService inviteService) {
         this.inviteService = inviteService;
@@ -28,7 +28,7 @@ public class GroupManageController {
         //TODO 传参问题
         Integer gid = inviteService.createGroup(groupName, uid).getGid();
         //创建房间
-        webSocketUtil.createRoom(gid);
+        chatController.createRoom(gid);
         return gid;
     }
 
