@@ -17,7 +17,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 
-@RestController
+//@RestController
 @ServerEndpoint("/websocket/{message}")
 public class ChatController {
     //房间集合
@@ -113,12 +113,19 @@ public class ChatController {
 
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
+        //session.getAsyncRemote().sendText("连接上WebSocket");
     }
 
     @OnClose
     public void onClose(Session session) {
         System.out.println("--------------房间关闭");
         chatRoomList.remove(this);
+    }
+
+    @OnError
+    public void OnError(Throwable e) {
+        System.out.println("----------------出现异常");
+        e.printStackTrace();
     }
 
     public int getConnectNum() {

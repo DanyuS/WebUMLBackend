@@ -1,5 +1,6 @@
 package nju.edu.uml.webumldesigner.serviceImpl;
 
+import nju.edu.uml.webumldesigner.controller.ChatController;
 import nju.edu.uml.webumldesigner.dao.FileDao;
 import nju.edu.uml.webumldesigner.dao.UserGroupDao;
 import nju.edu.uml.webumldesigner.entity.FilePic;
