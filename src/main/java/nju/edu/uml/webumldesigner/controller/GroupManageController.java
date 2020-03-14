@@ -25,7 +25,11 @@ public class GroupManageController {
     @GetMapping("/createGroup")
     public Integer createGroup(String groupName, Integer uid) {
         //TODO 传参问题
-        Integer gid = inviteService.createGroup(groupName, uid).getGid();
+        UserGroup userGroup = inviteService.createGroup(groupName, uid);
+        if (userGroup == null) {
+            return -1;
+        }
+        Integer gid = userGroup.getGid();
         //创建房间
 //        chatController.createRoom(gid);
         return gid;
@@ -37,8 +41,8 @@ public class GroupManageController {
     }
 
     @GetMapping("/getAllUser")
-    public List<User> getAllUser(Integer uid, Integer gid){
-        System.out.println(uid + " " +gid);
+    public List<User> getAllUser(Integer uid, Integer gid) {
+        System.out.println(uid + " " + gid);
         return inviteService.getAllUser(uid, gid);
     }
 
@@ -65,13 +69,13 @@ public class GroupManageController {
 
     @GetMapping("/acceptInvite")
     public boolean acceptInvite(Integer uid, Integer gid) {
-        System.out.println(uid + " " +gid);
+        System.out.println(uid + " " + gid);
         return inviteService.acceptInvite(uid, gid);
     }
 
     @GetMapping("/rejectInvite")
     public boolean rejectInvite(Integer uid, Integer gid) {
-        System.out.println(uid + " " +gid);
+        System.out.println(uid + " " + gid);
         return inviteService.rejectInvite(uid, gid);
     }
 

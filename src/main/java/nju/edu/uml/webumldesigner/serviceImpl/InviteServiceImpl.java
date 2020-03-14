@@ -26,6 +26,13 @@ public class InviteServiceImpl implements InviteService {
 
     @Override
     public UserGroup createGroup(String groupName, Integer uid) {
+        List<UserGroup> userGroupList = userGroupDao.findAllBy();
+        for (UserGroup userGroup : userGroupList) {
+            if (userGroup.getGroupName().equals(groupName)) {
+                return null;
+            }
+        }
+
         UserGroup userGroup = new UserGroup();
         userGroup.setGroupName(groupName);
 
