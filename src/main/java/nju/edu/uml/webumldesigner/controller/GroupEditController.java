@@ -96,20 +96,22 @@ public class GroupEditController {
         //還有是添加還是修改還是刪除的問題！！！
         if (message.contains("line")) {
             LineParams lineParams = new Gson().fromJson(message, LineParams.class);
-            User user = userDao.findUserByUid(lineParams.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(lineParams.getGid());
+            //並且還要保存到數據庫
+            Integer lid = editService.addLine(lineParams);
+            Line line = lineDao.findLineByLid(lid);
+            User user = userDao.findUserByUid(line.getUid());
+            UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
-                    editRoom.get(i).sendEditMessage(new Gson().toJson(lineParams));
+                    editRoom.get(i).sendEditMessage(new Gson().toJson(line));
                 }
             } else {
-                editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(lineParams));
+                editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(line));
             }
             editRoom.get(user.getUserName()).joinFlag = 0;
-            //並且還要保存到數據庫
-            editService.addLine(lineParams);
+
         } else {
             NewNodeParam newNodeParam = new Gson().fromJson(message, NewNodeParam.class);
             Style styles = newNodeParam.getStyles();
@@ -127,20 +129,20 @@ public class GroupEditController {
             properties.setCompositionType(properties.getCompositionType());
             properties.setConditions(properties.getConditions());
             properties.setName(properties.getName());
-
-            User user = userDao.findUserByUid(newNodeParam.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(newNodeParam.getGid());
+            Integer nid = editService.addNode(newNodeParam.getUid(), newNodeParam.getGid(), newNodeParam.getFid(), newNodeParam.getNodeType(), nodeStyle, properties);
+            NodePic nodePic = nodeDao.findNodePicByNid(nid);
+            User user = userDao.findUserByUid(nodePic.getUid());
+            UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
-                    editRoom.get(i).sendEditMessage(new Gson().toJson(newNodeParam));
+                    editRoom.get(i).sendEditMessage(new Gson().toJson(nodePic));
                 }
             } else {
-                editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(newNodeParam));
+                editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(nodePic));
             }
             editRoom.get(user.getUserName()).joinFlag = 0;
-            editService.addNode(newNodeParam.getUid(), newNodeParam.getGid(), newNodeParam.getFid(), newNodeParam.getNodeType(), nodeStyle, properties);
         }
     }
 
@@ -150,22 +152,25 @@ public class GroupEditController {
         //還有是添加還是修改還是刪除的問題！！！
         if (message.contains("line")) {
             LineParams lineParams = new Gson().fromJson(message, LineParams.class);
-            User user = userDao.findUserByUid(lineParams.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(lineParams.getGid());
+            //並且還要保存到數據庫
+            editService.updateLine(lineParams);
+            Line line = lineDao.findLineByLid(lineParams.getLid());
+            User user = userDao.findUserByUid(line.getUid());
+            UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
-                    editRoom.get(i).sendEditMessage(new Gson().toJson(lineParams));
+                    editRoom.get(i).sendEditMessage(new Gson().toJson(line));
                 }
             } else {
-                editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(lineParams));
+                editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(line));
             }
             editRoom.get(user.getUserName()).joinFlag = 0;
-            //並且還要保存到數據庫
-            editService.updateLine(lineParams);
         } else {
             NodeParams nodeParams = new Gson().fromJson(message, NodeParams.class);
+            editService.updateNode(nodeParams.getNid(), nodeParams.getNodeKey(), nodeParams.getKey(), nodeParams.getValue());
+
             NodePic nodePic = nodeDao.findNodePicByNid(nodeParams.getNid());
             User user = userDao.findUserByUid(nodePic.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
@@ -173,20 +178,19 @@ public class GroupEditController {
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
-                    editRoom.get(i).sendEditMessage(new Gson().toJson(nodeParams));
+                    editRoom.get(i).sendEditMessage(new Gson().toJson(nodePic));
                 }
             } else {
-                editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(nodeParams));
+                editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(nodePic));
             }
             editRoom.get(user.getUserName()).joinFlag = 0;
-            editService.updateNode(nodeParams.getNid(), nodeParams.getNodeKey(), nodeParams.getKey(), nodeParams.getValue());
         }
     }
 
     @OnMessage
     public void editDeleteGroup(Session session, @PathParam(value = "message") String message) throws IOException {
         //TODO 離開房間需要廣博並且全員離開需要關閉線程？？？
-
+        //TODO 刪除情況可能有些特殊
         String[] idList = message.split(",");
         Integer fid = Integer.parseInt(idList[0]);
         Integer id = Integer.parseInt(idList[1]);
