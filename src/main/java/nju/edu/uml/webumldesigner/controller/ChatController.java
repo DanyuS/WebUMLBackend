@@ -99,7 +99,7 @@ public class ChatController {
                 }
             }
             //房间成员统统没了关闭连接
-            onClose(session);
+//            onClose(session);
         } else {
             //就是普通发送信息
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
