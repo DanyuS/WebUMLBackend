@@ -103,6 +103,7 @@ public class EditServiceImpl implements EditService {
         String num = String.valueOf(nodeDao.count() + 1);
         nodePic.setNodeId("n" + num);
 
+        nodePic.setEditMethod("Add");
         nodePic.setIsDeleted("F");
 
         nodeStyleDao.save(nodeStyle);
@@ -166,6 +167,7 @@ public class EditServiceImpl implements EditService {
                 }
             }
             nodePic.setProperties(properties);
+            nodePic.setEditMethod("Update");
             propertiesDao.save(properties);
         } else {
             NodeStyle nodeStyle = nodePic.getNodeStyle();
@@ -186,6 +188,7 @@ public class EditServiceImpl implements EditService {
                 }
             }
             nodePic.setNodeStyle(nodeStyle);
+            nodePic.setEditMethod("Update");
             nodeStyleDao.save(nodeStyle);
         }
         nodeDao.save(nodePic);
@@ -195,6 +198,7 @@ public class EditServiceImpl implements EditService {
     @Override
     public boolean delNode(Integer fid, Integer nid) {
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
+        nodePic.setEditMethod("Delete");
         nodePic.setIsDeleted("T");
         nodeDao.save(nodePic);
 //        NodeStyle nodeStyle = nodePic.getNodeStyle();
@@ -285,6 +289,8 @@ public class EditServiceImpl implements EditService {
         line.setLineSvgStyle(lineSvgStyle);
         line.setUid(lineParams.getUid());
         line.setGid(lineParams.getGid());
+
+        line.setEditMethod("Add");
         line.setIsDeleted("F");
 
         for (int i = 0; i < linePositionList.size(); i++) {
@@ -365,6 +371,7 @@ public class EditServiceImpl implements EditService {
         line.setEndPosition(endPosition);
         line.setLineStyle(lineStyle);
         line.setLineSvgStyle(lineSvgStyle);
+        line.setEditMethod("Update");
 //        line.setUid(lineParams.getUid());
 //        line.setGid(lineParams.getGid());
         lineDao.save(line);
@@ -374,6 +381,7 @@ public class EditServiceImpl implements EditService {
     @Override
     public boolean delLine(Integer fid, Integer lid) {
         Line line = lineDao.findLineByLid(lid);
+        line.setEditMethod("Delete");
         line.setIsDeleted("T");
         lineDao.save(line);
 //        lineDao.delete(line);

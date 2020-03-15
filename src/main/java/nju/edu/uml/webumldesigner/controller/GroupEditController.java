@@ -68,17 +68,28 @@ public class GroupEditController {
     @OnOpen
     public void openEdit(Session session, @PathParam(value = "message") String message) {
         this.session = session;
-        if (message.contains("line")) {
-            Line line = new Gson().fromJson(message, Line.class);
-            User user = userDao.findUserByUid(line.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
-            joinEdit(userGroup.getGroupName(), user.getUserName());
-        } else {
-            NodePic nodePic = new Gson().fromJson(message, NodePic.class);
-            User user = userDao.findUserByUid(nodePic.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
+        String[] idList = message.split(",");
+        Integer gid = Integer.parseInt(idList[0]);
+        Integer uid = Integer.parseInt(idList[1]);
+        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        User user = userDao.findUserByUid(uid);
+        if (!gid.equals(-1)) {
+            if (groupEditList.get(userGroup.getGroupName()) == null) {
+                createRoom(gid);
+            }
             joinEdit(userGroup.getGroupName(), user.getUserName());
         }
+//        if (message.contains("line")) {
+//            Line line = new Gson().fromJson(message, Line.class);
+//            User user = userDao.findUserByUid(line.getUid());
+//            UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
+//            joinEdit(userGroup.getGroupName(), user.getUserName());
+//        } else {
+//            NodePic nodePic = new Gson().fromJson(message, NodePic.class);
+//            User user = userDao.findUserByUid(nodePic.getUid());
+//            UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
+//            joinEdit(userGroup.getGroupName(), user.getUserName());
+//        }
     }
 
     private void joinEdit(String groupName, String userName) {
@@ -104,7 +115,9 @@ public class GroupEditController {
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
-                    editRoom.get(i).sendEditMessage(new Gson().toJson(line));
+                    if (!i.equals(user.getUserName())) {
+                        editRoom.get(i).sendEditMessage(new Gson().toJson(line));
+                    }
                 }
             } else {
                 editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(line));
@@ -136,7 +149,9 @@ public class GroupEditController {
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
-                    editRoom.get(i).sendEditMessage(new Gson().toJson(nodePic));
+                    if (!i.equals(user.getUserName())) {
+                        editRoom.get(i).sendEditMessage(new Gson().toJson(nodePic));
+                    }
                 }
             } else {
                 editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(nodePic));
@@ -160,7 +175,9 @@ public class GroupEditController {
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
-                    editRoom.get(i).sendEditMessage(new Gson().toJson(line));
+                    if (!i.equals(user.getUserName())) {
+                        editRoom.get(i).sendEditMessage(new Gson().toJson(line));
+                    }
                 }
             } else {
                 editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(line));
@@ -177,7 +194,9 @@ public class GroupEditController {
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
-                    editRoom.get(i).sendEditMessage(new Gson().toJson(nodePic));
+                    if (!i.equals(user.getUserName())) {
+                        editRoom.get(i).sendEditMessage(new Gson().toJson(nodePic));
+                    }
                 }
             } else {
                 editRoom.get(user.getUserName()).sendEditMessage(new Gson().toJson(nodePic));
@@ -203,7 +222,9 @@ public class GroupEditController {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
                     //TODO 傳遞待思考
-                    editRoom.get(i).sendEditMessage(message);
+                    if (!i.equals(user.getUserName())) {
+                        editRoom.get(i).sendEditMessage(message);
+                    }
                 }
             } else {
                 editRoom.get(user.getUserName()).sendEditMessage(message);
@@ -221,7 +242,9 @@ public class GroupEditController {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
                     //TODO 傳遞待思考
-                    editRoom.get(i).sendEditMessage(message);
+                    if (!i.equals(user.getUserName())) {
+                        editRoom.get(i).sendEditMessage(message);
+                    }
                 }
             } else {
                 editRoom.get(user.getUserName()).sendEditMessage(message);

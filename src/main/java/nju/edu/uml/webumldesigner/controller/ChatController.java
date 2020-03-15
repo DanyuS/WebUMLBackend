@@ -51,14 +51,26 @@ public class ChatController {
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "message") String message) {
         //将用户加入聊天室
+        //傳遞內容"gid,uid"
         this.session = session;
-        ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
-        UserGroup userGroup = userGroupDao.findUserGroupByGid(chatRoom.getGid());
-        User user = userDao.findUserByUid(chatRoom.getUid());
-        if (chatRoom.getChatContent().equals("joinIn")) {
+        String[] idList = message.split(",");
+        Integer gid = Integer.parseInt(idList[0]);
+        Integer uid = Integer.parseInt(idList[1]);
+        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        User user = userDao.findUserByUid(uid);
+        if (!gid.equals(-1)) {
+            if (chatRoomList.get(userGroup.getGroupName()) == null) {
+                createRoom(gid);
+            }
             joinChatRoom(userGroup.getGroupName(), user.getUserName());
-            System.out.println("---------------" + user.getUserName() + "加入房间了");
         }
+//        ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
+//        UserGroup userGroup = userGroupDao.findUserGroupByGid(chatRoom.getGid());
+//        User user = userDao.findUserByUid(chatRoom.getUid());
+//        if (chatRoom.getChatContent().equals("joinIn")) {
+//            joinChatRoom(userGroup.getGroupName(), user.getUserName());
+//            System.out.println("---------------" + user.getUserName() + "加入房间了");
+//        }
     }
 
     public void joinChatRoom(String groupName, String userName) {
