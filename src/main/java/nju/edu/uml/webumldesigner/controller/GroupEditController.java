@@ -15,17 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-@RestController
+//@RestController
+@ServerEndpoint("/groupEdit/{message}")
 public class GroupEditController {
-
-    private final GroupEditService groupEditService;
     private final EditService editService;
 
-    public GroupEditController(GroupEditService groupEditService, EditService editService) {
-        this.groupEditService = groupEditService;
+    public GroupEditController(EditService editService) {
         this.editService = editService;
     }
 
@@ -48,10 +47,10 @@ public class GroupEditController {
     private LineDao lineDao;
 
 
-    @GetMapping("/createFileByGroup")
-    public Integer createFileByGroup(Integer gid, String fileName, String fileType) {
-        return groupEditService.createFileByGroup(gid, fileName, fileType);
-    }
+//    @GetMapping("/createFileByGroup")
+//    public Integer createFileByGroup(Integer gid, String fileName, String fileType) {
+//        return groupEditService.createFileByGroup(gid, fileName, fileType);
+//    }
 
     //////////////////////////////////////////
     //////////////////前方高能/////////////////

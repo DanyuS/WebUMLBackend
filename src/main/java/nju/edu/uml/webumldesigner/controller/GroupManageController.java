@@ -4,6 +4,7 @@ import nju.edu.uml.webumldesigner.controller.params.InvitationParams;
 import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.entity.UserGroup;
+import nju.edu.uml.webumldesigner.service.GroupEditService;
 import nju.edu.uml.webumldesigner.service.InviteService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +16,13 @@ import java.util.List;
 @RestController
 public class GroupManageController {
     private final InviteService inviteService;
+    private final GroupEditService groupEditService;
 
 //    private ChatController chatController;
 
-    public GroupManageController(InviteService inviteService) {
+    public GroupManageController(InviteService inviteService, GroupEditService groupEditService) {
         this.inviteService = inviteService;
+        this.groupEditService = groupEditService;
     }
 
     @GetMapping("/createGroup")
@@ -77,6 +80,11 @@ public class GroupManageController {
     public boolean rejectInvite(Integer uid, Integer gid) {
         System.out.println(uid + " " + gid);
         return inviteService.rejectInvite(uid, gid);
+    }
+
+    @GetMapping("/createFileByGroup")
+    public Integer createFileByGroup(Integer gid, String fileName, String fileType) {
+        return groupEditService.createFileByGroup(gid, fileName, fileType);
     }
 
 }
