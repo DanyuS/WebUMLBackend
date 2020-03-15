@@ -99,6 +99,7 @@ public class EditServiceImpl implements EditService {
         nodePic.setProperties(properties);
         nodePic.setUid(uid);
         nodePic.setGid(gid);
+        nodePic.setFid(fid);
         //日后要改成用户id加啥啥还是别的怎么用法
         String num = String.valueOf(nodeDao.count() + 1);
         nodePic.setNodeId("n" + num);
@@ -289,6 +290,7 @@ public class EditServiceImpl implements EditService {
         line.setLineSvgStyle(lineSvgStyle);
         line.setUid(lineParams.getUid());
         line.setGid(lineParams.getGid());
+        line.setFid(lineParams.getFid());
 
         line.setEditMethod("Add");
         line.setIsDeleted("F");

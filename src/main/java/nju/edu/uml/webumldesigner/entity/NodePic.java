@@ -16,6 +16,7 @@ public class NodePic {
 
     private Integer uid;//node创建者
     private Integer gid;//创建者所属组，如果没有就为-1
+    private Integer fid;
 
     private String editMethod;
 
@@ -75,6 +76,14 @@ public class NodePic {
 
     public void setGid(Integer gid) {
         this.gid = gid;
+    }
+
+    public Integer getFid() {
+        return fid;
+    }
+
+    public void setFid(Integer fid) {
+        this.fid = fid;
     }
 
     public String getEditMethod() {

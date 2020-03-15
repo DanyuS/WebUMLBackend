@@ -12,6 +12,7 @@ public class ChatRoom {
     private Integer cid;
     private Integer gid;
     private Integer uid;
+    private Integer fid;
     private String chatTime;
     private String chatContent;
 
@@ -37,6 +38,14 @@ public class ChatRoom {
 
     public void setUid(Integer uid) {
         this.uid = uid;
+    }
+
+    public Integer getFid() {
+        return fid;
+    }
+
+    public void setFid(Integer fid) {
+        this.fid = fid;
     }
 
     public String getChatTime() {

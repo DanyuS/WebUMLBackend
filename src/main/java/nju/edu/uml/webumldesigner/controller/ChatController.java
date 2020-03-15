@@ -39,9 +39,10 @@ public class ChatController {
      * 只要有一个用户进入就会新建一个房间
      * 全部用户离开就删除这个线程
      * */
-    public boolean createRoom(Integer gid) {
+    public boolean createRoom(Integer gid, Integer fid) {
+        //房間名格式為GroupName_fid
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        String chatRoomName = userGroup.getGroupName();
+        String chatRoomName = userGroup.getGroupName() + "_" + fid;
         chatRoomList.put(chatRoomName, new ConcurrentHashMap<String, ChatController>());
         System.out.println("-----------------创建房间" + chatRoomName);
         System.out.println("-----------------当前创建房间线程数" + getConnectNum());
@@ -56,11 +57,12 @@ public class ChatController {
         String[] idList = message.split(",");
         Integer gid = Integer.parseInt(idList[0]);
         Integer uid = Integer.parseInt(idList[1]);
+        Integer fid = Integer.parseInt(idList[2]);
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
         User user = userDao.findUserByUid(uid);
         if (!gid.equals(-1)) {
             if (chatRoomList.get(userGroup.getGroupName()) == null) {
-                createRoom(gid);
+                createRoom(gid, fid);
             }
             joinChatRoom(userGroup.getGroupName(), user.getUserName());
         }
@@ -89,7 +91,8 @@ public class ChatController {
             //用户退出房间
             User user = userDao.findUserByUid(chatRoom.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(chatRoom.getGid());
-            ConcurrentHashMap<String, ChatController> room = chatRoomList.get(userGroup.getGroupName());
+            String chatRoomName = userGroup.getGroupName() + "_" + chatRoom.getFid();
+            ConcurrentHashMap<String, ChatController> room = chatRoomList.get(chatRoomName);
             room.remove(user.getUserName());
             if (room.size() != 0) {
                 String content = user.getUserName() + " 退出了房间";
@@ -107,9 +110,10 @@ public class ChatController {
             chatRoom.setChatTime(df.format(date));
             User user = userDao.findUserByUid(chatRoom.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(chatRoom.getGid());
+            String chatRoomName = userGroup.getGroupName() + "_" + chatRoom.getFid();
             String username = user.getUserName();
             //从房间列表中定位到该房间
-            ConcurrentHashMap<String, ChatController> room = chatRoomList.get(userGroup.getGroupName());
+            ConcurrentHashMap<String, ChatController> room = chatRoomList.get(chatRoomName);
             if (room.get(username).joinFlag == 0) {
                 for (String i : room.keySet()) {
                     //调用方法 将消息推送

@@ -57,9 +57,9 @@ public class GroupEditController {
     //////////////////////////////////////////
 
     //TODO to be modified
-    public boolean createRoom(Integer gid) {
+    public boolean createRoom(Integer gid, Integer fid) {
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        String chatRoomName = userGroup.getGroupName();
+        String chatRoomName = userGroup.getGroupName() + "_" + fid;
         groupEditList.put(chatRoomName, new ConcurrentHashMap<String, GroupEditController>());
         System.out.println("-----------------当前创建房间线程数" + getConnectNum());
         return true;
@@ -71,11 +71,12 @@ public class GroupEditController {
         String[] idList = message.split(",");
         Integer gid = Integer.parseInt(idList[0]);
         Integer uid = Integer.parseInt(idList[1]);
+        Integer fid = Integer.parseInt(idList[2]);
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
         User user = userDao.findUserByUid(uid);
         if (!gid.equals(-1)) {
             if (groupEditList.get(userGroup.getGroupName()) == null) {
-                createRoom(gid);
+                createRoom(gid, fid);
             }
             joinEdit(userGroup.getGroupName(), user.getUserName());
         }
@@ -111,7 +112,8 @@ public class GroupEditController {
             Line line = lineDao.findLineByLid(lid);
             User user = userDao.findUserByUid(line.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
-            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
+            String editGroupName = userGroup.getGroupName() + "_" + line.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
@@ -145,7 +147,8 @@ public class GroupEditController {
             NodePic nodePic = nodeDao.findNodePicByNid(nid);
             User user = userDao.findUserByUid(nodePic.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
-            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
+            String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
@@ -171,7 +174,8 @@ public class GroupEditController {
             Line line = lineDao.findLineByLid(lineParams.getLid());
             User user = userDao.findUserByUid(line.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
-            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
+            String editGroupName = userGroup.getGroupName() + "_" + line.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
@@ -190,7 +194,8 @@ public class GroupEditController {
             NodePic nodePic = nodeDao.findNodePicByNid(nodeParams.getNid());
             User user = userDao.findUserByUid(nodePic.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
-            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
+            String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
@@ -217,7 +222,8 @@ public class GroupEditController {
             Line line = lineDao.findLineByLid(id);
             User user = userDao.findUserByUid(line.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
-            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
+            String editGroupName = userGroup.getGroupName() + "_" + line.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
@@ -237,7 +243,8 @@ public class GroupEditController {
             NodePic nodePic = nodeDao.findNodePicByNid(id);
             User user = userDao.findUserByUid(nodePic.getUid());
             UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
-            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(userGroup.getGroupName());
+            String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
@@ -259,8 +266,9 @@ public class GroupEditController {
     }
 
     @OnClose
-    public void closeGroupEdit() {
-
+    public void closeGroupEdit(Session session) {
+        System.out.println("--------------edit关闭");
+        groupEditList.remove(this);
     }
 
     @OnError
