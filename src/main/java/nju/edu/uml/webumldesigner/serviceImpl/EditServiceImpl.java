@@ -530,6 +530,21 @@ public class EditServiceImpl implements EditService {
         return result;
     }
 
+    @Override
+    public FilePic getFilePicByFid(Integer fid) {
+        return fileDao.findFilePicByFid(fid);
+    }
+
+    @Override
+    public NodePic getNodePicByNid(Integer nid) {
+        return nodeDao.findNodePicByNid(nid);
+    }
+
+    @Override
+    public Line getLineByLid(Integer lid) {
+        return lineDao.findLineByLid(lid);
+    }
+
 //    @Override
 //    public List<Properties> getAllPropertiesByNid(Integer nid) {
 //        NodePic nodePic = nodeDao.findNodePicByNid(nid);

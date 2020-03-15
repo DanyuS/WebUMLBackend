@@ -48,5 +48,11 @@ public interface EditService {
 
     public List<Line> getAllLineByFid(Integer fid);
 
+    public FilePic getFilePicByFid(Integer fid);
+
+    public NodePic getNodePicByNid(Integer nid);
+
+    public Line getLineByLid(Integer lid);
+
 //    public List<Properties> getAllPropertiesByNid(Integer nid);
 }

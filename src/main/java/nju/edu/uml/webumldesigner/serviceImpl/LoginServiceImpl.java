@@ -16,4 +16,9 @@ public class LoginServiceImpl implements LoginService {
     public User isValidLogin(String userEmail, String userPassword) {
         return userDao.findUserByUserEmailAndUserPassword(userEmail, userPassword);
     }
+
+    @Override
+    public User getUserByUid(Integer uid) {
+        return userDao.findUserByUid(uid);
+    }
 }

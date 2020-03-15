@@ -1,24 +1,23 @@
 package nju.edu.uml.webumldesigner.controller;
 
 import com.google.gson.Gson;
-import nju.edu.uml.webumldesigner.dao.UserDao;
-import nju.edu.uml.webumldesigner.dao.UserGroupDao;
+import nju.edu.uml.webumldesigner.controller.params.IdParams;
 import nju.edu.uml.webumldesigner.entity.ChatRoom;
 import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.entity.UserGroup;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import nju.edu.uml.webumldesigner.service.InviteService;
+import nju.edu.uml.webumldesigner.service.LoginService;
+import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 
-//@RestController
 @ServerEndpoint("/websocket/{message}")
+@Component
 public class ChatController {
     //房间集合
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, ChatController>> chatRoomList = new ConcurrentHashMap<String, ConcurrentHashMap<String, ChatController>>();
@@ -29,11 +28,13 @@ public class ChatController {
 
     private int joinFlag = 0;
 
-    @Autowired
-    private UserGroupDao userGroupDao;
+    private final LoginService loginService;
+    private final InviteService inviteService;
 
-    @Autowired
-    private UserDao userDao;
+    public ChatController(LoginService loginService, InviteService inviteService) {
+        this.loginService = loginService;
+        this.inviteService = inviteService;
+    }
 
     /*
      * 只要有一个用户进入就会新建一个房间
@@ -41,7 +42,7 @@ public class ChatController {
      * */
     public boolean createRoom(Integer gid, Integer fid) {
         //房間名格式為GroupName_fid
-        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        UserGroup userGroup = inviteService.getUserGroupByGid(gid);
         String chatRoomName = userGroup.getGroupName() + "_" + fid;
         chatRoomList.put(chatRoomName, new ConcurrentHashMap<String, ChatController>());
         System.out.println("-----------------创建房间" + chatRoomName);
@@ -50,19 +51,16 @@ public class ChatController {
     }
 
     @OnOpen
-    public void onOpen(Session session, @PathParam(value = "message") String message) {
+    public void onOpen(Session session, String message) {
         //将用户加入聊天室
         //傳遞內容"gid,uid"
         this.session = session;
-        String[] idList = message.split(",");
-        Integer gid = Integer.parseInt(idList[0]);
-        Integer uid = Integer.parseInt(idList[1]);
-        Integer fid = Integer.parseInt(idList[2]);
-        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        User user = userDao.findUserByUid(uid);
-        if (!gid.equals(-1)) {
+        IdParams idParams = new Gson().fromJson(message, IdParams.class);
+        if (!idParams.getGid().equals(-1)) {
+            UserGroup userGroup = inviteService.getUserGroupByGid(idParams.getGid());
+            User user = loginService.getUserByUid(idParams.getUid());
             if (chatRoomList.get(userGroup.getGroupName()) == null) {
-                createRoom(gid, fid);
+                createRoom(idParams.getGid(), idParams.getFid());
             }
             joinChatRoom(userGroup.getGroupName(), user.getUserName());
         }
@@ -85,12 +83,12 @@ public class ChatController {
     }
 
     @OnMessage
-    public void onMessage(Session session, @PathParam(value = "message") String message) throws IOException {
+    public void onMessage(Session session, String message) throws IOException {
         ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
         if (chatRoom.getChatContent().equals("exit")) {
             //用户退出房间
-            User user = userDao.findUserByUid(chatRoom.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(chatRoom.getGid());
+            User user = loginService.getUserByUid(chatRoom.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(chatRoom.getUid());
             String chatRoomName = userGroup.getGroupName() + "_" + chatRoom.getFid();
             ConcurrentHashMap<String, ChatController> room = chatRoomList.get(chatRoomName);
             room.remove(user.getUserName());
@@ -108,8 +106,8 @@ public class ChatController {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date(System.currentTimeMillis());
             chatRoom.setChatTime(df.format(date));
-            User user = userDao.findUserByUid(chatRoom.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(chatRoom.getGid());
+            User user = loginService.getUserByUid(chatRoom.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(chatRoom.getUid());
             String chatRoomName = userGroup.getGroupName() + "_" + chatRoom.getFid();
             String username = user.getUserName();
             //从房间列表中定位到该房间

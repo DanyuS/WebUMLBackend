@@ -2,16 +2,11 @@ package nju.edu.uml.webumldesigner.controller;
 
 import com.google.gson.Gson;
 import nju.edu.uml.webumldesigner.controller.params.*;
-import nju.edu.uml.webumldesigner.dao.LineDao;
-import nju.edu.uml.webumldesigner.dao.NodeDao;
-import nju.edu.uml.webumldesigner.dao.UserDao;
-import nju.edu.uml.webumldesigner.dao.UserGroupDao;
 import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
-import nju.edu.uml.webumldesigner.service.GroupEditService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import nju.edu.uml.webumldesigner.service.InviteService;
+import nju.edu.uml.webumldesigner.service.LoginService;
+import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -21,11 +16,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 //@RestController
 @ServerEndpoint("/groupEdit/{message}")
+@Component
 public class GroupEditController {
     private final EditService editService;
+    private final LoginService loginService;
+    private final InviteService inviteService;
 
-    public GroupEditController(EditService editService) {
+    public GroupEditController(EditService editService, LoginService loginService, InviteService inviteService) {
         this.editService = editService;
+        this.loginService = loginService;
+        this.inviteService = inviteService;
     }
 
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, GroupEditController>> groupEditList = new ConcurrentHashMap<String, ConcurrentHashMap<String, GroupEditController>>();
@@ -33,18 +33,6 @@ public class GroupEditController {
     private Session session;
 
     private int joinFlag = 0;
-
-    @Autowired
-    private UserGroupDao userGroupDao;
-
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private NodeDao nodeDao;
-
-    @Autowired
-    private LineDao lineDao;
 
 
 //    @GetMapping("/createFileByGroup")
@@ -58,7 +46,7 @@ public class GroupEditController {
 
     //TODO to be modified
     public boolean createRoom(Integer gid, Integer fid) {
-        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        UserGroup userGroup = inviteService.getUserGroupByGid(gid);
         String chatRoomName = userGroup.getGroupName() + "_" + fid;
         groupEditList.put(chatRoomName, new ConcurrentHashMap<String, GroupEditController>());
         System.out.println("-----------------当前创建房间线程数" + getConnectNum());
@@ -66,17 +54,14 @@ public class GroupEditController {
     }
 
     @OnOpen
-    public void openEdit(Session session, @PathParam(value = "message") String message) {
+    public void openEdit(Session session, String message) {
         this.session = session;
-        String[] idList = message.split(",");
-        Integer gid = Integer.parseInt(idList[0]);
-        Integer uid = Integer.parseInt(idList[1]);
-        Integer fid = Integer.parseInt(idList[2]);
-        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        User user = userDao.findUserByUid(uid);
-        if (!gid.equals(-1)) {
+        IdParams idParams = new Gson().fromJson(message, IdParams.class);
+        if (!idParams.getGid().equals(-1)) {
+            UserGroup userGroup = inviteService.getUserGroupByGid(idParams.getGid());
+            User user = loginService.getUserByUid(idParams.getUid());
             if (groupEditList.get(userGroup.getGroupName()) == null) {
-                createRoom(gid, fid);
+                createRoom(idParams.getGid(), idParams.getFid());
             }
             joinEdit(userGroup.getGroupName(), user.getUserName());
         }
@@ -101,17 +86,19 @@ public class GroupEditController {
         editGroup.put(userName, this);//将此用户加入房间中
     }
 
+
+    //TODO 全部删除参数注解存在问题，需要重新组织一下结构
     @OnMessage
-    public void editAddGroup(Session session, @PathParam(value = "message") String message) throws IOException {
+    public void editAddGroup(Session session, String message) throws IOException {
         //TODO 離開房間需要廣博並且全員離開需要關閉線程？？？
-        //還有是添加還是修改還是刪除的問題！！！
+
         if (message.contains("line")) {
             LineParams lineParams = new Gson().fromJson(message, LineParams.class);
             //並且還要保存到數據庫
             Integer lid = editService.addLine(lineParams);
-            Line line = lineDao.findLineByLid(lid);
-            User user = userDao.findUserByUid(line.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
+            Line line = editService.getLineByLid(lid);
+            User user = loginService.getUserByUid(line.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(line.getGid());
             String editGroupName = userGroup.getGroupName() + "_" + line.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
@@ -144,9 +131,9 @@ public class GroupEditController {
             properties.setConditions(properties.getConditions());
             properties.setName(properties.getName());
             Integer nid = editService.addNode(newNodeParam.getUid(), newNodeParam.getGid(), newNodeParam.getFid(), newNodeParam.getNodeType(), nodeStyle, properties);
-            NodePic nodePic = nodeDao.findNodePicByNid(nid);
-            User user = userDao.findUserByUid(nodePic.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
+            NodePic nodePic = editService.getNodePicByNid(nid);
+            User user = loginService.getUserByUid(nodePic.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(nodePic.getGid());
             String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
@@ -171,9 +158,9 @@ public class GroupEditController {
             LineParams lineParams = new Gson().fromJson(message, LineParams.class);
             //並且還要保存到數據庫
             editService.updateLine(lineParams);
-            Line line = lineDao.findLineByLid(lineParams.getLid());
-            User user = userDao.findUserByUid(line.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
+            Line line = editService.getLineByLid(lineParams.getLid());
+            User user = loginService.getUserByUid(line.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(line.getGid());
             String editGroupName = userGroup.getGroupName() + "_" + line.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
@@ -191,9 +178,9 @@ public class GroupEditController {
             NodeParams nodeParams = new Gson().fromJson(message, NodeParams.class);
             editService.updateNode(nodeParams.getNid(), nodeParams.getNodeKey(), nodeParams.getKey(), nodeParams.getValue());
 
-            NodePic nodePic = nodeDao.findNodePicByNid(nodeParams.getNid());
-            User user = userDao.findUserByUid(nodePic.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
+            NodePic nodePic = editService.getNodePicByNid(nodeParams.getNid());
+            User user = loginService.getUserByUid(nodePic.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(nodePic.getGid());
             String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
@@ -219,9 +206,9 @@ public class GroupEditController {
         Integer id = Integer.parseInt(idList[1]);
         if (message.contains("line")) {
             //刪除的傳參格式有待思考，暫時先定為a,b吧
-            Line line = lineDao.findLineByLid(id);
-            User user = userDao.findUserByUid(line.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
+            Line line = editService.getLineByLid(id);
+            User user = loginService.getUserByUid(line.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(line.getGid());
             String editGroupName = userGroup.getGroupName() + "_" + line.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
@@ -240,9 +227,9 @@ public class GroupEditController {
             editService.delLine(fid, id);
         } else {
 
-            NodePic nodePic = nodeDao.findNodePicByNid(id);
-            User user = userDao.findUserByUid(nodePic.getUid());
-            UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
+            NodePic nodePic = editService.getNodePicByNid(id);
+            User user = loginService.getUserByUid(nodePic.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(nodePic.getGid());
             String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {

@@ -215,4 +215,9 @@ public class InviteServiceImpl implements InviteService {
 
         return true;
     }
+
+    @Override
+    public UserGroup getUserGroupByGid(Integer gid) {
+        return userGroupDao.findUserGroupByGid(gid);
+    }
 }
