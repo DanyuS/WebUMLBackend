@@ -6,6 +6,7 @@ import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
 import nju.edu.uml.webumldesigner.service.InviteService;
 import nju.edu.uml.webumldesigner.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -18,15 +19,30 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServerEndpoint("/groupEdit/{message}")
 //@Component
 public class GroupEditController {
-    private final EditService editService;
-    private final LoginService loginService;
-    private final InviteService inviteService;
+    private static EditService editService;
+    private static LoginService loginService;
+    private static InviteService inviteService;
 
-    public GroupEditController(EditService editService, LoginService loginService, InviteService inviteService) {
-        this.editService = editService;
-        this.loginService = loginService;
-        this.inviteService = inviteService;
+    @Autowired
+    public void setEditService(EditService editService) {
+        GroupEditController.editService = editService;
     }
+
+    @Autowired
+    public void setLoginService(LoginService loginService) {
+        GroupEditController.loginService = loginService;
+    }
+
+    @Autowired
+    public void setInviteService(InviteService inviteService) {
+        GroupEditController.inviteService = inviteService;
+    }
+
+//    public GroupEditController(EditService editService, LoginService loginService, InviteService inviteService) {
+//        this.editService = editService;
+//        this.loginService = loginService;
+//        this.inviteService = inviteService;
+//    }
 
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, GroupEditController>> groupEditList = new ConcurrentHashMap<String, ConcurrentHashMap<String, GroupEditController>>();
 

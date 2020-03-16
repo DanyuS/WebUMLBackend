@@ -1,23 +1,24 @@
 package nju.edu.uml.webumldesigner.serviceImpl;
 
-import nju.edu.uml.webumldesigner.controller.ChatController;
 import nju.edu.uml.webumldesigner.dao.FileDao;
 import nju.edu.uml.webumldesigner.dao.UserGroupDao;
 import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.entity.UserGroup;
 import nju.edu.uml.webumldesigner.service.GroupEditService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class GroupEditServiceImpl implements GroupEditService {
-    @Autowired
-    private FileDao fileDao;
+    private final FileDao fileDao;
 
-    @Autowired
-    private UserGroupDao userGroupDao;
+    private final UserGroupDao userGroupDao;
+
+    public GroupEditServiceImpl(FileDao fileDao, UserGroupDao userGroupDao) {
+        this.fileDao = fileDao;
+        this.userGroupDao = userGroupDao;
+    }
 
     @Override
     public Integer createFileByGroup(Integer gid, String fileName, String fileType) {

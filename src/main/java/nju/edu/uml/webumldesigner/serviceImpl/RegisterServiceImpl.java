@@ -3,14 +3,16 @@ package nju.edu.uml.webumldesigner.serviceImpl;
 import nju.edu.uml.webumldesigner.dao.UserDao;
 import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.service.RegisterService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RegisterServiceImpl implements RegisterService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
+
+    public RegisterServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public boolean userRegister(String userName, String userEmail, String userPassword, String code) {

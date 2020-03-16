@@ -7,7 +7,6 @@ import nju.edu.uml.webumldesigner.entity.FilePic;
 import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.entity.UserGroup;
 import nju.edu.uml.webumldesigner.service.InviteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,14 +14,17 @@ import java.util.List;
 
 @Service
 public class InviteServiceImpl implements InviteService {
-    @Autowired
-    private UserGroupDao userGroupDao;
+    private final UserGroupDao userGroupDao;
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
 
-    @Autowired
-    private FileDao fileDao;
+    private final FileDao fileDao;
+
+    public InviteServiceImpl(UserGroupDao userGroupDao, UserDao userDao, FileDao fileDao) {
+        this.userGroupDao = userGroupDao;
+        this.userDao = userDao;
+        this.fileDao = fileDao;
+    }
 
     @Override
     public UserGroup createGroup(String groupName, Integer uid) {

@@ -7,6 +7,7 @@ import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.entity.UserGroup;
 import nju.edu.uml.webumldesigner.service.InviteService;
 import nju.edu.uml.webumldesigner.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -18,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/websocket/{message}")
-//@Component
+@Component
 public class ChatController {
     //房间集合
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, ChatController>> chatRoomList = new ConcurrentHashMap<String, ConcurrentHashMap<String, ChatController>>();
@@ -29,12 +30,17 @@ public class ChatController {
 
     private int joinFlag = 0;
 
-    private final LoginService loginService;
-    private final InviteService inviteService;
+    private static LoginService loginService;
+    private static InviteService inviteService;
 
-    public ChatController(LoginService loginService, InviteService inviteService) {
-        this.loginService = loginService;
-        this.inviteService = inviteService;
+    @Autowired
+    public void setLoginService(LoginService loginService) {
+        ChatController.loginService = loginService;
+    }
+
+    @Autowired
+    public void setInviteService(InviteService inviteService) {
+        ChatController.inviteService = inviteService;
     }
 
     /*

@@ -5,7 +5,6 @@ import nju.edu.uml.webumldesigner.controller.params.LineParams;
 import nju.edu.uml.webumldesigner.dao.*;
 import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,35 +13,38 @@ import java.util.List;
 @Service
 public class EditServiceImpl implements EditService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
 
-    @Autowired
-    private FileDao fileDao;
+    private final FileDao fileDao;
 
-    @Autowired
-    private NodeDao nodeDao;
+    private final NodeDao nodeDao;
 
-    @Autowired
-    private LineDao lineDao;
+    private final LineDao lineDao;
 
-    @Autowired
-    private LinePositionDao linePositionDao;
+    private final LinePositionDao linePositionDao;
 
-    @Autowired
-    private LineStyleDao lineStyleDao;
+    private final LineStyleDao lineStyleDao;
 
-    @Autowired
-    private LineSvgStyleDao lineSvgStyleDao;
+    private final LineSvgStyleDao lineSvgStyleDao;
 
-    @Autowired
-    private PropertiesDao propertiesDao;
+    private final PropertiesDao propertiesDao;
 
-    @Autowired
-    private VarAndFuncDao varAndFuncDao;
+    private final VarAndFuncDao varAndFuncDao;
 
-    @Autowired
-    private NodeStyleDao nodeStyleDao;
+    private final NodeStyleDao nodeStyleDao;
+
+    public EditServiceImpl(UserDao userDao, FileDao fileDao, NodeDao nodeDao, LineDao lineDao, LinePositionDao linePositionDao, LineStyleDao lineStyleDao, LineSvgStyleDao lineSvgStyleDao, PropertiesDao propertiesDao, VarAndFuncDao varAndFuncDao, NodeStyleDao nodeStyleDao) {
+        this.userDao = userDao;
+        this.fileDao = fileDao;
+        this.nodeDao = nodeDao;
+        this.lineDao = lineDao;
+        this.linePositionDao = linePositionDao;
+        this.lineStyleDao = lineStyleDao;
+        this.lineSvgStyleDao = lineSvgStyleDao;
+        this.propertiesDao = propertiesDao;
+        this.varAndFuncDao = varAndFuncDao;
+        this.nodeStyleDao = nodeStyleDao;
+    }
 
 
     @Override
