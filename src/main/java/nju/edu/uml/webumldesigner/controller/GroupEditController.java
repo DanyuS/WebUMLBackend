@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 //@RestController
 @ServerEndpoint("/groupEdit/{message}")
-@Component
+//@Component
 public class GroupEditController {
     private final EditService editService;
     private final LoginService loginService;
@@ -54,7 +54,7 @@ public class GroupEditController {
     }
 
     @OnOpen
-    public void openEdit(Session session, String message) {
+    public void openEdit(Session session, @PathParam(value = "message") String message) {
         this.session = session;
         IdParams idParams = new Gson().fromJson(message, IdParams.class);
         if (!idParams.getGid().equals(-1)) {

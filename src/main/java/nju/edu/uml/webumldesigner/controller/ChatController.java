@@ -10,6 +10,7 @@ import nju.edu.uml.webumldesigner.service.LoginService;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.sql.Date;
@@ -17,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/websocket/{message}")
-@Component
+//@Component
 public class ChatController {
     //房间集合
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, ChatController>> chatRoomList = new ConcurrentHashMap<String, ConcurrentHashMap<String, ChatController>>();
@@ -51,7 +52,7 @@ public class ChatController {
     }
 
     @OnOpen
-    public void onOpen(Session session, String message) {
+    public void onOpen(Session session, @PathParam(value = "message") String message) {
         //将用户加入聊天室
         //傳遞內容"gid,uid"
         this.session = session;
