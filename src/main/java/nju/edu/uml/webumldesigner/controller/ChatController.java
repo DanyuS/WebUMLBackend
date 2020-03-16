@@ -62,6 +62,7 @@ public class ChatController {
         //将用户加入聊天室
         //傳遞內容"gid,uid"
         this.session = session;
+        message = "{" + message + "}";
         IdParams idParams = new Gson().fromJson(message, IdParams.class);
         if (!idParams.getGid().equals(-1)) {
             UserGroup userGroup = inviteService.getUserGroupByGid(idParams.getGid());
@@ -91,6 +92,7 @@ public class ChatController {
 
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
+        message = "{" + message + "}";
         ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
         if (chatRoom.getChatContent().equals("exit")) {
             //用户退出房间
@@ -133,6 +135,7 @@ public class ChatController {
     }
 
     public void sendMessage(String message) throws IOException {
+        message = "{" + message + "}";
         this.session.getBasicRemote().sendText(message);
         //session.getAsyncRemote().sendText("连接上WebSocket");
     }

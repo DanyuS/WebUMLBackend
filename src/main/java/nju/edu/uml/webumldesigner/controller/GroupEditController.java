@@ -72,6 +72,7 @@ public class GroupEditController {
     @OnOpen
     public void openEdit(Session session, @PathParam(value = "message") String message) {
         this.session = session;
+        message = "{" + message + "}";
         IdParams idParams = new Gson().fromJson(message, IdParams.class);
         if (!idParams.getGid().equals(-1)) {
             UserGroup userGroup = inviteService.getUserGroupByGid(idParams.getGid());
@@ -107,7 +108,7 @@ public class GroupEditController {
     @OnMessage
     public void editAddGroup(Session session, String message) throws IOException {
         //TODO 離開房間需要廣博並且全員離開需要關閉線程？？？
-
+        message = "{" + message + "}";
         if (message.contains("line")) {
             LineParams lineParams = new Gson().fromJson(message, LineParams.class);
             //並且還要保存到數據庫
@@ -170,6 +171,7 @@ public class GroupEditController {
     public void editUpdateGroup(Session session, @PathParam(value = "message") String message) throws IOException {
         //TODO 離開房間需要廣博並且全員離開需要關閉線程？？？
         //還有是添加還是修改還是刪除的問題！！！
+        message = "{" + message + "}";
         if (message.contains("line")) {
             LineParams lineParams = new Gson().fromJson(message, LineParams.class);
             //並且還要保存到數據庫
@@ -217,13 +219,15 @@ public class GroupEditController {
     public void editDeleteGroup(Session session, @PathParam(value = "message") String message) throws IOException {
         //TODO 離開房間需要廣博並且全員離開需要關閉線程？？？
         //TODO 刪除情況可能有些特殊
-        String[] idList = message.split(",");
-        Integer fid = Integer.parseInt(idList[0]);
-        Integer id = Integer.parseInt(idList[1]);
+        message = "{" + message + "}";
+        IdParams idParams = new Gson().fromJson(message, IdParams.class);
+        Integer fid = idParams.getFid();
+        Integer id = idParams.getGid();
+        Integer uid = idParams.getUid();
         if (message.contains("line")) {
             //刪除的傳參格式有待思考，暫時先定為a,b吧
             Line line = editService.getLineByLid(id);
-            User user = loginService.getUserByUid(line.getUid());
+            User user = loginService.getUserByUid(uid);
             UserGroup userGroup = inviteService.getUserGroupByGid(line.getGid());
             String editGroupName = userGroup.getGroupName() + "_" + line.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
@@ -244,7 +248,7 @@ public class GroupEditController {
         } else {
 
             NodePic nodePic = editService.getNodePicByNid(id);
-            User user = loginService.getUserByUid(nodePic.getUid());
+            User user = loginService.getUserByUid(uid);
             UserGroup userGroup = inviteService.getUserGroupByGid(nodePic.getGid());
             String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
@@ -265,6 +269,7 @@ public class GroupEditController {
     }
 
     public void sendEditMessage(String message) throws IOException {
+        message = "{" + message + "}";
         this.session.getBasicRemote().sendText(message);
     }
 
