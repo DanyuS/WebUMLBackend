@@ -168,6 +168,10 @@ public class InviteServiceImpl implements InviteService {
             }
         }
         user.setInvitingGidList(invitingGidList);
+
+        List<Integer> gidList = user.getGidList();
+        gidList.add(gid);
+        user.setGidList(gidList);
         userDao.save(user);
         //其次将小组记录中待邀请成功移入邀请成功
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
