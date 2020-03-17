@@ -77,10 +77,11 @@ public class GroupEditController {
         if (!idParams.getGid().equals(-1)) {
             UserGroup userGroup = inviteService.getUserGroupByGid(idParams.getGid());
             User user = loginService.getUserByUid(idParams.getUid());
-            if (groupEditList.get(userGroup.getGroupName()) == null) {
+            String chatRoomName = userGroup.getGroupName() + "_" + idParams.getFid();
+            if (groupEditList.get(chatRoomName) == null) {
                 createRoom(idParams.getGid(), idParams.getFid());
             }
-            joinEdit(userGroup.getGroupName(), user.getUserName());
+            joinEdit(chatRoomName, user.getUserName());
         }
 //        if (message.contains("line")) {
 //            Line line = new Gson().fromJson(message, Line.class);

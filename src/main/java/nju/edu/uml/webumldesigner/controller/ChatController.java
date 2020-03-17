@@ -60,17 +60,17 @@ public class ChatController {
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "message") String message) {
         //将用户加入聊天室
-        //傳遞內容"gid,uid"
         this.session = session;
         message = "{" + message + "}";
         IdParams idParams = new Gson().fromJson(message, IdParams.class);
         if (!idParams.getGid().equals(-1)) {
             UserGroup userGroup = inviteService.getUserGroupByGid(idParams.getGid());
             User user = loginService.getUserByUid(idParams.getUid());
-            if (chatRoomList.get(userGroup.getGroupName()) == null) {
+            String chatRoomName = userGroup.getGroupName() + "_" + idParams.getFid();
+            if (chatRoomList.get(chatRoomName) == null) {
                 createRoom(idParams.getGid(), idParams.getFid());
             }
-            joinChatRoom(userGroup.getGroupName(), user.getUserName());
+            joinChatRoom(chatRoomName, user.getUserName());
         }
 //        ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
 //        UserGroup userGroup = userGroupDao.findUserGroupByGid(chatRoom.getGid());
