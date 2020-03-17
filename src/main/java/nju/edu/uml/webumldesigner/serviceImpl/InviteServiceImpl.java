@@ -167,6 +167,7 @@ public class InviteServiceImpl implements InviteService {
                 break;
             }
         }
+        user.setInvitingGidList(invitingGidList);
         userDao.save(user);
         //其次将小组记录中待邀请成功移入邀请成功
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
@@ -182,7 +183,7 @@ public class InviteServiceImpl implements InviteService {
             }
         }
 
-        List<User> invitingUserList2 = userGroup.getInvitingUserList();
+        List<User> invitingUserList2 = new ArrayList<User>();
         for (User value : invitingUserList) {
             invitingUserList2.add(value);
         }
@@ -206,18 +207,23 @@ public class InviteServiceImpl implements InviteService {
                 break;
             }
         }
+        user.setInvitingGidList(invitingGidList);
         userDao.save(user);
         //其次将小组记录中移出待邀请
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        List<User> invitedUserList = userGroup.getInvitedUserList();
-        for (int i = 0; i < invitedUserList.size(); i++) {
-            if (invitedUserList.get(i).getUid().equals(uid)) {
-                invitedUserList.remove(i);
+        List<User> invitingUserList = userGroup.getInvitingUserList();
+        for (int i = 0; i < invitingUserList.size(); i++) {
+            if (invitingUserList.get(i).getUid().equals(uid)) {
+                invitingUserList.remove(i);
                 break;
             }
         }
 
-        userGroup.setInvitedUserList(invitedUserList);
+        List<User> invitingUserList2 = new ArrayList<User>();
+        for (User value : invitingUserList) {
+            invitingUserList2.add(value);
+        }
+        userGroup.setInvitingUserList(invitingUserList2);
 
         userGroupDao.save(userGroup);
 
