@@ -171,18 +171,24 @@ public class InviteServiceImpl implements InviteService {
         //其次将小组记录中待邀请成功移入邀请成功
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
         List<User> invitedUserList = userGroup.getInvitedUserList();
-        for (int i = 0; i < invitedUserList.size(); i++) {
-            if (invitedUserList.get(i).getUid().equals(uid)) {
-                invitedUserList.remove(i);
+        invitedUserList.add(user);
+
+        //最后inviting小组删除记录
+        List<User> invitingUserList = userGroup.getInvitingUserList();
+        for (int i = 0; i < invitingUserList.size(); i++) {
+            if (invitingUserList.get(i).getUid().equals(uid)) {
+                invitingUserList.remove(i);
                 break;
             }
         }
 
-        List<User> invitingUserList = userGroup.getInvitingUserList();
-        invitingUserList.add(user);
+        List<User> invitingUserList2 = userGroup.getInvitingUserList();
+        for (User value : invitingUserList) {
+            invitingUserList2.add(value);
+        }
 
         userGroup.setInvitingUserList(invitedUserList);
-        userGroup.setInvitingUserList(invitingUserList);
+        userGroup.setInvitingUserList(invitingUserList2);
 
         userGroupDao.save(userGroup);
 
