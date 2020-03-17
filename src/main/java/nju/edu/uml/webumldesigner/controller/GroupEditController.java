@@ -72,7 +72,9 @@ public class GroupEditController {
     @OnOpen
     public void openEdit(Session session, @PathParam(value = "message") String message) {
         this.session = session;
-        message = "{" + message + "}";
+        if (!message.contains("{")) {
+            message = "{" + message + "}";
+        }
         IdParams idParams = new Gson().fromJson(message, IdParams.class);
         if (!idParams.getGid().equals(-1)) {
             UserGroup userGroup = inviteService.getUserGroupByGid(idParams.getGid());
@@ -109,7 +111,9 @@ public class GroupEditController {
     @OnMessage
     public void editAddGroup(Session session, String message) throws IOException {
         //TODO 離開房間需要廣博並且全員離開需要關閉線程？？？
-        message = "{" + message + "}";
+        if (!message.contains("{")) {
+            message = "{" + message + "}";
+        }
         if (message.contains("line")) {
             LineParams lineParams = new Gson().fromJson(message, LineParams.class);
             //並且還要保存到數據庫
@@ -172,7 +176,9 @@ public class GroupEditController {
     public void editUpdateGroup(Session session, @PathParam(value = "message") String message) throws IOException {
         //TODO 離開房間需要廣博並且全員離開需要關閉線程？？？
         //還有是添加還是修改還是刪除的問題！！！
-        message = "{" + message + "}";
+        if (!message.contains("{")) {
+            message = "{" + message + "}";
+        }
         if (message.contains("line")) {
             LineParams lineParams = new Gson().fromJson(message, LineParams.class);
             //並且還要保存到數據庫
@@ -219,8 +225,10 @@ public class GroupEditController {
     @OnMessage
     public void editDeleteGroup(Session session, @PathParam(value = "message") String message) throws IOException {
         //TODO 離開房間需要廣博並且全員離開需要關閉線程？？？
-        //TODO 刪除情況可能有些特殊
-        message = "{" + message + "}";
+
+        if (!message.contains("{")) {
+            message = "{" + message + "}";
+        }
         IdParams idParams = new Gson().fromJson(message, IdParams.class);
         Integer fid = idParams.getFid();
         Integer id = idParams.getGid();
@@ -270,7 +278,9 @@ public class GroupEditController {
     }
 
     public void sendEditMessage(String message) throws IOException {
-        message = "{" + message + "}";
+        if (!message.contains("{")) {
+            message = "{" + message + "}";
+        }
         this.session.getBasicRemote().sendText(message);
     }
 

@@ -61,7 +61,9 @@ public class ChatController {
     public void onOpen(Session session, @PathParam(value = "message") String message) {
         //将用户加入聊天室
         this.session = session;
-        message = "{" + message + "}";
+        if (!message.contains("{")) {
+            message = "{" + message + "}";
+        }
         IdParams idParams = new Gson().fromJson(message, IdParams.class);
         if (!idParams.getGid().equals(-1)) {
             UserGroup userGroup = inviteService.getUserGroupByGid(idParams.getGid());
@@ -92,12 +94,14 @@ public class ChatController {
 
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
-        message = "{" + message + "}";
+        if (!message.contains("{")) {
+            message = "{" + message + "}";
+        }
         ChatRoom chatRoom = new Gson().fromJson(message, ChatRoom.class);
         if (chatRoom.getChatContent().equals("exit")) {
             //用户退出房间
             User user = loginService.getUserByUid(chatRoom.getUid());
-            UserGroup userGroup = inviteService.getUserGroupByGid(chatRoom.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(chatRoom.getGid());
             String chatRoomName = userGroup.getGroupName() + "_" + chatRoom.getFid();
             ConcurrentHashMap<String, ChatController> room = chatRoomList.get(chatRoomName);
             room.remove(user.getUserName());
@@ -116,7 +120,7 @@ public class ChatController {
             Date date = new Date(System.currentTimeMillis());
             chatRoom.setChatTime(df.format(date));
             User user = loginService.getUserByUid(chatRoom.getUid());
-            UserGroup userGroup = inviteService.getUserGroupByGid(chatRoom.getUid());
+            UserGroup userGroup = inviteService.getUserGroupByGid(chatRoom.getGid());
             String chatRoomName = userGroup.getGroupName() + "_" + chatRoom.getFid();
             String username = user.getUserName();
             //从房间列表中定位到该房间
@@ -135,7 +139,9 @@ public class ChatController {
     }
 
     public void sendMessage(String message) throws IOException {
-        message = "{" + message + "}";
+        if (!message.contains("{")) {
+            message = "{" + message + "}";
+        }
         this.session.getBasicRemote().sendText(message);
         //session.getAsyncRemote().sendText("连接上WebSocket");
     }
