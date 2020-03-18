@@ -16,6 +16,8 @@ public class FilePic {
     @ElementCollection
     private List<Integer> lidList;
 
+    private Integer refreshTime;
+
     public Integer getFid() {
         return fid;
     }
@@ -62,5 +64,13 @@ public class FilePic {
 
     public void setLidList(List<Integer> lidList) {
         this.lidList = lidList;
+    }
+
+    public Integer getRefreshTime() {
+        return refreshTime;
+    }
+
+    public void setRefreshTime(Integer refreshTime) {
+        this.refreshTime = refreshTime;
     }
 }

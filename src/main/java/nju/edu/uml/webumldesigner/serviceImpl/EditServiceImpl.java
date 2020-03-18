@@ -59,6 +59,7 @@ public class EditServiceImpl implements EditService {
         filePic.setFileType(fileType);
         String num = String.valueOf(fileDao.count() + 1);
         filePic.setFileId("f" + num);
+        filePic.setRefreshTime(0);
 //        filePic.setNidList("[]");
         FilePic result = fileDao.save(filePic);
         if (result.getFid() > 0) {
@@ -545,6 +546,16 @@ public class EditServiceImpl implements EditService {
     @Override
     public Line getLineByLid(Integer lid) {
         return lineDao.findLineByLid(lid);
+    }
+
+    @Override
+    public Integer getRefreshTime(Integer fid) {
+        FilePic filePic = fileDao.findFilePicByFid(fid);
+        Integer refreshTime = filePic.getRefreshTime();
+        refreshTime++;
+        filePic.setRefreshTime(refreshTime);
+        fileDao.save(filePic);
+        return refreshTime;
     }
 
 //    @Override

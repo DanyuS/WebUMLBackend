@@ -54,5 +54,7 @@ public interface EditService {
 
     public Line getLineByLid(Integer lid);
 
+    public Integer getRefreshTime(Integer fid);
+
 //    public List<Properties> getAllPropertiesByNid(Integer nid);
 }

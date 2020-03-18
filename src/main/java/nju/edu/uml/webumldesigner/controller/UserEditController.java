@@ -135,6 +135,11 @@ public class UserEditController {
         return editService.getAllLineByFid(fid);
     }
 
+    @GetMapping("/getRefreshTime")
+    public Integer getRefreshTime(Integer fid) {
+        return editService.getRefreshTime(fid);
+    }
+
 //    @GetMapping("/getAllPropertiesByNid")
 //    public List<Properties> getAllPropertiesByNid(Integer nid) {
 //        return editService.getAllPropertiesByNid(nid);
