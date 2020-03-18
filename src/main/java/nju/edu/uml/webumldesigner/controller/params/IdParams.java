@@ -4,6 +4,8 @@ public class IdParams {
     Integer gid;
     Integer uid;
     Integer fid;
+    Integer nid;
+    Integer lid;
 
     public Integer getGid() {
         return gid;
@@ -27,5 +29,21 @@ public class IdParams {
 
     public void setFid(Integer fid) {
         this.fid = fid;
+    }
+
+    public Integer getNid() {
+        return nid;
+    }
+
+    public void setNid(Integer nid) {
+        this.nid = nid;
+    }
+
+    public Integer getLid() {
+        return lid;
+    }
+
+    public void setLid(Integer lid) {
+        this.lid = lid;
     }
 }
