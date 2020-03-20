@@ -17,6 +17,8 @@ public class VarAndFunc {
     private String propId;
     private Integer flag;//0为参数，1为方法
 
+    private String isDeleted;
+
     public Integer getVid() {
         return vid;
     }
@@ -71,5 +73,13 @@ public class VarAndFunc {
 
     public void setFlag(Integer flag) {
         this.flag = flag;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

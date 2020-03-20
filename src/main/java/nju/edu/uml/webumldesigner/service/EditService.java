@@ -34,7 +34,7 @@ public interface EditService {
 //
 //    public boolean delProperties(Integer nid, Integer pid);
 
-    public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag);
+    public Integer addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag);
 
     public boolean delVarAndFUnc(Integer pid, Integer vid);
 

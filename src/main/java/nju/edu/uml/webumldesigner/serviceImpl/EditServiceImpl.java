@@ -428,7 +428,7 @@ public class EditServiceImpl implements EditService {
 //    }
 
     @Override
-    public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
+    public Integer addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
         VarAndFunc varAndFunc = new VarAndFunc();
         varAndFunc.setModifier(modifier);
         varAndFunc.setDataType(dataType);
@@ -436,6 +436,7 @@ public class EditServiceImpl implements EditService {
         varAndFunc.setParams(params);
         varAndFunc.setPropId(propId);
         varAndFunc.setFlag(flag);
+        varAndFunc.setIsDeleted("F");
         VarAndFunc result = varAndFuncDao.save(varAndFunc);
         if (result.getVid() > 0) {
             Properties properties = propertiesDao.findPropertiesByPid(pid);
@@ -445,10 +446,10 @@ public class EditServiceImpl implements EditService {
                 properties.setFunctions(varAndFunc);
             }
             propertiesDao.save(properties);
-            return true;
+            return result.getVid();
         }
 
-        return false;
+        return -1;
     }
 
     @Override
@@ -461,7 +462,8 @@ public class EditServiceImpl implements EditService {
             properties.setFunctions(null);
         }
         propertiesDao.save(properties);
-        varAndFuncDao.delete(varAndFunc);
+        varAndFunc.setIsDeleted("T");
+        varAndFuncDao.save(varAndFunc);
         return true;
     }
 

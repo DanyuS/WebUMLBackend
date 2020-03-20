@@ -105,7 +105,7 @@ public class UserEditController {
 //    }
 
     @GetMapping("/addVarAndFunc")
-    public boolean addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
+    public Integer addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
         return editService.addVarAndFunc(pid, modifier, dataType, name, params, propId, flag);
     }
 
