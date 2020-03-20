@@ -10,10 +10,10 @@ public class NodeStyle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer sid;
-    private Integer styleWidth;
-    private Integer styleHeight;
-    private Integer styleLeft;
-    private Integer styleTop;
+    private double styleWidth;
+    private double styleHeight;
+    private double styleLeft;
+    private double styleTop;
     //日后添加层数
 
 
@@ -25,35 +25,35 @@ public class NodeStyle {
         this.sid = sid;
     }
 
-    public Integer getStyleWidth() {
+    public double getStyleWidth() {
         return styleWidth;
     }
 
-    public void setStyleWidth(Integer styleWidth) {
+    public void setStyleWidth(double styleWidth) {
         this.styleWidth = styleWidth;
     }
 
-    public Integer getStyleHeight() {
+    public double getStyleHeight() {
         return styleHeight;
     }
 
-    public void setStyleHeight(Integer styleHeight) {
+    public void setStyleHeight(double styleHeight) {
         this.styleHeight = styleHeight;
     }
 
-    public Integer getStyleLeft() {
+    public double getStyleLeft() {
         return styleLeft;
     }
 
-    public void setStyleLeft(Integer styleLeft) {
+    public void setStyleLeft(double styleLeft) {
         this.styleLeft = styleLeft;
     }
 
-    public Integer getStyleTop() {
+    public double getStyleTop() {
         return styleTop;
     }
 
-    public void setStyleTop(Integer styleTop) {
+    public void setStyleTop(double styleTop) {
         this.styleTop = styleTop;
     }
 }

@@ -6,40 +6,40 @@ package nju.edu.uml.webumldesigner.controller.params;
  * @Date: 2020/3/4
  */
 public class Style {
-    private Integer width;
-    private Integer height;
-    private Integer left;
-    private Integer top;
+    private double width;
+    private double height;
+    private double left;
+    private double top;
 
-    public Integer getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(Integer width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
-    public Integer getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 
-    public Integer getLeft() {
+    public double getLeft() {
         return left;
     }
 
-    public void setLeft(Integer left) {
+    public void setLeft(double left) {
         this.left = left;
     }
 
-    public Integer getTop() {
+    public double getTop() {
         return top;
     }
 
-    public void setTop(Integer top) {
+    public void setTop(double top) {
         this.top = top;
     }
 }
