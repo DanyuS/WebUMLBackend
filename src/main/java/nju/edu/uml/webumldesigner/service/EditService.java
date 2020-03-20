@@ -34,11 +34,11 @@ public interface EditService {
 //
 //    public boolean delProperties(Integer nid, Integer pid);
 
-    public Integer addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag);
+    public Integer addVarAndFunc(Integer nid, String modifier, String dataType, String name, String params, Integer flag);
 
-    public boolean delVarAndFUnc(Integer pid, Integer vid);
+    public boolean delVarAndFUnc(Integer nid, Integer vid);
 
-    public boolean upDateVarAndFunc(Integer pid, Integer vid, String modifier, String dataType, String name, String params, String propId, Integer flag);
+    public boolean upDateVarAndFunc(Integer nid, Integer vid, String modifier, String dataType, String name, String params, Integer flag);
 
     public boolean importFile(Integer fid, Integer id);//这里的id可以说uid或者gid？
 

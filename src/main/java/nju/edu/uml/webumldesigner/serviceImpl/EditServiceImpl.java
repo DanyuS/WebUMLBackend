@@ -428,33 +428,32 @@ public class EditServiceImpl implements EditService {
 //    }
 
     @Override
-    public Integer addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
+    public Integer addVarAndFunc(Integer nid, String modifier, String dataType, String name, String params, Integer flag) {
         VarAndFunc varAndFunc = new VarAndFunc();
         varAndFunc.setModifier(modifier);
         varAndFunc.setDataType(dataType);
         varAndFunc.setName(name);
         varAndFunc.setParams(params);
-        varAndFunc.setPropId(propId);
         varAndFunc.setFlag(flag);
         varAndFunc.setIsDeleted("F");
         VarAndFunc result = varAndFuncDao.save(varAndFunc);
-        if (result.getVid() > 0) {
-            Properties properties = propertiesDao.findPropertiesByPid(pid);
-            if (flag == 0) {
-                properties.setVariables(varAndFunc);
-            } else {
-                properties.setFunctions(varAndFunc);
-            }
-            propertiesDao.save(properties);
-            return result.getVid();
+        NodePic nodePic = nodeDao.findNodePicByNid(nid);
+        Properties properties = nodePic.getProperties();
+        if (flag == 0) {
+            properties.setVariables(varAndFunc);
+        } else {
+            properties.setFunctions(varAndFunc);
         }
-
-        return -1;
+        propertiesDao.save(properties);
+        nodePic.setProperties(properties);
+        nodeDao.save(nodePic);
+        return result.getVid();
     }
 
     @Override
-    public boolean delVarAndFUnc(Integer pid, Integer vid) {
-        Properties properties = propertiesDao.findPropertiesByPid(pid);
+    public boolean delVarAndFUnc(Integer nid, Integer vid) {
+        NodePic nodePic = nodeDao.findNodePicByNid(nid);
+        Properties properties = nodePic.getProperties();
         VarAndFunc varAndFunc = varAndFuncDao.findVarAndFuncByVid(vid);
         if (varAndFunc.getFlag() == 0) {
             properties.setVariables(null);
@@ -462,28 +461,32 @@ public class EditServiceImpl implements EditService {
             properties.setFunctions(null);
         }
         propertiesDao.save(properties);
+        nodePic.setProperties(properties);
+        nodeDao.save(nodePic);
         varAndFunc.setIsDeleted("T");
         varAndFuncDao.save(varAndFunc);
         return true;
     }
 
     @Override
-    public boolean upDateVarAndFunc(Integer pid, Integer vid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
+    public boolean upDateVarAndFunc(Integer nid, Integer vid, String modifier, String dataType, String name, String params, Integer flag) {
         VarAndFunc varAndFunc = varAndFuncDao.findVarAndFuncByVid(vid);
         varAndFunc.setModifier(modifier);
         varAndFunc.setDataType(dataType);
         varAndFunc.setName(name);
         varAndFunc.setParams(params);
-        varAndFunc.setPropId(propId);
         varAndFunc.setFlag(flag);
         varAndFuncDao.save(varAndFunc);
-        Properties properties = propertiesDao.findPropertiesByPid(pid);
+        NodePic nodePic = nodeDao.findNodePicByNid(nid);
+        Properties properties = nodePic.getProperties();
         if (flag == 0) {
             properties.setVariables(varAndFunc);
         } else {
             properties.setFunctions(varAndFunc);
         }
         propertiesDao.save(properties);
+        nodePic.setProperties(properties);
+        nodeDao.save(nodePic);
 
         return true;
     }

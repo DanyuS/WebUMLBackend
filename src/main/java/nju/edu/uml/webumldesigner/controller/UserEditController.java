@@ -104,19 +104,19 @@ public class UserEditController {
 //        return editService.delProperties(nid, pid);
 //    }
 
-    @GetMapping("/addVarAndFunc")
-    public Integer addVarAndFunc(Integer pid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
-        return editService.addVarAndFunc(pid, modifier, dataType, name, params, propId, flag);
+    @PostMapping("/addVarAndFunc")
+    public Integer addVarAndFunc(@RequestBody VarAndFuncParams varAndFuncParams) {
+        return editService.addVarAndFunc(varAndFuncParams.getNid(), varAndFuncParams.getModifier(), varAndFuncParams.getDataType(), varAndFuncParams.getName(), varAndFuncParams.getParams(), varAndFuncParams.getFlag());
     }
 
     @GetMapping("/delVarAndFUnc")
-    public boolean delVarAndFUnc(Integer pid, Integer vid) {
-        return editService.delVarAndFUnc(pid, vid);
+    public boolean delVarAndFUnc(Integer nid, Integer vid) {
+        return editService.delVarAndFUnc(nid, vid);
     }
 
-    @GetMapping("/upDateVarAndFunc")
-    public boolean upDateVarAndFunc(Integer pid, Integer vid, String modifier, String dataType, String name, String params, String propId, Integer flag) {
-        return editService.upDateVarAndFunc(pid, vid, modifier, dataType, name, params, propId, flag);
+    @PostMapping("/upDateVarAndFunc")
+    public boolean upDateVarAndFunc(@RequestBody VarAndFuncParams varAndFuncParams) {
+        return editService.upDateVarAndFunc(varAndFuncParams.getNid(), varAndFuncParams.getVid(), varAndFuncParams.getModifier(), varAndFuncParams.getDataType(), varAndFuncParams.getName(), varAndFuncParams.getParams(), varAndFuncParams.getFlag());
     }
 
     @GetMapping("/getAllFilePicByUid")

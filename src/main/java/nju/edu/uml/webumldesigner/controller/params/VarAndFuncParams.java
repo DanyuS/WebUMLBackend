@@ -1,22 +1,21 @@
-package nju.edu.uml.webumldesigner.entity;
+package nju.edu.uml.webumldesigner.controller.params;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+public class VarAndFuncParams {
+    Integer nid;
+    Integer vid;
+    String modifier;
+    String dataType;
+    String name;
+    String params;
+    Integer flag;//0为参数，1为方法
 
-@Entity
-public class VarAndFunc {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer vid;
-    private String modifier;
-    private String dataType;
-    private String name;
-    private String params;
-    private Integer flag;//0为参数，1为方法
+    public Integer getNid() {
+        return nid;
+    }
 
-    private String isDeleted;
+    public void setNid(Integer nid) {
+        this.nid = nid;
+    }
 
     public Integer getVid() {
         return vid;
@@ -64,13 +63,5 @@ public class VarAndFunc {
 
     public void setFlag(Integer flag) {
         this.flag = flag;
-    }
-
-    public String getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(String isDeleted) {
-        this.isDeleted = isDeleted;
     }
 }
