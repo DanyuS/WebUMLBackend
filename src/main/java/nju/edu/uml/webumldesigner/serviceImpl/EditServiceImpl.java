@@ -446,6 +446,8 @@ public class EditServiceImpl implements EditService {
     @Override
     public boolean upDateVarAndFunc(Integer nid, Integer vid, String modifier, String dataType, String name, String params, Integer flag) {
         VarAndFunc varAndFunc = varAndFuncDao.findVarAndFuncByVid(vid);
+        Integer originalFlag = varAndFunc.getFlag();
+        boolean isEqual = originalFlag == flag;
         varAndFunc.setModifier(modifier);
         varAndFunc.setDataType(dataType);
         varAndFunc.setName(name);
@@ -454,14 +456,56 @@ public class EditServiceImpl implements EditService {
         varAndFuncDao.save(varAndFunc);
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
         Properties properties = nodePic.getProperties();
-        if (flag == 0) {
-            List<VarAndFunc> varAndFuncList = properties.getVariables();
-            varAndFuncList.add(varAndFunc);
-            properties.setVariables(varAndFuncList);
+        if (isEqual) {
+            if (flag == 0) {
+                List<VarAndFunc> varAndFuncList = properties.getVariables();
+                for (int i = 0; i < varAndFuncList.size(); i++) {
+                    if (varAndFuncList.get(i).getVid().equals(varAndFunc.getVid())) {
+                        varAndFuncList.remove(i);
+                        varAndFuncList.add(varAndFunc);
+                        break;
+                    }
+                }
+                properties.setVariables(varAndFuncList);
+            } else {
+                List<VarAndFunc> varAndFuncList = properties.getFunctions();
+                for (int i = 0; i < varAndFuncList.size(); i++) {
+                    if (varAndFuncList.get(i).getVid().equals(varAndFunc.getVid())) {
+                        varAndFuncList.remove(i);
+                        varAndFuncList.add(varAndFunc);
+                        break;
+                    }
+                }
+                properties.setFunctions(varAndFuncList);
+            }
         } else {
-            List<VarAndFunc> varAndFuncList = properties.getFunctions();
-            varAndFuncList.add(varAndFunc);
-            properties.setFunctions(varAndFuncList);
+            if (flag == 0) {
+                List<VarAndFunc> varList = properties.getVariables();
+                varList.add(varAndFunc);
+                properties.setVariables(varList);
+
+                List<VarAndFunc> funcList = properties.getFunctions();
+                for (int i = 0; i < funcList.size(); i++) {
+                    if (funcList.get(i).getVid().equals(varAndFunc.getVid())) {
+                        funcList.remove(i);
+                        break;
+                    }
+                }
+                properties.setFunctions(funcList);
+            } else {
+                List<VarAndFunc> funcList = properties.getFunctions();
+                funcList.add(varAndFunc);
+                properties.setFunctions(funcList);
+
+                List<VarAndFunc> varList = properties.getVariables();
+                for (int i = 0; i < varList.size(); i++) {
+                    if (varList.get(i).getVid().equals(varAndFunc.getVid())) {
+                        varList.remove(i);
+                        break;
+                    }
+                }
+                properties.setVariables(varList);
+            }
         }
         propertiesDao.save(properties);
         nodePic.setProperties(properties);
