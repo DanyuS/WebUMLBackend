@@ -158,16 +158,6 @@ public class EditServiceImpl implements EditService {
                     case "conditions":
                         properties.setConditions(value.get(i));
                         break;
-                    case "variables": {
-                        VarAndFunc varAndFunc = new Gson().fromJson(value.get(i), VarAndFunc.class);
-                        properties.setVariables(varAndFunc);
-                        break;
-                    }
-                    case "functions": {
-                        VarAndFunc varAndFunc = new Gson().fromJson(value.get(i), VarAndFunc.class);
-                        properties.setFunctions(varAndFunc);
-                        break;
-                    }
                 }
             }
             nodePic.setProperties(properties);
@@ -394,39 +384,6 @@ public class EditServiceImpl implements EditService {
         return true;
     }
 
-//    @Override
-//    public boolean addProperties(Integer nid) {
-//
-//        //存入数据库
-//        Properties properties = new Properties();
-////        properties.setPropertiesId(propertiesId);
-//
-//        String num = String.valueOf(propertiesDao.count() + 1);
-//        properties.setPropertiesId("p" + num);
-//        Properties result = propertiesDao.save(properties);
-//
-//        if (result.getPid() > 0) {
-////            Integer pid = Integer.parseInt(num);
-////            addPidToNode(nid, pid);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean updateProperties(Integer pid) {
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean delProperties(Integer nid, Integer pid) {
-//        Properties properties = propertiesDao.findPropertiesByPid(pid);
-//        propertiesDao.delete(properties);
-////        removePidFromNode(nid, pid);
-//        return true;
-//    }
-
     @Override
     public Integer addVarAndFunc(Integer nid, String modifier, String dataType, String name, String params, Integer flag) {
         VarAndFunc varAndFunc = new VarAndFunc();
@@ -440,9 +397,13 @@ public class EditServiceImpl implements EditService {
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
         Properties properties = nodePic.getProperties();
         if (flag == 0) {
-            properties.setVariables(varAndFunc);
+            List<VarAndFunc> varAndFuncList = properties.getVariables();
+            varAndFuncList.add(varAndFunc);
+            properties.setVariables(varAndFuncList);
         } else {
-            properties.setFunctions(varAndFunc);
+            List<VarAndFunc> varAndFuncList = properties.getFunctions();
+            varAndFuncList.add(varAndFunc);
+            properties.setFunctions(varAndFuncList);
         }
         propertiesDao.save(properties);
         nodePic.setProperties(properties);
@@ -456,9 +417,23 @@ public class EditServiceImpl implements EditService {
         Properties properties = nodePic.getProperties();
         VarAndFunc varAndFunc = varAndFuncDao.findVarAndFuncByVid(vid);
         if (varAndFunc.getFlag() == 0) {
-            properties.setVariables(null);
+            List<VarAndFunc> varAndFuncList = properties.getVariables();
+            for (int i = 0; i < varAndFuncList.size(); i++) {
+                if (varAndFuncList.get(i).getVid().equals(varAndFunc.getVid())) {
+                    varAndFuncList.remove(i);
+                    break;
+                }
+            }
+            properties.setVariables(varAndFuncList);
         } else if (varAndFunc.getFlag() == 1) {
-            properties.setFunctions(null);
+            List<VarAndFunc> varAndFuncList = properties.getFunctions();
+            for (int i = 0; i < varAndFuncList.size(); i++) {
+                if (varAndFuncList.get(i).getVid().equals(varAndFunc.getVid())) {
+                    varAndFuncList.remove(i);
+                    break;
+                }
+            }
+            properties.setFunctions(varAndFuncList);
         }
         propertiesDao.save(properties);
         nodePic.setProperties(properties);
@@ -480,9 +455,13 @@ public class EditServiceImpl implements EditService {
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
         Properties properties = nodePic.getProperties();
         if (flag == 0) {
-            properties.setVariables(varAndFunc);
+            List<VarAndFunc> varAndFuncList = properties.getVariables();
+            varAndFuncList.add(varAndFunc);
+            properties.setVariables(varAndFuncList);
         } else {
-            properties.setFunctions(varAndFunc);
+            List<VarAndFunc> varAndFuncList = properties.getFunctions();
+            varAndFuncList.add(varAndFunc);
+            properties.setFunctions(varAndFuncList);
         }
         propertiesDao.save(properties);
         nodePic.setProperties(properties);

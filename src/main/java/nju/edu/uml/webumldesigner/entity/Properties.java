@@ -1,6 +1,7 @@
 package nju.edu.uml.webumldesigner.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Properties {
@@ -17,10 +18,10 @@ public class Properties {
     private String conditions;
 
     //variable&function 建表 加个标记位
-    @OneToOne
-    private VarAndFunc variables;
-    @OneToOne
-    private VarAndFunc functions;
+    @OneToMany
+    private List<VarAndFunc> variables;
+    @OneToMany
+    private List<VarAndFunc> functions;
 
     public Integer getPid() {
         return pid;
@@ -94,19 +95,19 @@ public class Properties {
         this.conditions = conditions;
     }
 
-    public VarAndFunc getVariables() {
+    public List<VarAndFunc> getVariables() {
         return variables;
     }
 
-    public void setVariables(VarAndFunc variables) {
+    public void setVariables(List<VarAndFunc> variables) {
         this.variables = variables;
     }
 
-    public VarAndFunc getFunctions() {
+    public List<VarAndFunc> getFunctions() {
         return functions;
     }
 
-    public void setFunctions(VarAndFunc functions) {
+    public void setFunctions(List<VarAndFunc> functions) {
         this.functions = functions;
     }
 }
