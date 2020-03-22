@@ -416,6 +416,8 @@ public class EditServiceImpl implements EditService {
         NodePic nodePic = nodeDao.findNodePicByNid(nid);
         Properties properties = nodePic.getProperties();
         VarAndFunc varAndFunc = varAndFuncDao.findVarAndFuncByVid(vid);
+        varAndFunc.setIsDeleted("T");
+        varAndFuncDao.save(varAndFunc);
         if (varAndFunc.getFlag() == 0) {
             List<VarAndFunc> varAndFuncList = properties.getVariables();
             for (int i = 0; i < varAndFuncList.size(); i++) {
@@ -438,8 +440,6 @@ public class EditServiceImpl implements EditService {
         propertiesDao.save(properties);
         nodePic.setProperties(properties);
         nodeDao.save(nodePic);
-        varAndFunc.setIsDeleted("T");
-        varAndFuncDao.save(varAndFunc);
         return true;
     }
 
