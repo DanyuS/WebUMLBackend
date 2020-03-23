@@ -64,11 +64,14 @@ public class EditServiceImpl implements EditService {
         FilePic result = fileDao.save(filePic);
         if (result.getFid() > 0) {
             //加入user的fidList中
-            Integer fid = Integer.parseInt(num);
+            Integer fid = result.getFid();
             addFidToUser(uid, fid);
+            //修改fileId
+            FilePic file = fileDao.findFilePicByFid(result.getFid());
+            file.setFileId("f" + result.getFid());
+            fileDao.save(file);
             return result.getFid();
         }
-
         return -1;
     }
 
