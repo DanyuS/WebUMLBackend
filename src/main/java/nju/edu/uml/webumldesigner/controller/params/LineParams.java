@@ -22,6 +22,8 @@ public class LineParams {
     private Integer gid;//创建者所属组，如果没有就为-1
     private Integer fid;
 
+    private String path;
+
     public Integer getLid() {
         return lid;
     }
@@ -148,5 +150,13 @@ public class LineParams {
 
     public void setFid(Integer fid) {
         this.fid = fid;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

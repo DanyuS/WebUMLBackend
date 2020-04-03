@@ -291,6 +291,8 @@ public class EditServiceImpl implements EditService {
         line.setEditMethod("Add");
         line.setIsDeleted("F");
 
+        line.setPath(lineParams.getPath());
+
         for (int i = 0; i < linePositionList.size(); i++) {
             linePositionDao.save(linePositionList.get(i));
         }
@@ -370,6 +372,7 @@ public class EditServiceImpl implements EditService {
         line.setLineStyle(lineStyle);
         line.setLineSvgStyle(lineSvgStyle);
         line.setEditMethod("Update");
+        line.setPath(lineParams.getPath());
 //        line.setUid(lineParams.getUid());
 //        line.setGid(lineParams.getGid());
         lineDao.save(line);

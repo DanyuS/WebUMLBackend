@@ -35,6 +35,8 @@ public class Line {
 
     private String isDeleted;
 
+    private String path;
+
     public Integer getLid() {
         return lid;
     }
@@ -177,5 +179,13 @@ public class Line {
 
     public void setIsDeleted(String isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
