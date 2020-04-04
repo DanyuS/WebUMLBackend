@@ -259,6 +259,7 @@ public class EditServiceImpl implements EditService {
         lineStyle.setStroke(lineParams.getLineStyle().getStroke());
         lineStyle.setStrokeDasharray(lineParams.getLineStyle().getStrokeDasharray());
         lineStyle.setStrokeWidth(lineParams.getLineStyle().getStrokeWidth());
+        lineStyle.setFill(lineParams.getLineStyle().getFill());
 
 //        lineStyleDao.save(lineStyle);
 
@@ -345,6 +346,7 @@ public class EditServiceImpl implements EditService {
         lineStyle.setStroke(lineParams.getLineStyle().getStroke());
         lineStyle.setStrokeDasharray(lineParams.getLineStyle().getStrokeDasharray());
         lineStyle.setStrokeWidth(lineParams.getLineStyle().getStrokeWidth());
+        lineStyle.setFill(lineParams.getLineStyle().getFill());
 
         lineStyleDao.save(lineStyle);
 

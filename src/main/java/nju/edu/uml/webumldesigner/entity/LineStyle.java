@@ -13,6 +13,7 @@ public class LineStyle {
     private String stroke;
     private String strokeDasharray;
     private String strokeWidth;
+    private String fill;
 
     public Integer getLsid() {
         return lsid;
@@ -44,5 +45,13 @@ public class LineStyle {
 
     public void setStrokeWidth(String strokeWidth) {
         this.strokeWidth = strokeWidth;
+    }
+
+    public String getFill() {
+        return fill;
+    }
+
+    public void setFill(String fill) {
+        this.fill = fill;
     }
 }
