@@ -1,7 +1,6 @@
 package nju.edu.uml.webumldesigner.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

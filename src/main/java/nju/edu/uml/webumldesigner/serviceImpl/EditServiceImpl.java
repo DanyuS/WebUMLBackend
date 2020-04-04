@@ -33,7 +33,9 @@ public class EditServiceImpl implements EditService {
 
     private final NodeStyleDao nodeStyleDao;
 
-    public EditServiceImpl(UserDao userDao, FileDao fileDao, NodeDao nodeDao, LineDao lineDao, LinePositionDao linePositionDao, LineStyleDao lineStyleDao, LineSvgStyleDao lineSvgStyleDao, PropertiesDao propertiesDao, VarAndFuncDao varAndFuncDao, NodeStyleDao nodeStyleDao) {
+    private final RevertEditTableDao revertEditTableDao;
+
+    public EditServiceImpl(UserDao userDao, FileDao fileDao, NodeDao nodeDao, LineDao lineDao, LinePositionDao linePositionDao, LineStyleDao lineStyleDao, LineSvgStyleDao lineSvgStyleDao, PropertiesDao propertiesDao, VarAndFuncDao varAndFuncDao, NodeStyleDao nodeStyleDao, RevertEditTableDao revertEditTableDao) {
         this.userDao = userDao;
         this.fileDao = fileDao;
         this.nodeDao = nodeDao;
@@ -44,6 +46,7 @@ public class EditServiceImpl implements EditService {
         this.propertiesDao = propertiesDao;
         this.varAndFuncDao = varAndFuncDao;
         this.nodeStyleDao = nodeStyleDao;
+        this.revertEditTableDao = revertEditTableDao;
     }
 
 
@@ -120,6 +123,14 @@ public class EditServiceImpl implements EditService {
         if (result.getNid() > 0) {
             Integer nid = Integer.parseInt(num);
             addNidToFile(fid, nid);
+
+            RevertEditTable revertEditTable = new RevertEditTable();
+            revertEditTable.setFid(fid);
+            revertEditTable.setUid(uid);
+            revertEditTable.setComponentType("Node");
+            revertEditTable.setComponentId(result.getNid());
+            revertEditTableDao.save(revertEditTable);
+
             return result.getNid();
         }
         return -1;
@@ -189,6 +200,14 @@ public class EditServiceImpl implements EditService {
             nodeStyleDao.save(nodeStyle);
         }
         nodeDao.save(nodePic);
+
+        RevertEditTable revertEditTable = new RevertEditTable();
+        revertEditTable.setFid(nodePic.getFid());
+        revertEditTable.setUid(nodePic.getUid());
+        revertEditTable.setComponentType("Node");
+        revertEditTable.setComponentId(nid);
+        revertEditTableDao.save(revertEditTable);
+
         return true;
     }
 
@@ -204,6 +223,12 @@ public class EditServiceImpl implements EditService {
 //        propertiesDao.delete(properties);
 //        nodeDao.delete(nodePic);
 //        removeNidFromFile(fid, nid);
+        RevertEditTable revertEditTable = new RevertEditTable();
+        revertEditTable.setFid(fid);
+        revertEditTable.setUid(nodePic.getUid());
+        revertEditTable.setComponentType("Node");
+        revertEditTable.setComponentId(nid);
+        revertEditTableDao.save(revertEditTable);
         return true;
     }
 
@@ -310,6 +335,13 @@ public class EditServiceImpl implements EditService {
 
         }
 
+        RevertEditTable revertEditTable = new RevertEditTable();
+        revertEditTable.setFid(line.getFid());
+        revertEditTable.setUid(line.getUid());
+        revertEditTable.setComponentType("Line");
+        revertEditTable.setComponentId(result.getLid());
+        revertEditTableDao.save(revertEditTable);
+
         return result.getLid();
     }
 
@@ -378,6 +410,13 @@ public class EditServiceImpl implements EditService {
 //        line.setUid(lineParams.getUid());
 //        line.setGid(lineParams.getGid());
         lineDao.save(line);
+
+        RevertEditTable revertEditTable = new RevertEditTable();
+        revertEditTable.setFid(line.getFid());
+        revertEditTable.setUid(line.getUid());
+        revertEditTable.setComponentType("Line");
+        revertEditTable.setComponentId(lid);
+        revertEditTableDao.save(revertEditTable);
         return true;
     }
 
@@ -389,6 +428,13 @@ public class EditServiceImpl implements EditService {
         lineDao.save(line);
 //        lineDao.delete(line);
 //        removeLidFromFile(fid, lid);
+
+        RevertEditTable revertEditTable = new RevertEditTable();
+        revertEditTable.setFid(line.getFid());
+        revertEditTable.setUid(line.getUid());
+        revertEditTable.setComponentType("Line");
+        revertEditTable.setComponentId(lid);
+        revertEditTableDao.save(revertEditTable);
         return true;
     }
 
@@ -416,6 +462,12 @@ public class EditServiceImpl implements EditService {
         propertiesDao.save(properties);
         nodePic.setProperties(properties);
         nodeDao.save(nodePic);
+        RevertEditTable revertEditTable = new RevertEditTable();
+        revertEditTable.setFid(nodePic.getFid());
+        revertEditTable.setUid(nodePic.getUid());
+        revertEditTable.setComponentType("VarAndFunc");
+        revertEditTable.setComponentId(result.getVid());
+        revertEditTableDao.save(revertEditTable);
         return result.getVid();
     }
 
@@ -448,6 +500,12 @@ public class EditServiceImpl implements EditService {
         propertiesDao.save(properties);
         nodePic.setProperties(properties);
         nodeDao.save(nodePic);
+        RevertEditTable revertEditTable = new RevertEditTable();
+        revertEditTable.setFid(nodePic.getFid());
+        revertEditTable.setUid(nodePic.getUid());
+        revertEditTable.setComponentType("VarAndFunc");
+        revertEditTable.setComponentId(vid);
+        revertEditTableDao.save(revertEditTable);
         return true;
     }
 
@@ -518,6 +576,13 @@ public class EditServiceImpl implements EditService {
         propertiesDao.save(properties);
         nodePic.setProperties(properties);
         nodeDao.save(nodePic);
+
+        RevertEditTable revertEditTable = new RevertEditTable();
+        revertEditTable.setFid(nodePic.getFid());
+        revertEditTable.setUid(nodePic.getUid());
+        revertEditTable.setComponentType("VarAndFunc");
+        revertEditTable.setComponentId(vid);
+        revertEditTableDao.save(revertEditTable);
 
         return true;
     }

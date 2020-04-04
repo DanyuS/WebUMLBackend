@@ -62,4 +62,9 @@ public class GroupEditServiceImpl implements GroupEditService {
         }
         return null;
     }
+
+    @Override
+    public FilePic revertEdit(Integer fid) {
+        return null;
+    }
 }
