@@ -32,6 +32,8 @@ public class UserGroup {
     private Integer captainId;
     private String captainEmail;
 
+    private String isDeleted;
+
     public Integer getGid() {
         return gid;
     }
@@ -94,5 +96,13 @@ public class UserGroup {
 
     public void setCaptainEmail(String captainEmail) {
         this.captainEmail = captainEmail;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

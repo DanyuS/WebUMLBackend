@@ -9,6 +9,8 @@ import java.util.List;
 public interface InviteService {
     public UserGroup createGroup(String groupName, Integer uid);
 
+    public boolean deleteGroup(Integer gid);
+
     public boolean inviteUser(Integer gid, List<String> userEmailList);
 
     public List<User> getAllUser(Integer uid, Integer gid);

@@ -20,19 +20,11 @@ public interface EditService {
 
     public boolean delNode(Integer fid, Integer nid);
 
-//    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles);
-
     public Integer addLine(LineParams lineParams);
 
     public boolean updateLine(LineParams lineParams);
 
     public boolean delLine(Integer fid, Integer lid);
-
-//    public boolean addProperties(Integer nid);
-//
-//    public boolean updateProperties(Integer pid);
-//
-//    public boolean delProperties(Integer nid, Integer pid);
 
     public Integer addVarAndFunc(Integer nid, String modifier, String dataType, String name, String params, Integer flag);
 
@@ -55,6 +47,4 @@ public interface EditService {
     public Line getLineByLid(Integer lid);
 
     public Integer getRefreshTime(Integer fid);
-
-//    public List<Properties> getAllPropertiesByNid(Integer nid);
 }

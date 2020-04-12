@@ -89,21 +89,6 @@ public class UserEditController {
         return editService.delLine(fid, lid);
     }
 
-//    @GetMapping("/addProperties")
-//    public boolean addProperties(Integer nid) {
-//        return editService.addProperties(nid);
-//    }
-//
-//    @GetMapping("/updateProperties")
-//    public boolean updateProperties(Integer pid) {
-//        return editService.updateProperties(pid);
-//    }
-//
-//    @GetMapping("/delProperties")
-//    public boolean delProperties(Integer nid, Integer pid) {
-//        return editService.delProperties(nid, pid);
-//    }
-
     @PostMapping("/addVarAndFunc")
     public Integer addVarAndFunc(@RequestBody VarAndFuncParams varAndFuncParams) {
         return editService.addVarAndFunc(varAndFuncParams.getNid(), varAndFuncParams.getModifier(), varAndFuncParams.getDataType(), varAndFuncParams.getName(), varAndFuncParams.getParams(), varAndFuncParams.getFlag());
@@ -140,8 +125,4 @@ public class UserEditController {
         return editService.getRefreshTime(fid);
     }
 
-//    @GetMapping("/getAllPropertiesByNid")
-//    public List<Properties> getAllPropertiesByNid(Integer nid) {
-//        return editService.getAllPropertiesByNid(nid);
-//    }
 }

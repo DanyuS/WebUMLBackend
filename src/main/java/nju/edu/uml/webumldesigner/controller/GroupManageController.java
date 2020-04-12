@@ -87,4 +87,14 @@ public class GroupManageController {
         return groupEditService.createFileByGroup(gid, fileName, fileType);
     }
 
+    @GetMapping("/deleteFileByGroup")
+    public boolean deleteFileByGroup(Integer gid, Integer fid) {
+        return groupEditService.deleteFileByGroup(gid, fid);
+    }
+
+    @GetMapping("/deleteGroup")
+    public boolean deleteGroup(Integer gid) {
+        return inviteService.deleteGroup(gid);
+    }
+
 }

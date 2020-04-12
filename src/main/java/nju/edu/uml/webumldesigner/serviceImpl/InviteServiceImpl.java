@@ -57,6 +57,8 @@ public class InviteServiceImpl implements InviteService {
         userGroup.setCaptainId(uid);
         userGroup.setCaptainEmail(user.getUserEmail());
 
+        userGroup.setIsDeleted("F");
+
         UserGroup result = userGroupDao.save(userGroup);
 
         //user的gidList存入gid
@@ -70,6 +72,37 @@ public class InviteServiceImpl implements InviteService {
 //        chatRoom.setGid(result.getGid());
 
         return result;
+    }
+
+    @Override
+    public boolean deleteGroup(Integer gid) {
+        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        userGroup.setIsDeleted("T");
+
+        //万一小组文件没有清干净
+        List<Integer> fidList= userGroup.getFidList();
+        if(fidList.size()!=0){
+            //////////right??
+            fidList.clear();
+        }
+        userGroup.setFidList(fidList);
+
+        List<User> userList = userGroup.getInvitedUserList();
+        for (User user : userList) {
+            List<Integer> gidList = user.getGidList();
+            for (int i = 0; i < gidList.size(); i++) {
+                if (gidList.get(i).equals(gid)) {
+                    gidList.remove(i);
+                    break;
+                }
+            }
+            user.setGidList(gidList);
+            userDao.save(user);
+        }
+
+        userGroupDao.save(userGroup);
+
+        return true;
     }
 
     @Override

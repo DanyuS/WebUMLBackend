@@ -48,6 +48,21 @@ public class GroupEditServiceImpl implements GroupEditService {
     }
 
     @Override
+    public boolean deleteFileByGroup(Integer gid, Integer fid) {
+        UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
+        List<Integer> fidList= userGroup.getFidList();
+        for(int i=0;i<fidList.size();i++){
+            if(fidList.get(i).equals(fid)){
+                fidList.remove(i);
+                break;
+            }
+        }
+        userGroup.setFidList(fidList);
+        userGroupDao.save(userGroup);
+        return true;
+    }
+
+    @Override
     public String updateText(String idType, Integer id, String text) {
         //问题在于，如果是同一个人修改那就没有解决冲突的必要，但如果是两个人修改就可能存在冲突，怎么判断是多个人同时修改
         String result = "";

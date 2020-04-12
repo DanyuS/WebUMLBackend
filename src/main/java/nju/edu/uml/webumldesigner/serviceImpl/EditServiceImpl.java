@@ -659,18 +659,6 @@ public class EditServiceImpl implements EditService {
         return refreshTime;
     }
 
-//    @Override
-//    public List<Properties> getAllPropertiesByNid(Integer nid) {
-//        NodePic nodePic = nodeDao.findNodePicByNid(nid);
-//        List<Integer> pidList = transStringToList(nodePic.getPidList());
-//        List<Properties> result = new ArrayList<Properties>();
-//        for (int i = 0; i < pidList.size(); i++) {
-//            Properties properties = propertiesDao.findPropertiesByPid(pidList.get(i));
-//            result.add(properties);
-//        }
-//        return result;
-//    }
-
     //将fid加入user的fidList中
     private void addFidToUser(Integer uid, Integer fid) {
         User user = userDao.findUserByUid(uid);
@@ -741,31 +729,6 @@ public class EditServiceImpl implements EditService {
         filePic.setLidList(lidList);
         fileDao.save(filePic);
     }
-
-//    //将pid加入node的pidList中
-//    private void addPidToNode(Integer nid, Integer pid) {
-//        NodePic nodePic = nodeDao.findNodePicByNid(nid);
-//        String pidList = nodePic.getPidList();
-//        List<String> pList = new Gson().fromJson(pidList, List.class);
-//        pList.add(String.valueOf(pid));
-//        nodePic.setPidList(new Gson().toJson(pList));
-//        nodeDao.save(nodePic);
-//    }
-
-//    //将pid從node的pidList中移除
-//    private void removePidFromNode(Integer nid, Integer pid) {
-//        NodePic nodePic = nodeDao.findNodePicByNid(nid);
-//        String pidList = nodePic.getPidList();
-//        List<String> pList = new Gson().fromJson(pidList, List.class);
-//        for (int i = 0; i < pList.size(); i++) {
-//            if (pList.get(i).equals(String.valueOf(pid))) {
-//                pList.remove(i);
-//                break;
-//            }
-//        }
-//        nodePic.setPidList(new Gson().toJson(pList));
-//        nodeDao.save(nodePic);
-//    }
 
     private List<Integer> transStringToList(String listStr) {
         List<String> list = new Gson().fromJson(listStr, List.class);
