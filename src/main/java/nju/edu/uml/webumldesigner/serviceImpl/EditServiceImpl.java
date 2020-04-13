@@ -5,6 +5,7 @@ import nju.edu.uml.webumldesigner.controller.params.LineParams;
 import nju.edu.uml.webumldesigner.dao.*;
 import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -688,6 +689,8 @@ public class EditServiceImpl implements EditService {
     private void addNidToFile(Integer fid, Integer nid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
         List<Integer> nidList = filePic.getNidList();
+        //lazy=false
+        Hibernate.initialize(nidList);
         nidList.add(nid);
         filePic.setNidList(nidList);
         fileDao.save(filePic);
