@@ -688,9 +688,9 @@ public class EditServiceImpl implements EditService {
     //将nid加入file的nidList中
     private void addNidToFile(Integer fid, Integer nid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
-        List<Integer> nidList = filePic.getNidList();
         //lazy=false
-        Hibernate.initialize(nidList);
+        Hibernate.initialize(filePic.getNidList());
+        List<Integer> nidList = filePic.getNidList();
         nidList.add(nid);
         filePic.setNidList(nidList);
         fileDao.save(filePic);
