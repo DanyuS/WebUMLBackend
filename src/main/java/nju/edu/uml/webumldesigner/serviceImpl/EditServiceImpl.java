@@ -5,7 +5,6 @@ import nju.edu.uml.webumldesigner.controller.params.LineParams;
 import nju.edu.uml.webumldesigner.dao.*;
 import nju.edu.uml.webumldesigner.entity.*;
 import nju.edu.uml.webumldesigner.service.EditService;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

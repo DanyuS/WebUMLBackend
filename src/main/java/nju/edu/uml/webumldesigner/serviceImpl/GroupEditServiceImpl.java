@@ -34,6 +34,7 @@ public class GroupEditServiceImpl implements GroupEditService {
         filePic.setFileType(fileType);
         String num = String.valueOf(fileDao.count() + 1);
         filePic.setFileId("f" + num);
+        filePic.setRefreshTime(0);
         FilePic result = fileDao.save(filePic);
         if (result.getFid() > 0) {
             //加入userGroup的fidList中
