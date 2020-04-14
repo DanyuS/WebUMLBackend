@@ -95,7 +95,8 @@ public class GroupEditController {
     private void joinEdit(String groupName, String userName) {
         ConcurrentHashMap<String, GroupEditController> editGroup = groupEditList.get(groupName);
         if (editGroup.get(userName) != null) {
-            this.joinFlag = 0;
+            //表明用户是退出后重新进入的
+            this.joinFlag = 1;
         }
         editGroup.put(userName, this);//将此用户加入房间中
     }
@@ -167,6 +168,7 @@ public class GroupEditController {
             String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
             ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
             if (editRoom.get(user.getUserName()).joinFlag == 0) {
+                //证明用户原本就在房内
                 for (String i : editRoom.keySet()) {
                     //调用方法 将消息推送
                     if (!i.equals(user.getUserName())) {
