@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 //@RestController
 @ServerEndpoint("/groupEdit/{message}")
-//@Component
+@Component
 public class GroupEditController {
     private static EditService editService;
     private static LoginService loginService;
@@ -95,7 +95,7 @@ public class GroupEditController {
     private void joinEdit(String groupName, String userName) {
         ConcurrentHashMap<String, GroupEditController> editGroup = groupEditList.get(groupName);
         if (editGroup.get(userName) != null) {
-            this.joinFlag = 1;
+            this.joinFlag = 0;
         }
         editGroup.put(userName, this);//将此用户加入房间中
     }
