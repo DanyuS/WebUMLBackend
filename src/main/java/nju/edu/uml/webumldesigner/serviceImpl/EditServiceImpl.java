@@ -689,7 +689,7 @@ public class EditServiceImpl implements EditService {
     private void addNidToFile(Integer fid, Integer nid) {
         FilePic filePic = fileDao.findFilePicByFid(fid);
         //lazy=false
-        Hibernate.initialize(filePic.getNidList());
+//        Hibernate.initialize(filePic.getNidList());
         List<Integer> nidList = filePic.getNidList();
         nidList.add(nid);
         filePic.setNidList(nidList);

@@ -11,9 +11,11 @@ public class FilePic {
     private String fileId;
     private String fileName;
     private String fileType;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @OrderColumn(name="nidList_1")
     private List<Integer> nidList;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @OrderColumn(name="lidList_1")
     private List<Integer> lidList;
 
     private Integer refreshTime;
