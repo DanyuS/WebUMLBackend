@@ -6,6 +6,7 @@ public class GroupEditParams {
     NewNodeParam newNodeParam;
     NodeParams nodeParams;
     LineParams lineParams;
+    VarAndFuncParams varAndFuncParams;
 
     public String getEditMethod() {
         return editMethod;
@@ -45,5 +46,13 @@ public class GroupEditParams {
 
     public void setLineParams(LineParams lineParams) {
         this.lineParams = lineParams;
+    }
+
+    public VarAndFuncParams getVarAndFuncParams() {
+        return varAndFuncParams;
+    }
+
+    public void setVarAndFuncParams(VarAndFuncParams varAndFuncParams) {
+        this.varAndFuncParams = varAndFuncParams;
     }
 }

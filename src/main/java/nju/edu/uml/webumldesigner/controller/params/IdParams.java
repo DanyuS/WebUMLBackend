@@ -6,6 +6,7 @@ public class IdParams {
     Integer fid;
     Integer nid;
     Integer lid;
+    Integer vid;
 
     public Integer getGid() {
         return gid;
@@ -45,5 +46,13 @@ public class IdParams {
 
     public void setLid(Integer lid) {
         this.lid = lid;
+    }
+
+    public Integer getVid() {
+        return vid;
+    }
+
+    public void setVid(Integer vid) {
+        this.vid = vid;
     }
 }

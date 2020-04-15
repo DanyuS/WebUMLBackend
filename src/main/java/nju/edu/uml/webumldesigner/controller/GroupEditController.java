@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import javax.xml.soap.Node;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -144,6 +145,25 @@ public class GroupEditController {
             }
             editRoom.get(username).joinFlag = 0;
 
+        } else if (groupEditParams.getVarAndFuncParams() != null) {
+            VarAndFuncParams varAndFuncParams = groupEditParams.getVarAndFuncParams();
+            Integer vid = editService.addVarAndFunc(varAndFuncParams.getNid(), varAndFuncParams.getModifier(), varAndFuncParams.getDataType(), varAndFuncParams.getName(), varAndFuncParams.getParams(), varAndFuncParams.getFlag());
+            groupEditParams.getVarAndFuncParams().setVid(vid);
+            NodePic nodePic = editService.getNodePicByNid(varAndFuncParams.getNid());
+            User user = loginService.getUserByUid(nodePic.getUid());
+            String username = user.getUserName();
+            UserGroup userGroup = inviteService.getUserGroupByGid(nodePic.getGid());
+            String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
+            if (editRoom.get(username).joinFlag == 0) {
+                for (String i : editRoom.keySet()) {
+                    //调用方法 将消息推送
+                    editRoom.get(i).sendEditMessage(new Gson().toJson(groupEditParams));
+                }
+            } else {
+                editRoom.get(username).sendEditMessage(new Gson().toJson(groupEditParams));
+            }
+            editRoom.get(username).joinFlag = 0;
         } else {
             NewNodeParam newNodeParam = groupEditParams.getNewNodeParam();
             Style styles = newNodeParam.getStyles();
@@ -207,6 +227,24 @@ public class GroupEditController {
                 editRoom.get(username).sendEditMessage(new Gson().toJson(groupEditParams));
             }
             editRoom.get(username).joinFlag = 0;
+        } else if (groupEditParams.getVarAndFuncParams() != null) {
+            VarAndFuncParams varAndFuncParams = groupEditParams.getVarAndFuncParams();
+            editService.upDateVarAndFunc(varAndFuncParams.getNid(), varAndFuncParams.getVid(), varAndFuncParams.getModifier(), varAndFuncParams.getDataType(), varAndFuncParams.getName(), varAndFuncParams.getParams(), varAndFuncParams.getFlag());
+            NodePic nodePic = editService.getNodePicByNid(varAndFuncParams.getNid());
+            User user = loginService.getUserByUid(nodePic.getUid());
+            String username = user.getUserName();
+            UserGroup userGroup = inviteService.getUserGroupByGid(nodePic.getGid());
+            String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
+            if (editRoom.get(username).joinFlag == 0) {
+                for (String i : editRoom.keySet()) {
+                    //调用方法 将消息推送
+                    editRoom.get(i).sendEditMessage(new Gson().toJson(groupEditParams));
+                }
+            } else {
+                editRoom.get(username).sendEditMessage(new Gson().toJson(groupEditParams));
+            }
+            editRoom.get(username).joinFlag = 0;
         } else {
             NodeParams nodeParams = groupEditParams.getNodeParams();
             editService.updateNode(nodeParams.getNid(), nodeParams.getNodeKey(), nodeParams.getKey(), nodeParams.getValue());
@@ -256,6 +294,25 @@ public class GroupEditController {
             editRoom.get(username).joinFlag = 0;
             //並且還要保存到數據庫
             editService.delLine(fid, lid);
+        } else if (!idParams.getVid().equals(-1)) {
+            Integer vid = idParams.getVid();
+            Integer nid = idParams.getNid();
+            NodePic nodePic = editService.getNodePicByNid(nid);
+            User user = loginService.getUserByUid(nodePic.getUid());
+            String username = user.getUserName();
+            UserGroup userGroup = inviteService.getUserGroupByGid(nodePic.getGid());
+            String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
+            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
+            if (editRoom.get(username).joinFlag == 0) {
+                for (String i : editRoom.keySet()) {
+                    //调用方法 将消息推送
+                    editRoom.get(i).sendEditMessage(new Gson().toJson(groupEditParams));
+                }
+            } else {
+                editRoom.get(username).sendEditMessage(new Gson().toJson(groupEditParams));
+            }
+            editRoom.get(username).joinFlag = 0;
+            editService.delVarAndFUnc(nid, vid);
         } else {
             Integer nid = idParams.getNid();
             NodePic nodePic = editService.getNodePicByNid(nid);
@@ -275,54 +332,6 @@ public class GroupEditController {
             editRoom.get(username).joinFlag = 0;
             editService.delNode(fid, nid);
         }
-
-//        if (!message.contains("{")) {
-//            message = "{" + message + "}";
-//        }
-//        IdParams idParams = new Gson().fromJson(message, IdParams.class);
-//        Integer fid = idParams.getFid();
-//        Integer id = idParams.getGid();
-//        Integer uid = idParams.getUid();
-//        if (message.contains("line")) {
-//            //刪除的傳參格式有待思考，暫時先定為a,b吧
-//            Line line = editService.getLineByLid(id);
-//            User user = loginService.getUserByUid(uid);
-//            UserGroup userGroup = inviteService.getUserGroupByGid(line.getGid());
-//            String editGroupName = userGroup.getGroupName() + "_" + line.getFid();
-//            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
-//            if (editRoom.get(user.getUserName()).joinFlag == 0) {
-//                for (String i : editRoom.keySet()) {
-//                    //调用方法 将消息推送
-//                    if (!i.equals(user.getUserName())) {
-//                        editRoom.get(i).sendEditMessage(message);
-//                    }
-//                }
-//            } else {
-//                editRoom.get(user.getUserName()).sendEditMessage(message);
-//            }
-//            editRoom.get(user.getUserName()).joinFlag = 0;
-//            //並且還要保存到數據庫
-//            editService.delLine(fid, id);
-//        } else {
-//
-//            NodePic nodePic = editService.getNodePicByNid(id);
-//            User user = loginService.getUserByUid(uid);
-//            UserGroup userGroup = inviteService.getUserGroupByGid(nodePic.getGid());
-//            String editGroupName = userGroup.getGroupName() + "_" + nodePic.getFid();
-//            ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
-//            if (editRoom.get(user.getUserName()).joinFlag == 0) {
-//                for (String i : editRoom.keySet()) {
-//                    //调用方法 将消息推送
-//                    if (!i.equals(user.getUserName())) {
-//                        editRoom.get(i).sendEditMessage(message);
-//                    }
-//                }
-//            } else {
-//                editRoom.get(user.getUserName()).sendEditMessage(message);
-//            }
-//            editRoom.get(user.getUserName()).joinFlag = 0;
-//            editService.delNode(fid, id);
-//        }
     }
 
     public void sendEditMessage(String message) throws IOException {
