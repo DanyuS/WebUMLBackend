@@ -175,12 +175,12 @@ public class GroupEditController {
             Prop props = newNodeParam.getProps();
             Properties properties = new Properties();
             properties.setInstance(props.isInstance());
-            properties.setWeak(properties.isWeak());
-            properties.setClassName(properties.getClassName());
-            properties.setClassType(properties.getClassType());
-            properties.setCompositionType(properties.getCompositionType());
-            properties.setConditions(properties.getConditions());
-            properties.setName(properties.getName());
+            properties.setWeak(props.isWeak());
+            properties.setClassName(props.getClassName());
+            properties.setClassType(props.getClassType());
+            properties.setCompositionType(props.getCompositionType());
+            properties.setConditions(props.getConditions());
+            properties.setName(props.getName());
             Integer nid = editService.addNode(newNodeParam.getUid(), newNodeParam.getGid(), newNodeParam.getFid(), newNodeParam.getNodeType(), nodeStyle, properties);
             groupEditParams.getIdParams().setNid(nid);
             NodePic nodePic = editService.getNodePicByNid(nid);
