@@ -127,6 +127,7 @@ public class GroupEditController {
             LineParams lineParams = groupEditParams.getLineParams();
             //並且還要保存到數據庫
             Integer lid = editService.addLine(lineParams);
+            groupEditParams.getIdParams().setLid(lid);
             Line line = editService.getLineByLid(lid);
             User user = loginService.getUserByUid(line.getUid());
             String username = user.getUserName();
@@ -161,6 +162,7 @@ public class GroupEditController {
             properties.setConditions(properties.getConditions());
             properties.setName(properties.getName());
             Integer nid = editService.addNode(newNodeParam.getUid(), newNodeParam.getGid(), newNodeParam.getFid(), newNodeParam.getNodeType(), nodeStyle, properties);
+            groupEditParams.getIdParams().setNid(nid);
             NodePic nodePic = editService.getNodePicByNid(nid);
             User user = loginService.getUserByUid(nodePic.getUid());
             String username = user.getUserName();
