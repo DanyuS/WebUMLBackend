@@ -257,16 +257,16 @@ public class EditServiceImpl implements EditService {
     @Override
     public Integer addLine(LineParams lineParams) {
         //TODO 各个daosave的位置问题，包括上面的addNode
-        List<LinePosition> linePositionList = new ArrayList<LinePosition>();
-        for (int i = 0; i < lineParams.getLineList().size(); i++) {
-            LinePosition linePosition = new LinePosition();
-            linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
-            linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
-
-//            linePositionDao.save(linePosition);
-
-            linePositionList.add(linePosition);
-        }
+//        List<LinePosition> linePositionList = new ArrayList<LinePosition>();
+//        for (int i = 0; i < lineParams.getLineList().size(); i++) {
+//            LinePosition linePosition = new LinePosition();
+//            linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
+//            linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
+//
+////            linePositionDao.save(linePosition);
+//
+//            linePositionList.add(linePosition);
+//        }
 
         LinePosition startPosition = new LinePosition();
         startPosition.setLpLeft(lineParams.getStartPosition().getLeft());
@@ -305,7 +305,6 @@ public class EditServiceImpl implements EditService {
         line.setText(lineParams.getText());
         line.setMarkerStart(lineParams.getMarkerStart());
         line.setMarkerEnd(lineParams.getMarkerEnd());
-        line.setLineList(linePositionList);
         line.setStartPosition(startPosition);
         line.setEndPosition(endPosition);
         line.setLineStyle(lineStyle);
@@ -319,9 +318,9 @@ public class EditServiceImpl implements EditService {
 
         line.setPath(lineParams.getPath());
 
-        for (int i = 0; i < linePositionList.size(); i++) {
-            linePositionDao.save(linePositionList.get(i));
-        }
+//        for (int i = 0; i < linePositionList.size(); i++) {
+//            linePositionDao.save(linePositionList.get(i));
+//        }
         linePositionDao.save(startPosition);
         linePositionDao.save(endPosition);
         lineStyleDao.save(lineStyle);
@@ -349,17 +348,17 @@ public class EditServiceImpl implements EditService {
     public boolean updateLine(LineParams lineParams) {
         Integer lid = lineParams.getLid();
         Line line = lineDao.findLineByLid(lid);
-        List<LinePosition> linePositionList = line.getLineList();
-        for (int i = 0; i < lineParams.getLineList().size(); i++) {
-            //payAttention!!!!有可能会增加！！！！！后期极有可能要修改！！！还有顺序问题
-            LinePosition linePosition = linePositionList.get(i);
-            linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
-            linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
-
-            linePositionDao.save(linePosition);
-
-            linePositionList.add(linePosition);
-        }
+//        List<LinePosition> linePositionList = line.getLineList();
+//        for (int i = 0; i < lineParams.getLineList().size(); i++) {
+//            //payAttention!!!!有可能会增加！！！！！后期极有可能要修改！！！还有顺序问题
+//            LinePosition linePosition = linePositionList.get(i);
+//            linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
+//            linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
+//
+//            linePositionDao.save(linePosition);
+//
+//            linePositionList.add(linePosition);
+//        }
 
         ///////////////////////////= linePositionDao.find...(line.getStartPosition().getId())???????
         LinePosition startPosition = line.getStartPosition();
@@ -400,7 +399,7 @@ public class EditServiceImpl implements EditService {
         line.setText(lineParams.getText());
         line.setMarkerStart(lineParams.getMarkerStart());
         line.setMarkerEnd(lineParams.getMarkerEnd());
-        line.setLineList(linePositionList);
+//        line.setLineList(linePositionList);
         line.setStartPosition(startPosition);
         line.setEndPosition(endPosition);
         line.setLineStyle(lineStyle);

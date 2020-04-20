@@ -12,7 +12,6 @@ public class LineParams {
     private String text;
     private String markerStart;
     private String markerEnd;
-    private List<LinePositionParams> lineList;
     private LinePositionParams startPosition;
     private LinePositionParams endPosition;
     private LineStyleParams lineStyle;
@@ -86,14 +85,6 @@ public class LineParams {
 
     public void setMarkerEnd(String markerEnd) {
         this.markerEnd = markerEnd;
-    }
-
-    public List<LinePositionParams> getLineList() {
-        return lineList;
-    }
-
-    public void setLineList(List<LinePositionParams> lineList) {
-        this.lineList = lineList;
     }
 
     public LinePositionParams getStartPosition() {

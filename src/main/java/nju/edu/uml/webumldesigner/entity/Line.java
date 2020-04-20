@@ -16,8 +16,6 @@ public class Line {
     private String text;
     private String markerStart;
     private String markerEnd;
-    @ManyToMany
-    private List<LinePosition> lineList;
     @OneToOne
     private LinePosition startPosition;
     @OneToOne
@@ -99,14 +97,6 @@ public class Line {
 
     public void setMarkerEnd(String markerEnd) {
         this.markerEnd = markerEnd;
-    }
-
-    public List<LinePosition> getLineList() {
-        return lineList;
-    }
-
-    public void setLineList(List<LinePosition> lineList) {
-        this.lineList = lineList;
     }
 
     public LinePosition getStartPosition() {
