@@ -3,7 +3,9 @@ package nju.edu.uml.webumldesigner.serviceImpl;
 import nju.edu.uml.webumldesigner.dao.UserDao;
 import nju.edu.uml.webumldesigner.entity.User;
 import nju.edu.uml.webumldesigner.service.RegisterService;
+import nju.edu.uml.webumldesigner.util.MD5Util;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 @Service
 public class RegisterServiceImpl implements RegisterService {
@@ -27,7 +29,9 @@ public class RegisterServiceImpl implements RegisterService {
         }
         //初始化用户
         user.setUserName(userName);
-        user.setUserPassword(userPassword);
+        //加密
+        String md5Str = MD5Util.getMD5(userPassword);
+        user.setUserPassword(md5Str);
         user.setEditable("T");
         user.setFidList("[]");
 //        user.setGidList("[]");
@@ -54,7 +58,8 @@ public class RegisterServiceImpl implements RegisterService {
         }
         else {
             user.setPwdCodeValid(false);
-            user.setUserPassword(userPassword);
+            String md5Str = MD5Util.getMD5(userPassword);
+            user.setUserPassword(md5Str);
             userDao.save(user);
             return "密码已重置";
         }
