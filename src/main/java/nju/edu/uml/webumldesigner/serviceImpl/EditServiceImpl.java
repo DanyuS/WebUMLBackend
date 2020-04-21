@@ -25,8 +25,6 @@ public class EditServiceImpl implements EditService {
 
     private final LineStyleDao lineStyleDao;
 
-    private final LineSvgStyleDao lineSvgStyleDao;
-
     private final PropertiesDao propertiesDao;
 
     private final VarAndFuncDao varAndFuncDao;
@@ -35,14 +33,13 @@ public class EditServiceImpl implements EditService {
 
     private final RevertEditTableDao revertEditTableDao;
 
-    public EditServiceImpl(UserDao userDao, FileDao fileDao, NodeDao nodeDao, LineDao lineDao, LinePositionDao linePositionDao, LineStyleDao lineStyleDao, LineSvgStyleDao lineSvgStyleDao, PropertiesDao propertiesDao, VarAndFuncDao varAndFuncDao, NodeStyleDao nodeStyleDao, RevertEditTableDao revertEditTableDao) {
+    public EditServiceImpl(UserDao userDao, FileDao fileDao, NodeDao nodeDao, LineDao lineDao, LinePositionDao linePositionDao, LineStyleDao lineStyleDao, PropertiesDao propertiesDao, VarAndFuncDao varAndFuncDao, NodeStyleDao nodeStyleDao, RevertEditTableDao revertEditTableDao) {
         this.userDao = userDao;
         this.fileDao = fileDao;
         this.nodeDao = nodeDao;
         this.lineDao = lineDao;
         this.linePositionDao = linePositionDao;
         this.lineStyleDao = lineStyleDao;
-        this.lineSvgStyleDao = lineSvgStyleDao;
         this.propertiesDao = propertiesDao;
         this.varAndFuncDao = varAndFuncDao;
         this.nodeStyleDao = nodeStyleDao;
@@ -232,42 +229,9 @@ public class EditServiceImpl implements EditService {
         return true;
     }
 
-//    @Override
-//    public Integer addLine(Integer uid, Integer gid, Integer fid, String relationType, String fromId, String toId, String styles) {
-//        Line line = new Line();
-//        line.setRelationType(relationType);
-//        line.setFromId(fromId);
-//        line.setToId(toId);
-//        line.setStyles(styles);
-//        line.setUid(uid);
-//        line.setGid(gid);
-//
-//        String num = String.valueOf(lineDao.count() + 1);
-//        line.setLineId("l" + num);
-//
-//        Line result = lineDao.save(line);
-//        if (result.getLid() > 0) {
-//            Integer lid = result.getLid();
-//            addLidToFile(fid, lid);
-//            return result.getLid();
-//        }
-//        return -1;
-//    }
-
     @Override
     public Integer addLine(LineParams lineParams) {
         //TODO 各个daosave的位置问题，包括上面的addNode
-//        List<LinePosition> linePositionList = new ArrayList<LinePosition>();
-//        for (int i = 0; i < lineParams.getLineList().size(); i++) {
-//            LinePosition linePosition = new LinePosition();
-//            linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
-//            linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
-//
-////            linePositionDao.save(linePosition);
-//
-//            linePositionList.add(linePosition);
-//        }
-
         LinePosition startPosition = new LinePosition();
         startPosition.setLpLeft(lineParams.getStartPosition().getLeft());
         startPosition.setLpTop(lineParams.getStartPosition().getTop());
@@ -288,13 +252,6 @@ public class EditServiceImpl implements EditService {
 
 //        lineStyleDao.save(lineStyle);
 
-        LineSvgStyle lineSvgStyle = new LineSvgStyle();
-        lineSvgStyle.setSvgPosition(lineParams.getLineSvgStyle().getPosition());
-        lineSvgStyle.setSvgWidth(lineParams.getLineSvgStyle().getWidth());
-        lineSvgStyle.setSvgHeight(lineParams.getLineSvgStyle().getHeight());
-        lineSvgStyle.setSvgLeft(lineParams.getLineSvgStyle().getLeft());
-        lineSvgStyle.setSvgTop(lineParams.getLineSvgStyle().getTop());
-
 //        lineSvgStyleDao.save(lineSvgStyle);
 
         Line line = new Line();
@@ -308,7 +265,6 @@ public class EditServiceImpl implements EditService {
         line.setStartPosition(startPosition);
         line.setEndPosition(endPosition);
         line.setLineStyle(lineStyle);
-        line.setLineSvgStyle(lineSvgStyle);
         line.setUid(lineParams.getUid());
         line.setGid(lineParams.getGid());
         line.setFid(lineParams.getFid());
@@ -318,13 +274,9 @@ public class EditServiceImpl implements EditService {
 
         line.setPath(lineParams.getPath());
 
-//        for (int i = 0; i < linePositionList.size(); i++) {
-//            linePositionDao.save(linePositionList.get(i));
-//        }
         linePositionDao.save(startPosition);
         linePositionDao.save(endPosition);
         lineStyleDao.save(lineStyle);
-        lineSvgStyleDao.save(lineSvgStyle);
 
 
         Line result = lineDao.save(line);
@@ -348,17 +300,6 @@ public class EditServiceImpl implements EditService {
     public boolean updateLine(LineParams lineParams) {
         Integer lid = lineParams.getLid();
         Line line = lineDao.findLineByLid(lid);
-//        List<LinePosition> linePositionList = line.getLineList();
-//        for (int i = 0; i < lineParams.getLineList().size(); i++) {
-//            //payAttention!!!!有可能会增加！！！！！后期极有可能要修改！！！还有顺序问题
-//            LinePosition linePosition = linePositionList.get(i);
-//            linePosition.setLpLeft(lineParams.getLineList().get(i).getLeft());
-//            linePosition.setLpTop(lineParams.getLineList().get(i).getTop());
-//
-//            linePositionDao.save(linePosition);
-//
-//            linePositionList.add(linePosition);
-//        }
 
         ///////////////////////////= linePositionDao.find...(line.getStartPosition().getId())???????
         LinePosition startPosition = line.getStartPosition();
@@ -381,17 +322,6 @@ public class EditServiceImpl implements EditService {
 
         lineStyleDao.save(lineStyle);
 
-//        LineSvgStyle lineSvgStyle = lineSvgStyleDao.findLineSvgStyleByLssid(line.getLineSvgStyle().getLssid());
-        LineSvgStyle lineSvgStyle = line.getLineSvgStyle();
-        lineSvgStyle.setSvgPosition(lineParams.getLineSvgStyle().getPosition());
-        lineSvgStyle.setSvgWidth(lineParams.getLineSvgStyle().getWidth());
-        lineSvgStyle.setSvgHeight(lineParams.getLineSvgStyle().getHeight());
-        lineSvgStyle.setSvgLeft(lineParams.getLineSvgStyle().getLeft());
-        lineSvgStyle.setSvgTop(lineParams.getLineSvgStyle().getTop());
-
-        lineSvgStyleDao.save(lineSvgStyle);
-
-        /////////
         line.setLineId(lineParams.getLineId());
         line.setRelationType(lineParams.getRelationType());
         line.setFromId(lineParams.getFromId());
@@ -399,11 +329,9 @@ public class EditServiceImpl implements EditService {
         line.setText(lineParams.getText());
         line.setMarkerStart(lineParams.getMarkerStart());
         line.setMarkerEnd(lineParams.getMarkerEnd());
-//        line.setLineList(linePositionList);
         line.setStartPosition(startPosition);
         line.setEndPosition(endPosition);
         line.setLineStyle(lineStyle);
-        line.setLineSvgStyle(lineSvgStyle);
         line.setEditMethod("Update");
         line.setPath(lineParams.getPath());
 //        line.setUid(lineParams.getUid());

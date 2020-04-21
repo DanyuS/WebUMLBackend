@@ -22,8 +22,6 @@ public class Line {
     private LinePosition endPosition;
     @OneToOne
     private LineStyle lineStyle;
-    @OneToOne
-    private LineSvgStyle lineSvgStyle;
 
     private Integer uid;//line创建者
     private Integer gid;//创建者所属组，如果没有就为-1
@@ -121,14 +119,6 @@ public class Line {
 
     public void setLineStyle(LineStyle lineStyle) {
         this.lineStyle = lineStyle;
-    }
-
-    public LineSvgStyle getLineSvgStyle() {
-        return lineSvgStyle;
-    }
-
-    public void setLineSvgStyle(LineSvgStyle lineSvgStyle) {
-        this.lineSvgStyle = lineSvgStyle;
     }
 
     public Integer getUid() {

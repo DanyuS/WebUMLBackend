@@ -15,7 +15,6 @@ public class LineParams {
     private LinePositionParams startPosition;
     private LinePositionParams endPosition;
     private LineStyleParams lineStyle;
-    private LineSvgStyleParams lineSvgStyle;
 
     private Integer uid;//line创建者
     private Integer gid;//创建者所属组，如果没有就为-1
@@ -109,14 +108,6 @@ public class LineParams {
 
     public void setLineStyle(LineStyleParams lineStyle) {
         this.lineStyle = lineStyle;
-    }
-
-    public LineSvgStyleParams getLineSvgStyle() {
-        return lineSvgStyle;
-    }
-
-    public void setLineSvgStyle(LineSvgStyleParams lineSvgStyle) {
-        this.lineSvgStyle = lineSvgStyle;
     }
 
     public Integer getUid() {
