@@ -1,5 +1,8 @@
 package nju.edu.uml.webumldesigner.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -18,9 +21,11 @@ public class Properties {
     private String conditions;
 
     //variable&function 建表 加个标记位
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<VarAndFunc> variables;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<VarAndFunc> functions;
 
     public Integer getPid() {

@@ -19,14 +19,6 @@ public class UserGroup {
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
     private List<User> invitingUserList;
-    //    @ElementCollection
-//    private List<Integer> invitedUidList;
-//    @ElementCollection
-//    private List<String> invitedUserNameList;
-//    @ElementCollection
-//    private List<Integer> invitingUidList;
-//    @ElementCollection
-//    private List<String> invitingUserNameList;
     @ElementCollection
     private List<Integer> fidList;
     private Integer captainId;
