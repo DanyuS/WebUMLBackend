@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import javax.xml.soap.Node;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,12 +37,6 @@ public class GroupEditController {
     public void setInviteService(InviteService inviteService) {
         GroupEditController.inviteService = inviteService;
     }
-
-//    public GroupEditController(EditService editService, LoginService loginService, InviteService inviteService) {
-//        this.editService = editService;
-//        this.loginService = loginService;
-//        this.inviteService = inviteService;
-//    }
 
     private static ConcurrentHashMap<String, ConcurrentHashMap<String, GroupEditController>> groupEditList = new ConcurrentHashMap<String, ConcurrentHashMap<String, GroupEditController>>();
 
@@ -80,17 +73,6 @@ public class GroupEditController {
             }
             joinEdit(chatRoomName, user.getUserName());
         }
-//        if (message.contains("line")) {
-//            Line line = new Gson().fromJson(message, Line.class);
-//            User user = userDao.findUserByUid(line.getUid());
-//            UserGroup userGroup = userGroupDao.findUserGroupByGid(line.getGid());
-//            joinEdit(userGroup.getGroupName(), user.getUserName());
-//        } else {
-//            NodePic nodePic = new Gson().fromJson(message, NodePic.class);
-//            User user = userDao.findUserByUid(nodePic.getUid());
-//            UserGroup userGroup = userGroupDao.findUserGroupByGid(nodePic.getGid());
-//            joinEdit(userGroup.getGroupName(), user.getUserName());
-//        }
     }
 
     private void joinEdit(String groupName, String userName) {
@@ -119,6 +101,11 @@ public class GroupEditController {
                 break;
             case "Delete":
                 editDeleteGroup(groupEditParams);
+                break;
+            case "Leave":
+                leaveRoom(groupEditParams);
+                break;
+            default:
                 break;
         }
     }
@@ -334,12 +321,27 @@ public class GroupEditController {
         }
     }
 
+    private void leaveRoom(GroupEditParams groupEditParams) {
+        IdParams idParams = groupEditParams.getIdParams();
+        Integer gid = idParams.getGid();
+        Integer uid = idParams.getUid();
+        Integer fid = idParams.getFid();
+        UserGroup userGroup = inviteService.getUserGroupByGid(gid);
+        User user = loginService.getUserByUid(uid);
+        String editGroupName = userGroup.getGroupName() + "_" + fid;
+        ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
+        editRoom.remove(user.getUserName());
+        if (editRoom.size() == 0) {
+            closeGroupEdit();
+        }
+    }
+
     public void sendEditMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }
 
     @OnClose
-    public void closeGroupEdit(Session session) {
+    public void closeGroupEdit() {
         System.out.println("--------------edit关闭");
         groupEditList.remove(this);
     }
