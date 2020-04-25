@@ -375,7 +375,7 @@ public class GroupEditController {
         List<String> nameList = new ArrayList<String>();
         for (UserGroup userGroup : deletedUserGroupList) {
             for (String name : groupEditList.keySet()) {
-                if (name.equals(userGroup.getGroupName())) {
+                if (name.contains(userGroup.getGroupName())) {
                     nameList.add(name);
                 }
             }
