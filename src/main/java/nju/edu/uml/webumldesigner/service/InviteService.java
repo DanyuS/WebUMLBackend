@@ -26,4 +26,6 @@ public interface InviteService {
     public boolean rejectInvite(Integer uid, Integer gid);
 
     public UserGroup getUserGroupByGid(Integer gid);
+
+    public List<UserGroup> getAllUserGroup();
 }

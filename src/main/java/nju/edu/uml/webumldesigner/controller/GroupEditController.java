@@ -13,6 +13,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 //@RestController
@@ -102,12 +104,14 @@ public class GroupEditController {
             case "Delete":
                 editDeleteGroup(groupEditParams);
                 break;
-            case "Leave":
-                leaveRoom(groupEditParams);
-                break;
+//            case "Leave":
+//                leaveRoom(groupEditParams);
+//                break;
             default:
                 break;
         }
+        //每一次编辑都遍历所有组是否有需要清空的线程
+//        leaveRoom();
     }
 
     public void editAddGroup(GroupEditParams groupEditParams) throws IOException {
@@ -321,20 +325,39 @@ public class GroupEditController {
         }
     }
 
-    private void leaveRoom(GroupEditParams groupEditParams) {
-        IdParams idParams = groupEditParams.getIdParams();
-        Integer gid = idParams.getGid();
-        Integer uid = idParams.getUid();
-        Integer fid = idParams.getFid();
-        UserGroup userGroup = inviteService.getUserGroupByGid(gid);
-        User user = loginService.getUserByUid(uid);
-        String editGroupName = userGroup.getGroupName() + "_" + fid;
-        ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
-        editRoom.remove(user.getUserName());
-        if (editRoom.size() == 0) {
-            closeGroupEdit();
-        }
-    }
+//    private void leaveRoom() {
+//        List<UserGroup> userGroupList = inviteService.getAllUserGroup();
+//        List<UserGroup> deletedUserGroupList = new ArrayList<UserGroup>();
+//        for (UserGroup userGroup : userGroupList) {
+//            if (userGroup.getIsDeleted().equals("T")) {
+//                deletedUserGroupList.add(userGroup);
+//            }
+//        }
+//        List<String> nameList = new ArrayList<String>();
+//        for (UserGroup userGroup : deletedUserGroupList) {
+//            for (String name : groupEditList.keySet()) {
+//                if (name.equals(userGroup.getGroupName())) {
+//                    nameList.add(name);
+//                }
+//            }
+//        }
+//        for (String name : nameList) {
+//            closeGroupEdit(name);
+//        }
+//
+////        IdParams idParams = groupEditParams.getIdParams();
+////        Integer gid = idParams.getGid();
+////        Integer uid = idParams.getUid();
+////        Integer fid = idParams.getFid();
+////        UserGroup userGroup = inviteService.getUserGroupByGid(gid);
+////        User user = loginService.getUserByUid(uid);
+////        String editGroupName = userGroup.getGroupName() + "_" + fid;
+////        ConcurrentHashMap<String, GroupEditController> editRoom = groupEditList.get(editGroupName);
+////        editRoom.remove(user.getUserName());
+////        if (editRoom.size() == 0) {
+////            closeGroupEdit();
+////        }
+//    }
 
     public void sendEditMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
@@ -342,8 +365,25 @@ public class GroupEditController {
 
     @OnClose
     public void closeGroupEdit() {
-        System.out.println("--------------edit关闭");
-        groupEditList.remove(this);
+        List<UserGroup> userGroupList = inviteService.getAllUserGroup();
+        List<UserGroup> deletedUserGroupList = new ArrayList<UserGroup>();
+        for (UserGroup userGroup : userGroupList) {
+            if (userGroup.getIsDeleted().equals("T")) {
+                deletedUserGroupList.add(userGroup);
+            }
+        }
+        List<String> nameList = new ArrayList<String>();
+        for (UserGroup userGroup : deletedUserGroupList) {
+            for (String name : groupEditList.keySet()) {
+                if (name.equals(userGroup.getGroupName())) {
+                    nameList.add(name);
+                }
+            }
+        }
+        for (String name : nameList) {
+            System.out.println(name + "--------------edit关闭");
+            groupEditList.remove(name);
+        }
     }
 
     @OnError

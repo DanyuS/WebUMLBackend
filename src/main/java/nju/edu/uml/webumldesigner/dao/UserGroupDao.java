@@ -7,9 +7,6 @@ import java.util.List;
 
 public interface UserGroupDao extends JpaRepository<UserGroup, Integer> {
     UserGroup findUserGroupByGid(Integer gid);
-    List<UserGroup> findAllBy();
-//    public boolean inviteUser(String userEmail);
-//
-//    public String getUserGroup(int gid);
 
+    List<UserGroup> findAllBy();
 }
