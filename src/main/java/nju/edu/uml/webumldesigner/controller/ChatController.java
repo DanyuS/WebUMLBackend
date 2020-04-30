@@ -16,6 +16,8 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/websocket/{message}")
@@ -148,8 +150,25 @@ public class ChatController {
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println("--------------房间关闭");
-        chatRoomList.remove(this);
+        List<UserGroup> userGroupList = inviteService.getAllUserGroup();
+        List<UserGroup> deletedUserGroupList = new ArrayList<UserGroup>();
+        for (UserGroup userGroup : userGroupList) {
+            if (userGroup.getIsDeleted().equals("T")) {
+                deletedUserGroupList.add(userGroup);
+            }
+        }
+        List<String> nameList = new ArrayList<String>();
+        for (UserGroup userGroup : deletedUserGroupList) {
+            for (String name : chatRoomList.keySet()) {
+                if (name.contains(userGroup.getGroupName())) {
+                    nameList.add(name);
+                }
+            }
+        }
+        for (String name : nameList) {
+            System.out.println(name + "--------------edit关闭");
+            chatRoomList.remove(name);
+        }
     }
 
     @OnError
