@@ -30,7 +30,7 @@ public class InviteServiceImpl implements InviteService {
     public UserGroup createGroup(String groupName, Integer uid) {
         List<UserGroup> userGroupList = userGroupDao.findAllBy();
         for (UserGroup userGroup : userGroupList) {
-            if (userGroup.getGroupName().equals(groupName)) {
+            if (userGroup.getGroupName().equals(groupName) && userGroup.getIsDeleted().equals("F")) {
                 return null;
             }
         }
@@ -80,8 +80,8 @@ public class InviteServiceImpl implements InviteService {
         userGroup.setIsDeleted("T");
 
         //万一小组文件没有清干净
-        List<Integer> fidList= userGroup.getFidList();
-        if(fidList.size()!=0){
+        List<Integer> fidList = userGroup.getFidList();
+        if (fidList.size() != 0) {
             //////////right??
             fidList.clear();
         }

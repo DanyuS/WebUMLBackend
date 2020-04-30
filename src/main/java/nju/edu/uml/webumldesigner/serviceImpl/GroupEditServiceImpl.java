@@ -80,7 +80,12 @@ public class GroupEditServiceImpl implements GroupEditService {
     }
 
     @Override
-    public FilePic revertEdit(Integer fid) {
+    public FilePic undo(Integer fid, Integer uid) {
+        return null;
+    }
+
+    @Override
+    public FilePic execute(Integer fid, Integer uid) {
         return null;
     }
 }
