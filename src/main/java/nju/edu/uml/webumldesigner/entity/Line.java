@@ -1,8 +1,6 @@
 package nju.edu.uml.webumldesigner.entity;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Map;
 
 @Entity
 public class Line {
@@ -32,6 +30,11 @@ public class Line {
     private String isDeleted;
 
     private String path;
+
+    private String startArrow;
+    private String endArrow;
+    private String startArrowStyle;
+    private String endArrowStyle;
 
     public Integer getLid() {
         return lid;
@@ -167,5 +170,37 @@ public class Line {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getStartArrow() {
+        return startArrow;
+    }
+
+    public void setStartArrow(String startArrow) {
+        this.startArrow = startArrow;
+    }
+
+    public String getEndArrow() {
+        return endArrow;
+    }
+
+    public void setEndArrow(String endArrow) {
+        this.endArrow = endArrow;
+    }
+
+    public String getStartArrowStyle() {
+        return startArrowStyle;
+    }
+
+    public void setStartArrowStyle(String startArrowStyle) {
+        this.startArrowStyle = startArrowStyle;
+    }
+
+    public String getEndArrowStyle() {
+        return endArrowStyle;
+    }
+
+    public void setEndArrowStyle(String endArrowStyle) {
+        this.endArrowStyle = endArrowStyle;
     }
 }

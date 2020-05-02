@@ -274,6 +274,11 @@ public class EditServiceImpl implements EditService {
 
         line.setPath(lineParams.getPath());
 
+        line.setStartArrow(lineParams.getStartArrow());
+        line.setEndArrow(lineParams.getEndArrow());
+        line.setStartArrowStyle(lineParams.getStartArrowStyle());
+        line.setEndArrowStyle(lineParams.getEndArrowStyle());
+
         linePositionDao.save(startPosition);
         linePositionDao.save(endPosition);
         lineStyleDao.save(lineStyle);
@@ -334,6 +339,11 @@ public class EditServiceImpl implements EditService {
         line.setLineStyle(lineStyle);
         line.setEditMethod("Update");
         line.setPath(lineParams.getPath());
+
+        line.setStartArrow(lineParams.getStartArrow());
+        line.setEndArrow(lineParams.getEndArrow());
+        line.setStartArrowStyle(lineParams.getStartArrowStyle());
+        line.setEndArrowStyle(lineParams.getEndArrowStyle());
 //        line.setUid(lineParams.getUid());
 //        line.setGid(lineParams.getGid());
         lineDao.save(line);
