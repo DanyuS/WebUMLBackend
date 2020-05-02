@@ -35,6 +35,10 @@ public class Line {
     private String endArrow;
     private String startArrowStyle;
     private String endArrowStyle;
+    private String startArrowId;
+    private String endArrowId;
+    private String startArrowType;
+    private String endArrowType;
 
     public Integer getLid() {
         return lid;
@@ -202,5 +206,37 @@ public class Line {
 
     public void setEndArrowStyle(String endArrowStyle) {
         this.endArrowStyle = endArrowStyle;
+    }
+
+    public String getStartArrowId() {
+        return startArrowId;
+    }
+
+    public void setStartArrowId(String startArrowId) {
+        this.startArrowId = startArrowId;
+    }
+
+    public String getEndArrowId() {
+        return endArrowId;
+    }
+
+    public void setEndArrowId(String endArrowId) {
+        this.endArrowId = endArrowId;
+    }
+
+    public String getStartArrowType() {
+        return startArrowType;
+    }
+
+    public void setStartArrowType(String startArrowType) {
+        this.startArrowType = startArrowType;
+    }
+
+    public String getEndArrowType() {
+        return endArrowType;
+    }
+
+    public void setEndArrowType(String endArrowType) {
+        this.endArrowType = endArrowType;
     }
 }
