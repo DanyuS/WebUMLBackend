@@ -17,14 +17,20 @@ public class GroupEditServiceImpl implements GroupEditService {
 
     private final NodeDao nodeDao;
 
+    private final VarAndFuncDao varAndFuncDao;
+
     private final PropertiesDao propertiesDao;
 
-    public GroupEditServiceImpl(FileDao fileDao, UserGroupDao userGroupDao, LineDao lineDao, NodeDao nodeDao, PropertiesDao propertiesDao) {
+    private final RevertEditTableDao revertEditTableDao;
+
+    public GroupEditServiceImpl(FileDao fileDao, UserGroupDao userGroupDao, LineDao lineDao, NodeDao nodeDao, VarAndFuncDao varAndFuncDao, PropertiesDao propertiesDao, RevertEditTableDao revertEditTableDao) {
         this.fileDao = fileDao;
         this.userGroupDao = userGroupDao;
         this.lineDao = lineDao;
         this.nodeDao = nodeDao;
+        this.varAndFuncDao = varAndFuncDao;
         this.propertiesDao = propertiesDao;
+        this.revertEditTableDao = revertEditTableDao;
     }
 
     @Override
@@ -51,9 +57,9 @@ public class GroupEditServiceImpl implements GroupEditService {
     @Override
     public boolean deleteFileByGroup(Integer gid, Integer fid) {
         UserGroup userGroup = userGroupDao.findUserGroupByGid(gid);
-        List<Integer> fidList= userGroup.getFidList();
-        for(int i=0;i<fidList.size();i++){
-            if(fidList.get(i).equals(fid)){
+        List<Integer> fidList = userGroup.getFidList();
+        for (int i = 0; i < fidList.size(); i++) {
+            if (fidList.get(i).equals(fid)) {
                 fidList.remove(i);
                 break;
             }
@@ -80,12 +86,75 @@ public class GroupEditServiceImpl implements GroupEditService {
     }
 
     @Override
-    public FilePic undo(Integer fid, Integer uid) {
-        return null;
+    public Object undo(Integer fid, Integer uid) {
+        List<RevertEditTable> revertEditTableList = revertEditTableDao.findRevertEditTablesByFidAndUid(fid, uid);
+        Object result = null;
+        Object afterChange = null;
+//        Class<T> clazz;
+        if (revertEditTableList.size() != 0) {
+            int lastUpdate = revertEditTableList.size();
+            RevertEditTable revertEditTable = revertEditTableList.get(lastUpdate - 1);
+            switch (revertEditTable.getComponentType()) {
+                case "Line":
+//                    clazz = (Class<T>) Line.class;
+                    afterChange = changeEditMethod(lineDao.findLineByLid(revertEditTable.getComponentId()), "Line");
+                    result = afterChange;
+//                    result = clazz.cast(afterChange);
+                    break;
+                case "Node":
+                    afterChange = changeEditMethod(nodeDao.findNodePicByNid(revertEditTable.getComponentId()), "Node");
+                    result = afterChange;
+                    break;
+                case "VarAndFunc":
+                    afterChange = changeEditMethod(varAndFuncDao.findVarAndFuncByVid(revertEditTable.getComponentId()), "VarAndFunc");
+                    result = afterChange;
+                    break;
+            }
+            revertEditTableDao.delete(revertEditTable);
+        }
+
+        return result;
     }
 
     @Override
     public FilePic execute(Integer fid, Integer uid) {
         return null;
+    }
+
+    private Object changeEditMethod(Object component, String componentType) {
+        String editMethod;
+        Object result = null;
+        switch (componentType) {
+            case "Line":
+                Line line = (Line) component;
+                editMethod = line.getEditMethod();
+                if (editMethod.equals("Add")) {
+                    line.setEditMethod("Delete");
+                } else if (editMethod.equals("Delete")) {
+                    line.setEditMethod("Add");
+                }
+                result = line;
+                break;
+            case "Node":
+                NodePic nodePic = (NodePic) component;
+                editMethod = nodePic.getEditMethod();
+                if (editMethod.equals("Add")) {
+                    nodePic.setEditMethod("Delete");
+                } else if (editMethod.equals("Delete")) {
+                    nodePic.setEditMethod("Add");
+                }
+                result = nodePic;
+                break;
+            case "VarAndFunc":
+//                VarAndFunc varAndFunc = (VarAndFunc) component;
+//                editMethod = varAndFunc.getEditMethod();
+//                if (editMethod.equals("Add")) {
+//                    varAndFunc.setEditMethod("Delete");
+//                } else if (editMethod.equals("Delete")) {
+//                    varAndFunc.setEditMethod("Add");
+//                }
+                break;
+        }
+        return result;
     }
 }

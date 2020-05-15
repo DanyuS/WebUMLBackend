@@ -9,7 +9,8 @@ public interface GroupEditService {
 
     public String updateText(String idType, Integer id, String text);//节点或者线条, 参数修改可能需要其他的方法，有可能要vid
 
-    public FilePic undo(Integer fid, Integer uid);
+    //    public <T> T undo(Integer fid, Integer uid);
+    public Object undo(Integer fid, Integer uid);
 
     public FilePic execute(Integer fid, Integer uid);
 }

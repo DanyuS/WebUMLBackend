@@ -8,5 +8,5 @@ import java.util.List;
 public interface RevertEditTableDao extends JpaRepository<RevertEditTable, Integer> {
     RevertEditTable findRevertEditTableByRid(Integer rid);
 
-    List<RevertEditTable> findRevertEditTablesByFid(Integer fid);
+    List<RevertEditTable> findRevertEditTablesByFidAndUid(Integer fid, Integer uid);
 }
